@@ -2,7 +2,7 @@
   "name": "feedparser",
   "author": "Dan MacTough <danmactough@gmail.com>",
   "description": "Robust RSS, Atom, and RDF feed parsing using libxmljs",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "repository": {
     "type": "git",
     "url": "git://github.com/danmactough/node-feedparser.git"
