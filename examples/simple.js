@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-var FeedParser = require('./feedparser')
+var FeedParser = require('../lib/feedparser')
   , parser
 
 parser = new FeedParser();
@@ -13,4 +13,4 @@ parser.on('article', function(article){
     console.log('Got article: %s', JSON.stringify(article));
 });
 
-parser.parseFile('./feed');
+parser.parseFile('http://cyber.law.harvard.edu/rss/examples/rss2sample.xml');
