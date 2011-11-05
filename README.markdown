@@ -1,26 +1,11 @@
 #  Feedparser - Robust RSS, Atom, and RDF feed parsing in Node.js 
       
-This module adds methods for RSS, Atom, and RDF feed parsing in node.js using libxmljs.
+This module adds methods for RSS, Atom, and RDF feed parsing in node.js using Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
 ## Requirements
 
-Feedparser uses libxmljs to parse XML. libxmljs requires `scons` to be installed prior to installing through [npm](http://npmjs.org).
-
-### Installing `scons` through APT/yum
-
-On Debian based Linux distributions like Ubuntu, simply install using `apt-get` like this:
-
-    sudo apt-get install scons
-
-On RedHat based Linux distributions like Fedora or CentOS, simply install using `yum` like this:
-
-    sudo yum install scons
-
-### Installing `scons` through Homebrew
-
-On Mac OS X, the easiest way to install `scons` is using [Homebrew](http://mxcl.github.com/homebrew/), a great package manager for OS X. With `brew` installed, simply open Terminal and type:
-
-    brew install scons
+- [sax](https://github.com/isaacs/sax-js)
+- [request](https://github.com/mikeal/request)
 
 ## Installation
 
