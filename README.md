@@ -41,7 +41,7 @@ npm install feedparser
     parser.parseUrl('http://cyber.law.harvard.edu/rss/examples/rss2sample.xml');
 
     // But you should probably be using conditional GETs and passing the results to
-    // parseString() or or piping it right into the stream, if possible
+    // parseString() or piping it right into the stream, if possible
 
     var reqObj = {'uri': 'http://cyber.law.harvard.edu/rss/examples/rss2sample.xml',
                   'If-Modified-Since' : <your cached 'lastModified' value>,
@@ -63,6 +63,9 @@ npm install feedparser
 ```
 
 ### Use with a callback
+
+When the feed is finished being parsed, if you provide a callback, it gets
+called with three parameters: error, meta, and articles.
 
 ```javascript
 
