@@ -5,33 +5,94 @@ Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
 ## Requirements
 
-- [sax](https://github.com/isaacs/sax-js) -
-[request](https://github.com/mikeal/request)
+- [sax](https://github.com/isaacs/sax-js)
+- [request](https://github.com/mikeal/request)
 
 ## Installation
 
 npm install feedparser
 
-## Example
+## Examples
 
-```javascript var FeedParser = require('feedparser') , parser
+```javascript
 
-parser = new FeedParser();
+    var FeedParser = require('feedparser')
+      , parser = new FeedParser()
+      // The following modules are used in the examples below
+      , fs = require('fs')
+      , request = require('request')
+      ;
+```
+### Use as an EventEmitter
 
-parser.on('article', function(article){ console.log('Got article: %s',
-JSON.stringify(article)); });
+```javascript
 
-parser.parseFile('./feed'); ```
+    parser.on('article', function (article){
+      console.log('Got article: %s', JSON.stringify(article));
+    });
+
+    // You can give a local file path to parseFile()
+    parser.parseFile('./feed');
+
+    // For libxml compatibility, you can also give a URL to parseFile()
+    parser.parseFile('http://cyber.law.harvard.edu/rss/examples/rss2sample.xml');
+
+    // Or, you can give that URL to parseUrl()
+    parser.parseUrl('http://cyber.law.harvard.edu/rss/examples/rss2sample.xml');
+
+    // But you should probably be using conditional GETs and passing the results to
+    // parseString() or or piping it right into the stream, if possible
+
+    var reqObj = {'uri': 'http://cyber.law.harvard.edu/rss/examples/rss2sample.xml',
+                  'If-Modified-Since' : <your cached 'lastModified' value>,
+                  'If-None-Match' : <your cached 'etag' value>};
+
+    // parseString()
+    request(reqObj, function (err, response, body){
+      parser.parseString(body);
+    });
+
+    // Stream piping -- very sexy
+    request(reqObj).pipe(parser.stream);
+    
+    // Using the stream interface with a file (or string)
+    // A good alternative to parseFile() or parseString() when you have a large local file
+    parser.parseStream(fs.createReadStream('./feed'));
+    // Or
+    fs.createReadStream('./feed').pipe(parser.stream);
+```
+
+### Use with a callback
+
+```javascript
+
+    function myCallback (error, meta, articles){
+      if (error) console.error(error);
+      else {
+        console.log('Feed info');
+        console.log('%s - %s - %s', meta.title, meta.link, meta.xmlUrl);
+        console.log('Articles');
+        articles.forEach(function (article){
+          console.log('%s - %s (%s)', article.date, article.title, article.link);
+        });
+      }
+    }
+
+    parser.parseFile('./feed', myCallback);
+
+    // To use the stream interface with a callback, you *MUST* use parseStream(), not piping
+    parser.parseStream(fs.createReadStream('./feed'), myCallback);
+```
 
 ## What is the parsed output produced by feedparser?
 
 Feedparser parses each feed into a `meta` portion and one or more `articles`.
 
-Regardless of the format of the feed, both `meta` and each `article` contain a
-uniform set of generic properties patterned (although not identical to) the RSS
-2.0 format, as well as all of the properties originally contained in the feed.
-So, for example, an Atom feed may have a `meta.description` property, but it
-will also have a `meta['atom:subtitle']` property.
+Regardless of the format of the feed, the `meta` and each `article` contain a
+uniform set of generic properties patterned after (although not identical to)
+the RSS 2.0 format, as well as all of the properties originally contained in the
+feed. So, for example, an Atom feed may have a `meta.description` property, but
+it will also have a `meta['atom:subtitle']` property.
 
 The purpose of the generic properties is to provide the user a uniform interface
 for accessing a feed's information without needing to know the feed's format
@@ -43,18 +104,25 @@ and `pheedo` extensions. So, for example, if a feed article contains either an
 `itunes:image` or `media:thumbnail`, the url for that image will be contained in
 the article's `image.url` property.
 
-All properties are "pre-initialized" to `null` (or empty arrays or objects for
-certain properties). This should save you from having to do a lot of checking
-for `undefined`, such as, for example, when you are using jade templates.
+All generic properties are "pre-initialized" to `null` (or empty arrays or
+objects for certain properties). This should save you from having to do a lot of
+checking for `undefined`, such as, for example, when you are using jade
+templates.
+
+In addition, all properties (and namespace prefixes) use only lowercase letters,
+regardless of how they were capitalized in the original feed. ("xmlUrl" and
+"pubDate" also are still used to provide backwards compatibility.) This decision
+places ease-of-use over purity -- hopefully, you will never need to think about
+whether you should camelCase "pubDate" ever again.
 
 ### List of meta propreties
 
 * title
 * description
 * link (website link)
-* xmlUrl (the canonical link to the feed, as specified by the feed)
+* xmlurl (the canonical link to the feed, as specified by the feed)
 * date (most recent update)
-* pubDate (original published date)
+* pubdate (original published date)
 * author
 * language
 * image (an Object containing `url` and `title` properties)
@@ -71,7 +139,7 @@ for `undefined`, such as, for example, when you are using jade templates.
 * link
 * origlink (when FeedBurner or Pheedo puts a special tracking url in the `link` property, `origlink` contains the original link)
 * date (most recent update)
-* pubDate (original published date)
+* pubdate (original published date)
 * author
 * guid (a unique identifier for the article)
 * comments (a link to the article's comments section)
