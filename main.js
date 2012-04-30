@@ -448,7 +448,7 @@ function handleItem (node, type){
 function FeedParser () {
   var self = this;
   self._reset();
-  self.stream = sax.createStream(false /* strict mode - no */, {lowercasetags: true}); // https://github.com/isaacs/sax-js
+  self.stream = sax.createStream(false /* strict mode - no */, {lowercase: true}); // https://github.com/isaacs/sax-js
   self.stream.on('error', function (e){ self.handleSaxError(e, self) });
   self.stream.on('opentag', function (n){ self.handleOpenTag(n, self) });
   self.stream.on('closetag', function (el){ self.handleCloseTag(el, self) });

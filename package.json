@@ -14,7 +14,7 @@
 , "engines" :
   { "node" : ">= 0.4.0" }
 , "dependencies" :
-  { "sax" : "0.3.x"
+  { "sax" : "0.4.x"
   , "request" : "2.9.x"
   }
 , "devDependencies": {}
