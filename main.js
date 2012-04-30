@@ -788,4 +788,5 @@ FeedParser.prototype._setCallback = function (callback){
   this.callback = ('function' == typeof callback) ? callback : undefined;
 }
 
-exports = module.exports = FeedParser;
+module.exports = new FeedParser();
+module.exports.FeedParser = FeedParser;

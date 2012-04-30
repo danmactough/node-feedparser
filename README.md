@@ -12,12 +12,18 @@ Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
 npm install feedparser
 
+## Breakage Note
+
+If you are upgrading from version 0.9.x or earlier, note that when you require
+the module using `require('feedparser')`, you now will receive an instance of
+FeedParser rather than an object. If you wish to create your own instance for
+some reason, use `require('feedparser').FeedParser` or some variant of that.
+
 ## Examples
 
 ```javascript
 
-    var FeedParser = require('feedparser')
-      , parser = new FeedParser()
+    var parser = require('feedparser')
       // The following modules are used in the examples below
       , fs = require('fs')
       , request = require('request')
