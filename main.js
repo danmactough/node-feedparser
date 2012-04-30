@@ -343,7 +343,7 @@ function handleItem (node, type){
       }
       break;
     case('enc:enclosure'): // Can't find this in use for an example to debug. Only example found does not comply with the spec -- can't code THAT!
-      break;      
+      break;
     case('category'):
     case('dc:subject'):
     case('itunes:category'):
@@ -448,14 +448,14 @@ function handleItem (node, type){
 function FeedParser () {
   var self = this;
   self._reset();
-  self.stream = sax.createStream(false, {lowercasetags: true}); // https://github.com/isaacs/sax-js
+  self.stream = sax.createStream(false /* strict mode - no */, {lowercasetags: true}); // https://github.com/isaacs/sax-js
   self.stream.on('error', function (e){ self.handleSaxError(e, self) });
   self.stream.on('opentag', function (n){ self.handleOpenTag(n, self) });
   self.stream.on('closetag', function (el){ self.handleCloseTag(el, self) });
   self.stream.on('text', function (text){ self.handleText(text, self) });
   self.stream.on('cdata', function (text){ self.handleText(text, self) });
   self.stream.on('end', function (){ self.handleEnd(self) });
-  events.EventEmitter.call(this);
+  events.EventEmitter.call(self);
 }
 
 util.inherits(FeedParser, events.EventEmitter);
