@@ -2,7 +2,7 @@
   "name": "feedparser",
   "author": "Dan MacTough <danmactough@gmail.com>",
   "description": "Robust RSS, Atom, and RDF feed parsing using sax js",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "repository": {
     "type": "git",
     "url": "git://github.com/danmactough/node-feedparser.git"
@@ -13,7 +13,7 @@
     "node": ">= 0.4.0"
   },
   "dependencies": {
-    "sax": "0.3.x",
+    "sax": "0.4.x",
     "request": "2.9.x"
   },
   "devDependencies": {}
