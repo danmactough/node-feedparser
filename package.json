@@ -1,20 +1,21 @@
-{
-  "name": "feedparser",
-  "author": "Dan MacTough <danmactough@gmail.com>",
-  "description": "Robust RSS, Atom, and RDF feed parsing using sax js",
-  "version": "0.9.8",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/danmactough/node-feedparser.git"
-  },
-  "keywords": ["rss", "feed", "atom", "rdf", "xml", "syndication"],
-  "main": "./lib/feedparser",
-  "engines": {
-    "node": ">= 0.4.0"
-  },
-  "dependencies": {
-    "sax": "0.4.x",
-    "request": "2.9.x"
-  },
-  "devDependencies": {}
+{ "name" : "feedparser"
+, "author" : "Dan MacTough <danmactough@gmail.com>"
+, "description" : "Robust RSS Atom and RDF feed parsing using sax js"
+, "version": "0.9.8",
+, "keywords" : ["rss", "feed", "atom", "rdf", "xml", "syndication"]
+, "homepage" : "http://github.com/danmactough/node-feedparser"
+, "repository" :
+  { "type" : "git"
+  , "url" : "git://github.com/danmactough/node-feedparser.git"
+  }
+, "bugs" :
+  { "url" : "http://github.com/danmactough/node-feedparser/issues"}
+, "main" : "./main.js"
+, "engines" :
+  { "node" : ">= 0.4.0" }
+, "dependencies" :
+  { "sax" : "0.4.x"
+  , "request" : "2.9.x"
+  }
+, "devDependencies": {}
 }
