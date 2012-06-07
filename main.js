@@ -458,23 +458,23 @@ function handleItem (node, type){
  * @api public
  */
 function FeedParser () {
-  var self = this;
-  self._reset();
-  self.stream = sax.createStream(false /* strict mode - no */, {lowercase: true}); // https://github.com/isaacs/sax-js
-  self.stream.on('error', function (e){ self.handleSaxError(e, self) });
-  self.stream.on('opentag', function (n){ self.handleOpenTag(n, self) });
-  self.stream.on('closetag', function (el){ self.handleCloseTag(el, self) });
-  self.stream.on('text', function (text){ self.handleText(text, self) });
-  self.stream.on('cdata', function (text){ self.handleText(text, self) });
-  self.stream.on('end', function (){ self.handleEnd(self) });
-  EventEmitter.call(self);
+  var parser = this;
+  parser._reset();
+  parser.stream = sax.createStream(false /* strict mode - no */, {lowercase: true}); // https://github.com/isaacs/sax-js
+  parser.stream.on('error', function (e){ parser.handleSaxError(e, parser) });
+  parser.stream.on('opentag', function (n){ parser.handleOpenTag(n, parser) });
+  parser.stream.on('closetag', function (el){ parser.handleCloseTag(el, parser) });
+  parser.stream.on('text', function (text){ parser.handleText(text, parser) });
+  parser.stream.on('cdata', function (text){ parser.handleText(text, parser) });
+  parser.stream.on('end', function (){ parser.handleEnd(parser) });
+  EventEmitter.call(parser);
 }
 util.inherits(FeedParser, EventEmitter);
 
 /**
  * Parses a feed contained in a string.
  *
- * For each article/post in a feed, emits an 'article' event 
+ * For each article/post in a feed, emits an 'article' event
  * with an object with the following keys:
  *   title {String}
  *   description {String}
@@ -519,10 +519,10 @@ util.inherits(FeedParser, EventEmitter);
  */
 
 FeedParser.prototype.parseString = function(string, callback) {
-  var self = this;
-  self._setCallback(callback);
-  self.stream
-    .on('error', function (e){ self.handleError(e, self); })
+  var parser = this;
+  parser._setCallback(callback);
+  parser.stream
+    .on('error', function (e){ parser.handleError(e, parser); })
     .end(string, 'utf8');
 };
 
@@ -536,21 +536,21 @@ FeedParser.prototype.parseString = function(string, callback) {
  */
 
 FeedParser.prototype.parseFile = function(file, callback) {
-  var self = this;
+  var parser = this;
   if (/^https?:/.test(file) || (typeof file == 'object' && 'protocol' in file)) {
-    self.parseUrl(file, callback);
+    parser.parseUrl(file, callback);
   } else {
-    self._setCallback(callback);
+    parser._setCallback(callback);
     fs.createReadStream(file)
-      .on('error', function (e){ self.handleError(e, self); })
-      .pipe(self.stream);
+      .on('error', function (e){ parser.handleError(e, parser); })
+      .pipe(parser.stream);
   }
 };
 
 /**
  * Parses a feed from a url.
  *
- * Please consider whether it would be better to perform conditional GETs 
+ * Please consider whether it would be better to perform conditional GETs
  * and pass in the results instead.
  *
  * See parseString for more info.
@@ -561,11 +561,11 @@ FeedParser.prototype.parseFile = function(file, callback) {
  */
 
 FeedParser.prototype.parseUrl = function(url, callback) {
-  var self = this;
-  self._setCallback(callback);
+  var parser = this;
+  parser._setCallback(callback);
   request(url)
-    .on('error', function (e){ self.handleError(e, self); })
-    .pipe(self.stream);
+    .on('error', function (e){ parser.handleError(e, parser); })
+    .pipe(parser.stream);
 };
 
 /**
@@ -585,51 +585,49 @@ FeedParser.prototype.parseUrl = function(url, callback) {
  */
 
 FeedParser.prototype.parseStream = function(stream, callback) {
-  var self = this;
-  self._setCallback(callback);
+  var parser = this;
+  parser._setCallback(callback);
   stream
-    .on('error', function (e){ self.handleError(e, self); })
-    .pipe(self.stream);
+    .on('error', function (e){ parser.handleError(e, parser); })
+    .pipe(parser.stream);
 };
 
 FeedParser.prototype.handleEnd = function (scope){
-  var self = scope;
-  var meta = self.meta
-    , articles = self.articles;
+  var parser = scope;
 
-  self.emit('end', articles);
+  parser.emit('end', parser.articles);
 
-  if ('function' == typeof self.callback) {
-    if (self.errors.length) {
-      var error = self.errors.pop();
-      if (self.errors.length) {
-        error.errors = self.errors;
+  if ('function' == typeof parser.callback) {
+    if (parser.errors.length) {
+      var error = parser.errors.pop();
+      if (parser.errors.length) {
+        error.errors = parser.errors;
       }
-      self.callback(error);
+      parser.callback(error);
     } else {
-      self.callback(null, meta, articles);
+      parser.callback(null, parser.meta, parser.articles);
     }
   }
-  self._reset();
+  parser._reset();
 };
 
 FeedParser.prototype.handleSaxError = function (e, scope){
-  var self = scope;
-  self.handleError(e, self);
-  if (self._parser) {
-    self._parser.error = null;
-    self._parser.resume();
+  var parser = scope;
+  parser.handleError(e, parser);
+  if (parser._parser) {
+    parser._parser.error = null;
+    parser._parser.resume();
   }
 };
 
 FeedParser.prototype.handleError = function (e, scope){
-  var self = scope;
-  self.emit('error', e);
-  self.errors.push(e);
+  var parser = scope;
+  parser.emit('error', e);
+  parser.errors.push(e);
 };
 
 FeedParser.prototype.handleOpenTag = function (node, scope){
-  var self = scope;
+  var parser = scope;
   var n = {};
   n['#name'] = node.name; // Avoid namespace collissions later...
   n['@'] = {};
@@ -637,18 +635,18 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
 
   function handleAttributes (attrs, el) {
     Object.keys(attrs).forEach(function(name){
-      if (self.xmlbase.length && (name == 'href' || name == 'src' || name == 'uri')) {
+      if (parser.xmlbase.length && (name == 'href' || name == 'src' || name == 'uri')) {
         // Apply xml:base to these elements as they appear
         // rather than leaving it to the ultimate parser
-        attrs[name] = url.resolve(self.xmlbase[0]['#'], attrs[name]);
+        attrs[name] = url.resolve(parser.xmlbase[0]['#'], attrs[name]);
       } else if (name == 'xml:base') {
-        if (self.xmlbase.length) {
-          attrs[name] = url.resolve(self.xmlbase[0]['#'], attrs[name]);
+        if (parser.xmlbase.length) {
+          attrs[name] = url.resolve(parser.xmlbase[0]['#'], attrs[name]);
         }
-        self.xmlbase.unshift({ '#name': el, '#': attrs[name]});
+        parser.xmlbase.unshift({ '#name': el, '#': attrs[name]});
       } else if (name == 'type' && attrs['type'] == 'xhtml') {
-        self.in_xhtml = true;
-        self.xhtml = {'#name': el, '#': ''};
+        parser.in_xhtml = true;
+        parser.xhtml = {'#name': el, '#': ''};
       }
       attrs[name] = attrs[name].trim();
     });
@@ -659,75 +657,75 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
     n['@'] = handleAttributes(node.attributes, n['#name']);
   }
 
-  if (self.in_xhtml && self.xhtml['#name'] != n['#name']) { // We are in an xhtml node
+  if (parser.in_xhtml && parser.xhtml['#name'] != n['#name']) { // We are in an xhtml node
     // This builds the opening tag, e.g., <div id='foo' class='bar'>
-    self.xhtml['#'] += '<'+n['#name'];
+    parser.xhtml['#'] += '<'+n['#name'];
     Object.keys(n['@']).forEach(function(name){
-      self.xhtml['#'] += ' '+ name +'="'+ n['@'][name] + '"';
+      parser.xhtml['#'] += ' '+ name +'="'+ n['@'][name] + '"';
     });
-    self.xhtml['#'] += '>';
-  } else if (self.stack.length == 0 && 
+    parser.xhtml['#'] += '>';
+  } else if (parser.stack.length == 0 &&
             (n['#name'] == 'rss' || n['#name'] == 'rdf:rdf' || n['#name'] == 'feed')) {
-    self.meta['#ns'] = [];
-    self.meta['@'] = [];
+    parser.meta['#ns'] = [];
+    parser.meta['@'] = [];
     Object.keys(n['@']).forEach(function(name) {
       var o = {};
       o[name] = n['@'][name];
       if (name.indexOf('xmlns') == 0) {
-        self.meta['#ns'].push(o);
+        parser.meta['#ns'].push(o);
       } else if (name != 'version') {
-        self.meta['@'].push(o);
+        parser.meta['@'].push(o);
       }
     });
     switch(n['#name']) {
     case 'rss':
-      self.meta['#type'] = 'rss';
-      self.meta['#version'] = n['@']['version'];
+      parser.meta['#type'] = 'rss';
+      parser.meta['#version'] = n['@']['version'];
       break;
     case 'rdf:rdf':
-      self.meta['#type'] = 'rdf';
-      self.meta['#version'] = n['@']['version'] || '1.0';
+      parser.meta['#type'] = 'rdf';
+      parser.meta['#version'] = n['@']['version'] || '1.0';
       break;
     case 'feed':
-      self.meta['#type'] = 'atom';
-      self.meta['#version'] = n['@']['version'] || '1.0';
+      parser.meta['#type'] = 'atom';
+      parser.meta['#version'] = n['@']['version'] || '1.0';
       break;
     }
   }
-  self.stack.unshift(n);
+  parser.stack.unshift(n);
 };
 
 FeedParser.prototype.handleCloseTag = function (el, scope){
-  var self = scope;
+  var parser = scope;
   var item;
-  var n = self.stack.shift();
+  var n = parser.stack.shift();
   delete n['#name'];
 
-  if (self.xmlbase.length && (el == 'logo' || el == 'icon')) { // Via atom
+  if (parser.xmlbase.length && (el == 'logo' || el == 'icon')) { // Via atom
     // Apply xml:base to these elements as they appear
     // rather than leaving it to the ultimate parser
-    n['#'] = url.resolve(self.xmlbase[0]['#'], n['#']);
+    n['#'] = url.resolve(parser.xmlbase[0]['#'], n['#']);
   }
 
-  if (self.xmlbase.length && (el == self.xmlbase[0]['#name'])) {
-    void self.xmlbase.shift();
+  if (parser.xmlbase.length && (el == parser.xmlbase[0]['#name'])) {
+    void parser.xmlbase.shift();
   }
 
-  if (self.in_xhtml) {
-    if (el == self.xhtml['#name']) { // The end of the XHTML
+  if (parser.in_xhtml) {
+    if (el == parser.xhtml['#name']) { // The end of the XHTML
 
       // Add xhtml data to the container element
-      n['#'] += self.xhtml['#'].trim();
+      n['#'] += parser.xhtml['#'].trim();
         // Clear xhtml nodes from the tree
         for (var key in n) {
           if (key != '@' && key != '#') {
             delete n[key];
           }
         }
-      self.xhtml = {};
-      self.in_xhtml = false;
+      parser.xhtml = {};
+      parser.in_xhtml = false;
     } else { // Somewhere in the middle of the XHTML
-      self.xhtml['#'] += '</' + el + '>';
+      parser.xhtml['#'] += '</' + el + '>';
     }
   }
 
@@ -743,43 +741,43 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
   }
 
   if (el == 'item' || el == 'entry') { // We have an article!
-    if (!self.meta.title) { // We haven't yet parsed all the metadata
-      utils.merge(self.meta, handleMeta(self.stack[0], self.meta['#type']));
-      self.emit('meta', self.meta);
+    if (!parser.meta.title) { // We haven't yet parsed all the metadata
+      utils.merge(parser.meta, handleMeta(parser.stack[0], parser.meta['#type']));
+      parser.emit('meta', parser.meta);
     }
-    item = handleItem(n, self.meta['#type']);
-    item.meta = self.meta;
-    if (self.meta.author && !item.author) item.author = self.meta.author;
-    self.emit('article', item);
-    self.articles.push(item);
-  } else if ((el == 'channel' || el == 'feed') && !self.meta.title) { // We haven't yet parsed all the metadata
-    utils.merge(self.meta, handleMeta(n, self.meta['#type']));
-    self.emit('meta', self.meta);
+    item = handleItem(n, parser.meta['#type']);
+    item.meta = parser.meta;
+    if (parser.meta.author && !item.author) item.author = parser.meta.author;
+    parser.emit('article', item);
+    parser.articles.push(item);
+  } else if ((el == 'channel' || el == 'feed') && !parser.meta.title) { // We haven't yet parsed all the metadata
+    utils.merge(parser.meta, handleMeta(n, parser.meta['#type']));
+    parser.emit('meta', parser.meta);
   }
 
-  if (self.stack.length > 0) {
-    if (!self.stack[0].hasOwnProperty(el)) {
-      self.stack[0][el] = n;
-    } else if (self.stack[0][el] instanceof Array) {
-      self.stack[0][el].push(n);
+  if (parser.stack.length > 0) {
+    if (!parser.stack[0].hasOwnProperty(el)) {
+      parser.stack[0][el] = n;
+    } else if (parser.stack[0][el] instanceof Array) {
+      parser.stack[0][el].push(n);
     } else {
-      self.stack[0][el] = [self.stack[0][el], n];
+      parser.stack[0][el] = [parser.stack[0][el], n];
     }
   } else {
-    self.nodes = n;
+    parser.nodes = n;
   }
 };
 
 FeedParser.prototype.handleText = function (text, scope){
-  var self = scope;
-  if (self.in_xhtml) {
-    self.xhtml['#'] += text;
+  var parser = scope;
+  if (parser.in_xhtml) {
+    parser.xhtml['#'] += text;
   } else {
-    if (self.stack.length) {
-      if ('#' in self.stack[0]) {
-        self.stack[0]['#'] += text;
+    if (parser.stack.length) {
+      if ('#' in parser.stack[0]) {
+        parser.stack[0]['#'] += text;
       } else {
-        self.stack[0]['#'] = text;
+        parser.stack[0]['#'] = text;
       }
     }
   }
@@ -792,7 +790,7 @@ FeedParser.prototype._reset = function (){
   this.nodes = {};
   this.xmlbase = [];
   this.in_xhtml = false;
-  this.xhtml = {}; /* Where to store xhtml elements as associative 
+  this.xhtml = {}; /* Where to store xhtml elements as associative
                       array with keys: '#' (containing the text)
                       and '#name' (containing the XML element name) */
   this.errors = [];
