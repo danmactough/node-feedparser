@@ -1,46 +1,51 @@
 /**
- * Adapted from
- * Connect - utils
- * Copyright(c) 2010 Sencha Inc.
- * Copyright(c) 2011 TJ Holowaychuk
- * MIT Licensed
- * 
  * Merge object b with object a.
  *
  * var a = { foo: 'bar' }
- * , b = { foo: 'quux', bar: 'baz' };
+ *   , b = { foo: 'quux', bar: 'baz' };
  *
- * Object.merge(a, b);
- * // => { foo: 'bar', bar: 'baz' }
- *
- * Object.merge(a, b, true);
+ * merge(a, b);
  * // => { foo: 'quux', bar: 'baz' }
+ *
+ * merge(a, b, true);
+ * // => { foo: 'bar', bar: 'baz' }
  * 
  * @param {Object} a
  * @param {Object} b
- * @param {Boolean} [force] Optionally, overwrite any existing keys in a found in b
+ * @param {Boolean} [noforce] Optionally, don't overwrite any existing keys in a found in b
  * @return {Object}
  */
-if(!Object.merge) Object.merge = function(a, b, force){
-  if (a && b) {
-    if (a !== Object(a) || b !== Object(b)) {
-      throw new TypeError('Object.merge called on non-object');
-    }
+function merge (a, b, noforce) {
+  if (a && b && a === Object(a) && b === Object(b)) {
     for (var key in b) {
-      if(force || !a.hasOwnProperty(key)) {
-        a[key] = b[key];
+      if (noforce) {
+        if (!a.hasOwnProperty(key)) a[key] = b[key];
+      } else {
+        a[key] = b[key]
       }
     }
   }
   return a;
 };
+exports.merge = merge;
 
-Array.unique = function (array){
+/**
+ * Create an array containing the unique members of an array.
+ *
+ * var array = ['a', 'b', 1, 2, 'a', 3 ];
+ *
+ * unique(array);
+ * // => ['b', 1, 2, 'a', 3 ]
+ *
+ * @param {Array} array
+ * @return {Array}
+ */
+function unique (array) {
   var a = [];
   var l = array.length;
-  for(var i=0; i<l; i++) {
-    for(var j=i+1; j<l; j++) {
-      // If this[i] is found later in the array
+  for (var i=0; i<l; i++) {
+    for (var j=i+1; j<l; j++) {
+      // If array[i] is found later in the array
       if (array[i] === array[j])
         j = ++i;
     }
@@ -48,9 +53,24 @@ Array.unique = function (array){
   }
   return a;
 };
+exports.unique = unique;
 
-// Utility function to test for and extract a subkey
-function getValue(obj, subkey) {
+/**
+ * Utility function to test for and extract a subkey.
+ *
+ * var obj = { '#': 'foo', 'bar': 'baz' };
+ *
+ * get(obj);
+ * // => 'foo'
+ *
+ * get(obj, 'bar');
+ * // => 'baz'
+ *
+ * @param {Object} obj
+ * @param {String} [subkey="#"] By default, use the '#' key, but you may pass any key you like
+ * @return Returns the value of the selected key or 'null' if undefined.
+ */
+function get(obj, subkey) {
   if (!subkey)
     subkey = '#';
 
@@ -62,4 +82,4 @@ function getValue(obj, subkey) {
   else
     return null;
 }
-exports.getValue = getValue;
+exports.get = get;
