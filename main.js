@@ -522,7 +522,6 @@ FeedParser.prototype.parseString = function(string, callback) {
   var parser = this;
   parser._setCallback(callback);
   parser.stream
-    .on('error', function (e){ parser.handleError(e, parser); })
     .end(string, 'utf8');
 };
 
