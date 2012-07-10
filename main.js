@@ -612,17 +612,23 @@ FeedParser.prototype.handleEnd = function (scope){
 
 FeedParser.prototype.handleSaxError = function (e, scope){
   var parser = scope;
-  parser.handleError(e, parser);
-  if (parser._parser) {
-    parser._parser.error = null;
-    parser._parser.resume();
-  }
+  parser.handleError(e, parser, function(){
+    if (parser._parser) {
+      parser._parser.error = null;
+      parser._parser.resume();
+    }
+  });
 };
 
-FeedParser.prototype.handleError = function (e, scope){
+FeedParser.prototype.handleError = function (e, scope, next){
   var parser = scope;
   parser.emit('error', e);
   parser.errors.push(e);
+  if (typeof next === 'function') {
+    next();
+  } else {
+    parser.handleEnd(parser);
+  }
 };
 
 FeedParser.prototype.handleOpenTag = function (node, scope){
