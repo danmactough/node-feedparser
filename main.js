@@ -275,6 +275,7 @@ function handleItem (node, type){
         el.forEach(function (link){
           if (link['@']['href']) { // Atom
             if (utils.get(link['@'], 'rel')) {
+              if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
               if (link['@']['rel'] == 'alternate') item.link = link['@']['href'];
               if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
               if (link['@']['rel'] == 'enclosure') {
@@ -294,6 +295,7 @@ function handleItem (node, type){
       } else {
         if (el['@']['href']) { // Atom
           if (utils.get(el['@'], 'rel')) {
+            if (el['@']['rel'] == 'canonical') item.origlink = el['@']['href'];
             if (el['@']['rel'] == 'alternate') item.link = el['@']['href'];
             if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
             if (el['@']['rel'] == 'enclosure') {
