@@ -425,7 +425,9 @@ function handleItem (node, type){
       break;
     case('feedburner:origlink'):
     case('pheedo:origlink'):
-      item.origlink = utils.get(el);
+      if (!item.origlink) {
+        item.origlink = utils.get(el);
+      }
       break;
     } // switch end
     // Fill with all native other namespaced properties
