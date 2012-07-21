@@ -12,11 +12,38 @@
 var sax = require('sax')
   , request = require('request')
   , fs = require('fs')
-  , url = require('url')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
   , utils = require('./utils')
   ;
+
+function handleAttributes (attrs, el) {
+  var parser = this
+    , basepath = ''
+    ;
+
+  if (parser.xmlbase && parser.xmlbase.length) {
+    basepath = parser.xmlbase[0]['#'];
+  }
+
+  Object.keys(attrs).forEach(function(name){
+    if (basepath && (name == 'href' || name == 'src' || name == 'uri')) {
+      // Apply xml:base to these elements as they appear
+      // rather than leaving it to the ultimate parser
+      attrs[name] = utils.resolve(basepath, attrs[name]);
+    } else if (name == 'xml:base') {
+      if (basepath) {
+        attrs[name] = utils.resolve(basepath, attrs[name]);
+      }
+      parser.xmlbase.unshift({ '#name': el, '#': attrs[name]});
+    } else if (name == 'type' && attrs['type'] == 'xhtml') {
+      parser.in_xhtml = true;
+      parser.xhtml = {'#name': el, '#': ''};
+    }
+    attrs[name] = attrs[name].trim();
+  });
+  return attrs;
+}
 
 function handleMeta (node, type, options) {
   if (!type || !node) return {};
@@ -667,28 +694,8 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
   n['@'] = {};
   n['#'] = '';
 
-  function handleAttributes (attrs, el) {
-    Object.keys(attrs).forEach(function(name){
-      if (parser.xmlbase.length && (name == 'href' || name == 'src' || name == 'uri')) {
-        // Apply xml:base to these elements as they appear
-        // rather than leaving it to the ultimate parser
-        attrs[name] = url.resolve(parser.xmlbase[0]['#'], attrs[name]);
-      } else if (name == 'xml:base') {
-        if (parser.xmlbase.length) {
-          attrs[name] = url.resolve(parser.xmlbase[0]['#'], attrs[name]);
-        }
-        parser.xmlbase.unshift({ '#name': el, '#': attrs[name]});
-      } else if (name == 'type' && attrs['type'] == 'xhtml') {
-        parser.in_xhtml = true;
-        parser.xhtml = {'#name': el, '#': ''};
-      }
-      attrs[name] = attrs[name].trim();
-    });
-    return attrs;
-  }
-
   if (Object.keys(node.attributes).length) {
-    n['@'] = handleAttributes(node.attributes, n['#name']);
+    n['@'] = handleAttributes.call(parser, node.attributes, n['#name']);
   }
 
   if (parser.in_xhtml && parser.xhtml['#name'] != n['#name']) { // We are in an xhtml node
@@ -738,7 +745,7 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
   if (parser.xmlbase.length && (el == 'logo' || el == 'icon')) { // Via atom
     // Apply xml:base to these elements as they appear
     // rather than leaving it to the ultimate parser
-    n['#'] = url.resolve(parser.xmlbase[0]['#'], n['#']);
+    n['#'] = utils.resolve(parser.xmlbase[0]['#'], n['#']);
   }
 
   if (parser.xmlbase.length && (el == parser.xmlbase[0]['#name'])) {
