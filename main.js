@@ -12,16 +12,76 @@
 var sax = require('sax')
   , request = require('request')
   , fs = require('fs')
-  , url = require('url')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
   , utils = require('./utils')
   ;
 
+function reresolve (node, baseurl) {
+
+  if (!node || !baseurl) {
+    return false; // Nothing to do.
+  }
+
+  function resolveLevel (level) {
+    var els = Object.keys(level);
+    els.forEach(function(el){
+      if (Array.isArray(level[el])) {
+        level[el].forEach(resolveLevel);
+      } else {
+        if (level[el].constructor.name === 'Object') {
+          if (el == 'logo' || el == 'icon') {
+            level[el]['#'] = utils.resolve(baseurl, level[el]['#']);
+          } else {
+            var attrs = Object.keys(level[el]);
+            attrs.forEach(function(name){
+              if (name == 'href' || name == 'src' || name == 'uri') {
+                level[el][name] = utils.resolve(baseurl, level[el][name]);
+              }
+            });
+          }
+        }
+      }
+    });
+    return level;
+  }
+
+  return resolveLevel(node);
+}
+
+function handleAttributes (attrs, el) {
+  var parser = this
+    , basepath = ''
+    ;
+
+  if (parser.xmlbase && parser.xmlbase.length) {
+    basepath = parser.xmlbase[0]['#'];
+  }
+
+  Object.keys(attrs).forEach(function(name){
+    if (basepath && (name == 'href' || name == 'src' || name == 'uri')) {
+      // Apply xml:base to these elements as they appear
+      // rather than leaving it to the ultimate parser
+      attrs[name] = utils.resolve(basepath, attrs[name]);
+    } else if (name == 'xml:base') {
+      if (basepath) {
+        attrs[name] = utils.resolve(basepath, attrs[name]);
+      }
+      parser.xmlbase.unshift({ '#name': el, '#': attrs[name]});
+    } else if (name == 'type' && attrs['type'] == 'xhtml') {
+      parser.in_xhtml = true;
+      parser.xhtml = {'#name': el, '#': ''};
+    }
+    attrs[name] = attrs[name].trim();
+  });
+  return attrs;
+}
+
 function handleMeta (node, type, options) {
   if (!type || !node) return {};
 
-  var meta = {}
+  var parser = this
+    , meta = {}
     , normalize = !options || (options && options.normalize)
     ;
 
@@ -65,7 +125,13 @@ function handleMeta (node, type, options) {
             if (link['@']['href']) { // Atom
               if (utils.get(link['@'], 'rel')) {
                 if (link['@']['rel'] == 'alternate') meta.link = link['@']['href'];
-                else if (link['@']['rel'] == 'self') meta.xmlurl = meta.xmlUrl = link['@']['href'];
+                else if (link['@']['rel'] == 'self') {
+                  meta.xmlurl = meta.xmlUrl = link['@']['href'];
+                  if (parser.xmlbase && parser.xmlbase.length === 0) {
+                    parser.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
+                    parser.stack[0] = reresolve(parser.stack[0], meta.xmlurl);
+                  }
+                }
               } else {
                 meta.link = link['@']['href'];
               }
@@ -77,7 +143,13 @@ function handleMeta (node, type, options) {
           if (el['@']['href']) { // Atom
             if (utils.get(el['@'], 'rel')) {
               if (el['@']['rel'] == 'alternate') meta.link = el['@']['href'];
-              else if (el['@']['rel'] == 'self') meta.xmlurl = meta.xmlUrl = el['@']['href'];
+              else if (el['@']['rel'] == 'self') {
+                meta.xmlurl = meta.xmlUrl = el['@']['href'];
+                if (parser.xmlbase && parser.xmlbase.length === 0) {
+                  parser.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
+                  parser.stack[0] = reresolve(parser.stack[0], meta.xmlurl);
+                }
+              }
             } else {
               meta.link = el['@']['href'];
             }
@@ -547,8 +619,15 @@ util.inherits(FeedParser, EventEmitter);
  * @api public
  */
 
-FeedParser.prototype.parseString = function(string, callback) {
+FeedParser.prototype.parseString = function(string, options, callback) {
   var parser = this;
+  if (arguments.length === 2 && typeof options === 'function') {
+    callback = options;
+    options = null;
+  }
+  if (options && options.feedurl) {
+    parser.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
+  }
   parser._setCallback(callback);
   parser.stream
     .end(string, 'utf8');
@@ -563,8 +642,15 @@ FeedParser.prototype.parseString = function(string, callback) {
  * @api public
  */
 
-FeedParser.prototype.parseFile = function(file, callback) {
+FeedParser.prototype.parseFile = function(file, options, callback) {
   var parser = this;
+  if (arguments.length === 2 && typeof options === 'function') {
+    callback = options;
+    options = null;
+  }
+  if (options && options.feedurl) {
+    parser.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
+  }
   if (/^https?:/.test(file) || (typeof file == 'object' && 'protocol' in file)) {
     parser.parseUrl(file, callback);
   } else {
@@ -590,6 +676,13 @@ FeedParser.prototype.parseFile = function(file, callback) {
 
 FeedParser.prototype.parseUrl = function(url, callback) {
   var parser = this;
+  if (!parser.xmlbase.length) { // .parseFile may have already populated this value
+    if (/^https?:/.test(url)) {
+      parser.xmlbase.unshift({ '#name': 'xml', '#': url});
+    } else if (typeof url == 'object' && 'href' in url) {
+      parser.xmlbase.unshift({ '#name': 'xml', '#': url.href});
+    }
+  }
   parser._setCallback(callback);
   request(url)
     .on('error', function (e){ parser.handleError(e, parser); })
@@ -612,8 +705,15 @@ FeedParser.prototype.parseUrl = function(url, callback) {
  * @api public
  */
 
-FeedParser.prototype.parseStream = function(stream, callback) {
+FeedParser.prototype.parseStream = function(stream, options, callback) {
   var parser = this;
+  if (arguments.length === 2 && typeof options === 'function') {
+    callback = options;
+    options = null;
+  }
+  if (options && options.feedurl) {
+    parser.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
+  }
   parser._setCallback(callback);
   stream
     .on('error', function (e){ parser.handleError(e, parser); })
@@ -667,28 +767,8 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
   n['@'] = {};
   n['#'] = '';
 
-  function handleAttributes (attrs, el) {
-    Object.keys(attrs).forEach(function(name){
-      if (parser.xmlbase.length && (name == 'href' || name == 'src' || name == 'uri')) {
-        // Apply xml:base to these elements as they appear
-        // rather than leaving it to the ultimate parser
-        attrs[name] = url.resolve(parser.xmlbase[0]['#'], attrs[name]);
-      } else if (name == 'xml:base') {
-        if (parser.xmlbase.length) {
-          attrs[name] = url.resolve(parser.xmlbase[0]['#'], attrs[name]);
-        }
-        parser.xmlbase.unshift({ '#name': el, '#': attrs[name]});
-      } else if (name == 'type' && attrs['type'] == 'xhtml') {
-        parser.in_xhtml = true;
-        parser.xhtml = {'#name': el, '#': ''};
-      }
-      attrs[name] = attrs[name].trim();
-    });
-    return attrs;
-  }
-
   if (Object.keys(node.attributes).length) {
-    n['@'] = handleAttributes(node.attributes, n['#name']);
+    n['@'] = handleAttributes.call(parser, node.attributes, n['#name']);
   }
 
   if (parser.in_xhtml && parser.xhtml['#name'] != n['#name']) { // We are in an xhtml node
@@ -730,15 +810,21 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
 };
 
 FeedParser.prototype.handleCloseTag = function (el, scope){
-  var parser = scope;
-  var item;
+  var parser = scope
+    , item
+    , baseurl
+    ;
   var n = parser.stack.shift();
   delete n['#name'];
 
-  if (parser.xmlbase.length && (el == 'logo' || el == 'icon')) { // Via atom
+  if (parser.xmlbase && parser.xmlbase.length) {
+    baseurl = parser.xmlbase[0]['#'];
+  }
+
+  if (baseurl && (el == 'logo' || el == 'icon')) { // Via atom
     // Apply xml:base to these elements as they appear
     // rather than leaving it to the ultimate parser
-    n['#'] = url.resolve(parser.xmlbase[0]['#'], n['#']);
+    n['#'] = utils.resolve(baseurl, n['#']);
   }
 
   if (parser.xmlbase.length && (el == parser.xmlbase[0]['#name'])) {
@@ -776,8 +862,11 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
 
   if (el == 'item' || el == 'entry') { // We have an article!
     if (!parser.meta.title) { // We haven't yet parsed all the metadata
-      utils.merge(parser.meta, handleMeta(parser.stack[0], parser.meta['#type'], parser.options));
+      utils.merge(parser.meta, handleMeta.call(parser, parser.stack[0], parser.meta['#type'], parser.options));
       parser.emit('meta', parser.meta);
+    }
+    if (!baseurl && parser.xmlbase && parser.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
+      n = reresolve(n, parser.xmlbase[0]['#']);
     }
     item = handleItem(n, parser.meta['#type'], parser.options);
     if (parser.options.addMetaToItems) {

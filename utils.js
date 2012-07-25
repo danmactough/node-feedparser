@@ -1,3 +1,10 @@
+
+/**
+ * Module dependencies.
+ */
+var URL = require('url')
+  ;
+
 /**
  * Merge object b with object a.
  *
@@ -21,12 +28,12 @@ function merge (a, b, noforce) {
       if (noforce) {
         if (!a.hasOwnProperty(key)) a[key] = b[key];
       } else {
-        a[key] = b[key]
+        a[key] = b[key];
       }
     }
   }
   return a;
-};
+}
 exports.merge = merge;
 
 /**
@@ -52,7 +59,7 @@ function unique (array) {
     a.push(array[i]);
   }
   return a;
-};
+}
 exports.unique = unique;
 
 /**
@@ -83,3 +90,8 @@ function get(obj, subkey) {
     return null;
 }
 exports.get = get;
+
+function resolve (baseUrl, pathUrl) {
+  return URL.resolve(baseUrl, pathUrl);
+}
+exports.resolve = resolve;
