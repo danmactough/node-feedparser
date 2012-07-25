@@ -44,8 +44,8 @@ npm install feedparser
     // parseString() or piping it right into the stream, if possible
 
     var reqObj = {'uri': 'http://cyber.law.harvard.edu/rss/examples/rss2sample.xml',
-                  'If-Modified-Since' : <your cached 'lastModified' value>,
-                  'If-None-Match' : <your cached 'etag' value>};
+                  'headers': {'If-Modified-Since' : <your cached 'lastModified' value>,
+                              'If-None-Match' : <your cached 'etag' value>}};
 
     // parseString()
     request(reqObj, function (err, response, body){
