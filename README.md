@@ -12,6 +12,58 @@ Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
 npm install feedparser
 
+## Changes since v0.9.13
+
+Instantiating the parser or calling one of the parser methods now may be
+called with an optional [options object](#options).
+
+## Usage
+
+### Create a new instance
+
+```javascript
+
+    var FeedParser = require('feedparser')
+      , parser = new FeedParser() // optionally called with an options object
+      ;
+```
+### parser.parseString(string, [options], [callback])
+
+- `string` - the contents of the feed
+
+### parser.parseFile(filename, [options], [callback])
+
+- `filename` - a local filename or remote url
+
+### parser.parseUrl(url, [options], [callback])
+
+- `url` - fully qualified uri or a parsed url object from url.parse()
+
+### parser.parseStream(readableStream, [options], [callback])
+
+- `readableStream` - a [Readable Stream](http://nodejs.org/api/stream.html#stream_readable_stream)
+
+### options
+
+- `normalize` - Set to `false` to override Feedparser's default behavior,
+  which is to parse feeds into an object that contains the generic properties
+  patterned after (although not identical to) the RSS 2.0 format, regardless
+  of the feed's format.
+
+- `addmeta` - Set to `false` to override Feedparser's default behavior, which
+  is to add the feed's `meta` information to each `article`.
+
+- `feedurl` - The url (string) of the feed. FeedParser is very good at
+  resolving relative urls in feeds. But some feeds use relative urls without
+  declaring the `xml:base` attribute any place in the feed. This is perfectly
+  valid, but if we are parsing the feed with the `parseString`, `parseFile`,
+  or `parseStream` method, we don't know know the feed's url before we start
+  parsing the feed and trying to resolve those relative urls. If we discover
+  the feed's url, we will go back and resolve the relative urls we've already
+  seen, but this takes a little time (not much). If you want to be sure we
+  never have to re-resolve relative urls (or if FeedParser is failing to
+  properly resolve relative urls), you should set `feedurl`.
+
 ## Examples
 
 ```javascript
@@ -23,6 +75,7 @@ npm install feedparser
       , request = require('request')
       ;
 ```
+
 ### Use as an EventEmitter
 
 ```javascript
