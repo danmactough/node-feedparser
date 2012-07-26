@@ -1,6 +1,6 @@
 var assert = require('assert')
   , fs = require('fs')
-  , str = fs.readFileSync(__dirname + '/rss2sample.xml')
+  , str = fs.readFileSync(__dirname + '/feeds/rss2sample.xml')
   , meta = {}
   , articles = []
   , FeedParser = require('../')
