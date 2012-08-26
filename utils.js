@@ -3,6 +3,7 @@
  * Module dependencies.
  */
 var URL = require('url')
+  , NS = require('./namespaces')
   ;
 
 /**
@@ -95,3 +96,15 @@ function resolve (baseUrl, pathUrl) {
   return URL.resolve(baseUrl, pathUrl);
 }
 exports.resolve = resolve;
+
+/*
+ * Check whether a given namespace URI matches the given default
+ *
+ * @param {String} URI
+ * @param {String} default, e.g., 'atom'
+ * @return {Boolean}
+ */
+function nslookup (uri, def) {
+  return NS[uri] === def;
+}
+exports.nslookup = nslookup;
