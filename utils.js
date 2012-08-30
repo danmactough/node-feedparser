@@ -108,3 +108,14 @@ function nslookup (uri, def) {
   return NS[uri] === def;
 }
 exports.nslookup = nslookup;
+
+/*
+ * Return the "default" namespace prefix for a given namespace URI
+ *
+ * @param {String} URI
+ * @return {String}
+ */
+function nsprefix (uri) {
+  return NS[uri];
+}
+exports.nsprefix = nsprefix;
