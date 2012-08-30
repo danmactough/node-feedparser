@@ -21,4 +21,5 @@ module.exports = { 'http://www.w3.org/2005/Atom': 'atom' // v1.0
                   , 'http://purl.org/rss/1.0/modules/taxonomy/' : 'taxo'
                   , 'http://purl.org/syndication/thread/1.0': 'thr'
                   , 'http://www.w3.org/1999/xhtml' : 'xhtml'
+                  , 'http://www.w3.org/XML/1998/namespace' : 'xml'
                   };
