@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:h="http://www.w3.org/1999/xhtml">
+	<title>Prefixed XHTML with unprefixed bogo-namespace</title>
+	<updated>2006-01-22T19:47:34Z</updated>
+	<link href="http://example.org/tests/namespace/result.html"/>
+	<author>
+		<name>Henri Sivonen</name>
+		<email>hsivonen@iki.fi</email>
+	</author>
+	<id>http://hsivonen.iki.fi/test/unknown-namespace.atom</id>
+	<entry>
+		<id>http://hsivonen.iki.fi/test/unknown-namespace.atom/entry</id>
+		<title>This entry contains XHTML-looking markup that is not XHTML</title>
+		<link href="http://example.org/tests/namespace/result.html"/>
+		<updated>2006-01-22T19:47:34Z</updated>
+		<content type="xhtml"><h:div xmlns='http://hsivonen.iki.fi/FooML'>
+			<h:ul>
+				<h:li>This is an XHTML list item. If it is not rendered as a list item, the namespace support of the client app is broken.</h:li>
+			</h:ul>
+			<ul>
+				<li>This is not an XHTML list item. If it is rendered as a list item, the namespace support of the client app is broken.</li>
+			</ul>
+		</h:div></content>
+	</entry>
+</feed>
