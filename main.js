@@ -861,6 +861,7 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
     , node = { '#name' : el
              , '#prefix' : ''
              , '#local' : '' }
+    , stdEl
     , item
     , baseurl
     ;
@@ -876,6 +877,9 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
       node['#prefix'] = el[0];
       node['#local'] = el.slice(1).join(':');
       node['#type'] = 'rdf';
+    } else {
+      node['#prefix'] = utils.nsprefix(n['#uri']) || n['#prefix'];
+      node['#local'] = el.slice(1).join(':');
     }
   } else {
     node['#local'] = node['#name'];
@@ -960,12 +964,17 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
   }
 
   if (parser.stack.length > 0) {
-    if (!parser.stack[0].hasOwnProperty(node['#local'] || node['#name'])) {
-      parser.stack[0][node['#local'] || node['#name']] = n;
-    } else if (parser.stack[0][node['#local'] || node['#name']] instanceof Array) {
-      parser.stack[0][node['#local'] || node['#name']].push(n);
+    if (node['#prefix'] && node['#local'] && !node['#type']) {
+      stdEl = node['#prefix'] + ':' + node['#local'];
     } else {
-      parser.stack[0][node['#local'] || node['#name']] = [parser.stack[0][node['#local'] || node['#name']], n];
+      stdEl = node['#local'] || node['#name'];
+    }
+    if (!parser.stack[0].hasOwnProperty(stdEl)) {
+      parser.stack[0][stdEl] = n;
+    } else if (parser.stack[0][stdEl] instanceof Array) {
+      parser.stack[0][stdEl].push(n);
+    } else {
+      parser.stack[0][stdEl] = [parser.stack[0][stdEl], n];
     }
   } else {
     parser.nodes = n;
