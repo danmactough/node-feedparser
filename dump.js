@@ -1,3 +1,9 @@
+/*
+ * Parse a feed and dump the result to the console
+ *
+ * Usage: node dump.js <feed url or filename>
+ *
+ */
 var util = require('util')
   , FeedParser = require('./')
   , parser = new FeedParser()
