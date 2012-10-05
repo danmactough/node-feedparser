@@ -8,7 +8,7 @@ describe('feedparser', function(){
     it('should return http error: getaddrinfo ENOENT', function(done) {
       this.timeout(10000);
       feedparser.parseUrl('http://nonexistingdomaincausinganerror.com/feed.rss', function (error, meta, articles) {
-        assert.ifError(!error);
+        assert(error instanceof Error, error.message);
         assert.equal(error.message, 'getaddrinfo ENOENT');
         done();
       });

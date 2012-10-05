@@ -50,31 +50,57 @@ function reresolve (node, baseurl) {
 }
 
 function handleAttributes (attrs, el) {
+  /*
+   * Using the sax.js option { xmlns: true }
+   * attrs is an array of objects (not strings) having the following properties
+   * name - e.g., xmlns:dc or href
+   * value
+   * prefix - the first part of the name of the attribute (before the colon)
+   * local - the second part of the name of the attribute (after the colon)
+   * uri - the uri of the namespace
+   *
+   */
+
   var parser = this
     , basepath = ''
+    , simplifiedAttributes = {}
     ;
 
   if (parser.xmlbase && parser.xmlbase.length) {
     basepath = parser.xmlbase[0]['#'];
   }
 
-  Object.keys(attrs).forEach(function(name){
-    if (basepath && (name == 'href' || name == 'src' || name == 'uri')) {
+  Object.keys(attrs).forEach(function(key){
+    var attr = attrs[key]
+      , ns = {}
+      , prefix = ''
+      ;
+    if (attr.prefix === 'xmlns') {
+      ns[attr.name] = attr.value;
+      parser.meta['#ns'].push(ns);
+    }
+    // If the feed is using a non-default prefix, we'll use it, too
+    // But we force the use of the 'xml' prefix
+    if (attr.uri && attr.prefix && !utils.nslookup(attr.uri, attr.prefix) || utils.nslookup(attr.uri, 'xml')) {
+      prefix = ( utils.nsprefix(attr.uri) || attr.prefix ) + ( attr.local ? ':' : '' );
+    }
+    if (basepath && (attr.local == 'href' || attr.local == 'src' || attr.local == 'uri')) {
       // Apply xml:base to these elements as they appear
       // rather than leaving it to the ultimate parser
-      attrs[name] = utils.resolve(basepath, attrs[name]);
-    } else if (name == 'xml:base') {
+      attr.value = utils.resolve(basepath, attr.value);
+    } else if (attr.local === 'base' && utils.nslookup(attr.uri, 'xml')) {
+      // Keep track of the xml:base for the current node
       if (basepath) {
-        attrs[name] = utils.resolve(basepath, attrs[name]);
+        attr.value = utils.resolve(basepath, attr.value);
       }
-      parser.xmlbase.unshift({ '#name': el, '#': attrs[name]});
-    } else if (name == 'type' && attrs['type'] == 'xhtml') {
+      parser.xmlbase.unshift({ '#name': el, '#': attr.value});
+    } else if (attr.name === 'type' && attr.value === 'xhtml') {
       parser.in_xhtml = true;
       parser.xhtml = {'#name': el, '#': ''};
     }
-    attrs[name] = attrs[name].trim();
+    simplifiedAttributes[prefix + attr.local] = attr.value ? attr.value.trim() : '';
   });
-  return attrs;
+  return simplifiedAttributes;
 }
 
 function handleMeta (node, type, options) {
@@ -95,6 +121,7 @@ function handleMeta (node, type, options) {
 
   Object.keys(node).forEach(function(name){
     var el = node[name];
+
     if (normalize) {
       switch(name){
       case('title'):
@@ -559,10 +586,11 @@ function FeedParser (options) {
   var parser = this;
   parser._reset();
   parser.options = options || {};
+  if (!('strict' in parser.options)) parser.options.strict = false;
   if (!('normalize' in parser.options)) parser.options.normalize = true;
   if (!('addmeta' in parser.options)) parser.options.addmeta = true;
   if (parser.options.feedurl) parser.xmlbase.unshift({ '#name': 'xml', '#': parser.options.feedurl});
-  parser.stream = sax.createStream(false /* strict mode - no */, {lowercase: true}); // https://github.com/isaacs/sax-js
+  parser.stream = sax.createStream(parser.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true }); // https://github.com/isaacs/sax-js
   parser.stream.on('error', function (e){ parser.handleSaxError(e, parser); });
   parser.stream.on('opentag', function (n){ parser.handleOpenTag(n, parser); });
   parser.stream.on('closetag', function (el){ parser.handleCloseTag(el, parser); });
@@ -689,7 +717,7 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
     if ('normalize' in options) parser.options.normalize = options.normalize;
     if ('addmeta' in options) parser.options.addmeta = options.addmeta;
   }
-  if (!parser.xmlbase.length) { // .parseFile may have already populated this value
+  if (!parser.xmlbase.length) { // #parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       parser.xmlbase.unshift({ '#name': 'xml', '#': url});
     } else if (typeof url == 'object' && 'href' in url) {
@@ -783,6 +811,9 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
   var parser = scope;
   var n = {};
   n['#name'] = node.name; // Avoid namespace collissions later...
+  n['#prefix'] = node.prefix; // The current ns prefix
+  n['#local'] = node.local; // The current element name, sans prefix
+  n['#uri'] = node.uri; // The current ns uri
   n['@'] = {};
   n['#'] = '';
 
@@ -797,25 +828,23 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
       parser.xhtml['#'] += ' '+ name +'="'+ n['@'][name] + '"';
     });
     parser.xhtml['#'] += '>';
-  } else if (parser.stack.length === 0 &&
-            (n['#name'] == 'rss' || n['#name'] == 'rdf:rdf' || n['#name'] == 'feed')) {
-    parser.meta['#ns'] = [];
-    parser.meta['@'] = [];
-    Object.keys(n['@']).forEach(function(name) {
+  } else if ( parser.stack.length === 0 &&
+              (n['#name'] === 'rss' ||
+              (n['#local'] === 'rdf' && utils.nslookup([n['#uri']], 'rdf')) ||
+              (n['#local'] === 'feed'&& utils.nslookup([n['#uri']], 'atom')) ) ) {
+      Object.keys(n['@']).forEach(function(name) {
       var o = {};
-      o[name] = n['@'][name];
-      if (name.indexOf('xmlns') === 0) {
-        parser.meta['#ns'].push(o);
-      } else if (name != 'version') {
+      if (name != 'version') {
+        o[name] = n['@'][name];
         parser.meta['@'].push(o);
       }
     });
-    switch(n['#name']) {
+    switch(n['#local']) {
     case 'rss':
       parser.meta['#type'] = 'rss';
       parser.meta['#version'] = n['@']['version'];
       break;
-    case 'rdf:rdf':
+    case 'rdf':
       parser.meta['#type'] = 'rdf';
       parser.meta['#version'] = n['@']['version'] || '1.0';
       break;
@@ -830,17 +859,43 @@ FeedParser.prototype.handleOpenTag = function (node, scope){
 
 FeedParser.prototype.handleCloseTag = function (el, scope){
   var parser = scope
+    , node = { '#name' : el
+             , '#prefix' : ''
+             , '#local' : '' }
+    , stdEl
     , item
     , baseurl
     ;
   var n = parser.stack.shift();
+  el = el.split(':');
+
+  if (el.length > 1 && el[0] === n['#prefix']) {
+    if (utils.nslookup(n['#uri'], 'atom')) {
+      node['#prefix'] = el[0];
+      node['#local'] = el.slice(1).join(':');
+      node['#type'] = 'atom';
+    } else if (utils.nslookup(n['#uri'], 'rdf')) {
+      node['#prefix'] = el[0];
+      node['#local'] = el.slice(1).join(':');
+      node['#type'] = 'rdf';
+    } else {
+      node['#prefix'] = utils.nsprefix(n['#uri']) || n['#prefix'];
+      node['#local'] = el.slice(1).join(':');
+    }
+  } else {
+    node['#local'] = node['#name'];
+    node['#type'] = utils.nsprefix(n['#uri']) || n['#prefix'];
+  }
   delete n['#name'];
+  delete n['#local'];
+  delete n['#prefix'];
+  delete n['#uri'];
 
   if (parser.xmlbase && parser.xmlbase.length) {
     baseurl = parser.xmlbase[0]['#'];
   }
 
-  if (baseurl && (el == 'logo' || el == 'icon')) { // Via atom
+  if (baseurl && (node['#local'] === 'logo' || node['#local'] === 'icon') && node['#type'] === 'atom') {
     // Apply xml:base to these elements as they appear
     // rather than leaving it to the ultimate parser
     n['#'] = utils.resolve(baseurl, n['#']);
@@ -851,7 +906,7 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
   }
 
   if (parser.in_xhtml) {
-    if (el == parser.xhtml['#name']) { // The end of the XHTML
+    if (node['#name'] == parser.xhtml['#name']) { // The end of the XHTML
 
       // Add xhtml data to the container element
       n['#'] += parser.xhtml['#'].trim();
@@ -864,22 +919,28 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
       parser.xhtml = {};
       parser.in_xhtml = false;
     } else { // Somewhere in the middle of the XHTML
-      parser.xhtml['#'] += '</' + el + '>';
+      parser.xhtml['#'] += '</' + node['#name'] + '>';
     }
   }
 
   if ('#' in n) {
     if (n['#'].match(/^\s*$/)) {
+      // Delete text nodes with nothing by whitespace
       delete n['#'];
     } else {
       n['#'] = n['#'].trim();
       if (Object.keys(n).length === 1) {
+        // If there is only one text node, hoist it
         n = n['#'];
       }
     }
   }
 
-  if (el == 'item' || el == 'entry') { // We have an article!
+  if (node['#name'] === 'item' ||
+      node['#name'] === 'entry' ||
+      (node['#local'] === 'item' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
+      (node['#local'] == 'entry' && (node['#prefix'] === '' || node['#type'] === 'atom'))) { // We have an article!
+
     if (!parser.meta.title) { // We haven't yet parsed all the metadata
       utils.merge(parser.meta, handleMeta.call(parser, parser.stack[0], parser.meta['#type'], parser.options));
       parser.emit('meta', parser.meta);
@@ -894,18 +955,27 @@ FeedParser.prototype.handleCloseTag = function (el, scope){
     if (parser.meta.author && !item.author) item.author = parser.meta.author;
     parser.emit('article', item);
     parser.articles.push(item);
-  } else if ((el == 'channel' || el == 'feed') && !parser.meta.title) { // We haven't yet parsed all the metadata
+  } else if (!parser.meta.title && // We haven't yet parsed all the metadata
+              (node['#name'] === 'channel' ||
+               node['#name'] === 'feed' ||
+               (node['#local'] === 'channel' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
+               (node['#local'] === 'feed' && (node['#prefix'] === '' || node['#type'] === 'atom')) ) ) {
     utils.merge(parser.meta, handleMeta(n, parser.meta['#type'], parser.options));
     parser.emit('meta', parser.meta);
   }
 
   if (parser.stack.length > 0) {
-    if (!parser.stack[0].hasOwnProperty(el)) {
-      parser.stack[0][el] = n;
-    } else if (parser.stack[0][el] instanceof Array) {
-      parser.stack[0][el].push(n);
+    if (node['#prefix'] && node['#local'] && !node['#type']) {
+      stdEl = node['#prefix'] + ':' + node['#local'];
     } else {
-      parser.stack[0][el] = [parser.stack[0][el], n];
+      stdEl = node['#local'] || node['#name'];
+    }
+    if (!parser.stack[0].hasOwnProperty(stdEl)) {
+      parser.stack[0][stdEl] = n;
+    } else if (parser.stack[0][stdEl] instanceof Array) {
+      parser.stack[0][stdEl].push(n);
+    } else {
+      parser.stack[0][stdEl] = [parser.stack[0][stdEl], n];
     }
   } else {
     parser.nodes = n;
@@ -929,6 +999,8 @@ FeedParser.prototype.handleText = function (text, scope){
 
 FeedParser.prototype._reset = function (){
   this.meta = {};
+  this.meta['#ns'] = [];
+  this.meta['@'] = [];
   this.articles = [];
   this.stack = [];
   this.nodes = {};

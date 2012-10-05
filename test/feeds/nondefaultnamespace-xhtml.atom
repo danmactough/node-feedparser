@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:h="http://www.w3.org/1999/xhtml">
+	<title>Non-default XHTML namespace test</title>
+	<updated>2006-01-18T12:26:54+01:00</updated>
+	<link href="http://example.org/tests/namespace/result.html"/>
+	<author>
+		<name>Aristotle Pagaltzis</name>
+		<email>pagaltzis@gmx.de</email>
+	</author>
+	<id>urn:uuid:f8195e66-863f-11da-9fcb-dd680b0526e0</id>
+	<entry>
+		<id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+		<title>If you can read the content of this entry, and it has a list and links, your aggregator works fine.</title>
+		<link href="http://example.org/tests/namespace/result.html"/>
+		<updated>2006-01-18T12:26:54+01:00</updated>
+		<content type="xhtml"><h:div>
+			<h:p>For information, see:</h:p>
+			<h:ul>
+				<h:li><h:a href="http://plasmasturm.org/log/376/">Who knows an <h:abbr title="Extensible Markup Language">XML</h:abbr> document from a hole in the ground?</h:a></h:li>
+				<h:li><h:a href="http://plasmasturm.org/log/377/">More on Atom aggregator <h:abbr title="Extensible Markup Language">XML</h:abbr> namespace conformance tests</h:a></h:li>
+				<h:li><h:a href="http://www.intertwingly.net/wiki/pie/XmlNamespaceConformanceTests"><h:abbr title="Extensible Markup Language">XML</h:abbr> Namespace Conformance Tests</h:a></h:li>
+			</h:ul>
+		</h:div></content>
+	</entry>
+</feed>

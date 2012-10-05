@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+   <link href="http://localhost:8080/namespace/feed/" rel="current" />
+   <link href="http://localhost:8080/namespace/feed/" rel="self" />
+   
+   <id>urn:uuid:9f547ffc-0b31-4794-bcb2-c00f79771738</id>
+   
+   <title type="text">namespace/feed</title>
+   
+   <link href="http://localhost:8080/namespace/feed/?marker=urn:uuid:d5ffaea2-0a9a-4f38-98fc-5c364177b6b4&amp;limit=25&amp;search=&amp;direction=forward" rel="previous" />
+   <link href="http://localhost:8080/namespace/feed/?marker=urn:uuid:d5ffaea2-0a9a-4f38-98fc-5c364177b6b4&amp;limit=25&amp;search=&amp;direction=backward" rel="last" />
+   
+   <updated>2012-08-04T01:34:19.533Z</updated>
+   
+   <p0:entry xmlns:p0="http://www.w3.org/2005/Atom" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <p0:title type="text">This is the title</p0:title>
+      <p0:author>
+         <p0:name>John Doe</p0:name>
+      </p0:author>
+   
+      <p0:content type="text">Hello World</p0:content>
+
+      <p0:category term="MyCategory 1" />
+      <p0:category term="MyCategory 2" />
+      <p0:category term="MyCategory 3" />
+      <p0:link href="http://localhost:8080/namespace/feed/entries/urn:uuid:d5ffaea2-0a9a-4f38-98fc-5c364177b6b4" rel="self" />
+      
+      <p0:id>urn:uuid:d5ffaea2-0a9a-4f38-98fc-5c364177b6b4</p0:id>
+      <p0:updated>2012-08-04T01:29:34.677Z</p0:updated>
+   </p0:entry>
+</feed> 
