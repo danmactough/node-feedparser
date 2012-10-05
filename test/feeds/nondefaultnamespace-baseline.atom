@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>Non-default namespace test baseline</title>
+	<updated>2006-01-18T12:26:54+01:00</updated>
+	<link href="http://example.org/tests/namespace/result.html"/>
+	<author>
+		<name>Aristotle Pagaltzis</name>
+		<email>pagaltzis@gmx.de</email>
+	</author>
+	<id>urn:uuid:f8195e66-863f-11da-9fcb-dd680b0526e0</id>
+	<entry>
+		<id>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</id>
+		<title>If you can read the content of this entry, checking the test case will be meaningful.</title>
+		<link href="http://example.org/tests/namespace/result.html"/>
+		<updated>2006-01-18T12:26:54+01:00</updated>
+		<content type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">
+			<p>For information, see:</p>
+			<ul>
+				<li><a href="http://plasmasturm.org/log/376/">Who knows an <abbr title="Extensible Markup Language">XML</abbr> document from a hole in the ground?</a></li>
+				<li><a href="http://plasmasturm.org/log/377/">More on Atom aggregator <abbr title="Extensible Markup Language">XML</abbr> namespace conformance tests</a></li>
+				<li><a href="http://www.intertwingly.net/wiki/pie/XmlNamespaceConformanceTests"><abbr title="Extensible Markup Language">XML</abbr> Namespace Conformance Tests</a></li>
+			</ul>
+		</div></content>
+	</entry>
+</feed>

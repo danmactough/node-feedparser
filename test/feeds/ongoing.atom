@@ -1,0 +1,888 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom'
+      xmlns:thr='http://purl.org/syndication/thread/1.0'
+      xml:base='http://www.tbray.org/ongoing/ongoing.atom'
+      xml:lang='en-us'>
+ <title>ongoing</title>
+ <id>http://www.tbray.org/ongoing/</id>
+ <link href='./' />
+ <link rel='self' href='' />
+ <link rel='replies'       thr:count='101'       href='/home/tbray.org/www/html/ongoing/comments.atom' />
+ <logo>rsslogo.jpg</logo>
+ <icon>/favicon.ico</icon>
+ <updated>2006-12-13T09:33:10-08:00</updated>
+ <author><name>Tim Bray</name></author>
+ <subtitle>ongoing fragmented essay by Tim Bray</subtitle>
+ <rights>All content written by Tim Bray and photos by Tim Bray Copyright Tim Bray, some rights reserved, see /ongoing/misc/Copyright</rights>
+ <generator uri='/misc/Colophon'>Generated from XML source code using Perl, Expat, Emacs, Mysql, Ruby, Java, and ImageMagick.  Industrial-strength technology, baby.</generator>
+
+<entry xml:base='When/200x/2006/12/12/'>
+ <title>Get Those J1 Papers In</title>
+ <link href='Java-One-CFP' />
+ <link rel='replies'        thr:count='0'        type='application/xhtml+xml'        href='Java-One-CFP#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/12/Java-One-CFP</id>
+ <published>2006-12-12T12:00:00-08:00</published>
+ <updated>2006-12-12T11:27:25-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Java' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Java' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>The Java One
+<a href="http://www.cplan.com/sun/javaone07/cfp">Call for Papers</a> closes
+this Friday the 15th, so buckle down and get those submissions in.  If you’ve
+never been to a Java One you should find a way to go sometime, it’s a uniquely
+high-intensity experience.    The
+<a href="https://www28.cplan.com/cfp_prod/CFPLogin.jsp?wId=58LE17">suggested
+topics</a> for this year are interesting, in particular
+<a href="https://www28.cplan.com/cfp_prod/topics.do?ic=158&amp;il=158-1#web">The
+Next Generation Web</a>,
+<a href="https://www28.cplan.com/cfp_prod/topics.do?ic=158&amp;il=158-1#tools">Tools
+and Languages</a>, and
+<a href="https://www28.cplan.com/cfp_prod/topics.do?ic=158&amp;il=158-1#open">Open Source and Community Development</a>.
+</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/11/'>
+ <title>5&#x272d;&#x266b;: Better Get Hit In Your Soul</title>
+ <link href='Mingus' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='Mingus#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/11/Mingus</id>
+ <published>2006-12-11T12:00:00-08:00</published>
+ <updated>2006-12-12T01:05:50-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts/Music/Recordings' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Music' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Recordings' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts/Music/5 Stars' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='5 Stars' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>This piece appears on <a href='http://en.wikipedia.org/wiki/Mingus_Ah_Um'>Mingus Ah Um</a>, a 1959 album by <a href='http://en.wikipedia.org/wiki/Charles_Mingus'>Charles Mingus</a>, and on <a href='http://en.wikipedia.org/wiki/Mingus_at_Antibes'>Mingus at Antibes</a>, recorded live the next year. There may be a few rock-&#x26;-roll fans who haven&#x2019;t heard this and don&#x2019;t know how hard jazz can be played; I can&#x2019;t imagine any band ever playing harder. <i>(&#x201c;5&#x272d;&#x266b;&#x201d; series introduction <a href='/ongoing/When/200x/2006/01/23/5-Star-Music'>here</a>; with <a href='/ongoing/When/200x/2006/01/23/5-Star-Music#p-1'>an explanation</a> of why the title may look broken.)</i></div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>This piece appears on
+<a href="http://en.wikipedia.org/wiki/Mingus_Ah_Um">Mingus Ah Um</a>, a 1959
+album by
+<a href="http://en.wikipedia.org/wiki/Charles_Mingus">Charles Mingus</a>, and on
+<a href="http://en.wikipedia.org/wiki/Mingus_at_Antibes">Mingus at
+Antibes</a>, recorded live the next year.
+There may be a few rock-&amp;-roll fans who haven’t heard this and don’t know
+how hard jazz can be played; I can’t imagine any band ever playing harder.
+<i>(“5✭♫” series introduction <a href="/ongoing/When/200x/2006/01/23/5-Star-Music">here</a>;
+with <a href="/ongoing/When/200x/2006/01/23/5-Star-Music#p-1">an
+explanation</a> of why the title may look broken.)</i></p>
+<img src="Mingus-playing.png" alt="Charles Mingus" class="inline"/>
+<h2 id='p-1'>The Context</h2>
+<p>Mingus (1922-79), spent much of his life at the top of
+the jazz world.  He was prolific; there are many records and I only own a 
+handful, but I look forward to exploring the rest.</p>
+<p>The idiom is hard-bop, most of the playing fast, stepping out of
+the bounds of traditional Western tonality as required, pushing hard at the
+boundaries of what was then considered sanity in the arrangements and
+ensemble. Some of it goes way out into what was later called “free-jazz”
+territory, but Mingus had the wisdom to keep that short and then re-converge
+with a bang, so for me, it mostly works, and I have trouble with most free
+jazz.</p>
+<p>It’s always a small ensemble, something like trumpet/sax/sax/bass/drums/piano.
+There are big solos but a lot of the improvisation is collective, with the
+players lashing each other higher and higher.  The debt to New Orleans parade
+music and black-church gospel is obvious and was freely acknowledged by
+Mingus.</p>
+<p>He was an angry, sometimes nasty, sometimes violent, man.  Some of it was
+political; it was reasonable for a talented black person born in the Twenties
+to have spent most of his life angry.  But he went beyond that, sometimes
+assaulting people on the stage and in the studio.
+Late in life, he collaborated with Joni Mitchell, and on that record (which I
+can’t seem to find at the moment) there’s a Mingus soliloquy entitled
+<cite>Lucky Man</cite>; given his reputation, it’s oddly sunny and relaxed.
+He talks about how life is really shitty for some people, but for himself, he
+can’t complain to much; “I always had money to rub together in my pocket” he
+explains.</p>
+<img src="Mingus-Ah-Um.png" alt="Mingus Ah Um" />
+<img src="Mingus-at-Antibes.png" alt="Mingus at Antibes" />
+<h2 id='p-2'>The Music</h2>
+<p>What happened was, sometime in the Seventies, I was in university majoring
+in sex, drugs, rock&amp;roll, and left-wing politics, and I heard the
+<cite>Antibes</cite> version of <cite>Better Get Hit In Your Soul</cite> very late
+on one of those nights before the morning after and my eyes got big as
+saucers, “There’s jazz that’s hotter
+than Deep Purple?!?”  Well, not much, actually; but Mingus is at the center of
+it.</p>
+<p>I’ve come to like the studio version of <cite>Better Git Hit In Your
+Soul</cite> on <cite>Mingus Ah Um</cite> too, it’s
+got most of the energy but there’s more room between the notes, and they
+have time to caress them a bit.  Also
+<a href="http://en.wikipedia.org/wiki/Horace_Parlan">Horace Parlan</a>
+provides nice light fast piano support.</p>
+<p>But the <cite>Antibes</cite> take
+discards all that subtlety crap and explores what happens when one
+of the great jazz bands of all time puts the pedal right down to the metal and
+holds it there for 11:34.  Another description would be “divine madness”.</p>
+<p>Here’s what I wrote when I listened to it just now:
+Bass intro, big loud brass call/response, a
+chorus that sounds like schoolyard taunt, a sizzly sax plays alone, then the
+band rolls in behind to make it faster and hotter, colourful explosions of atonality,
+back to the fast sizzle, the rhythm section goes away and the band claps
+behind the saxes, sizzle again, those atonal bits work because the music
+is so hot that he just <em>had</em> to explode outside the form, now Mingus is
+whooping and chortling into a little drum break, now the band vamps fast
+behind
+trumpet fireworks from <a href="http://en.wikipedia.org/wiki/Ted_Curson">Ted Curson</a>, oops, there go the drums again, there’s
+the vamp, 
+there’s Ted, suddenly we’re listening to Charlie play big piano chords in
+front of the drums.  Return to the opening call/response, but they’re shouting
+now, and a wrap-up that Tchaikowsky would have been proud of.</p>
+<p><cite>Antibes</cite> has two more of these hell-for-leather charges,
+<cite>Wednesday Night 
+Prayer Meeting</cite> and <cite>Folk Forms</cite>.
+A couple of the tracks veer into boring self-indulgence though, the pit that free
+jazz is always skating close to the edge of.</p>
+<p>On balance, <cite>Ah Um</cite> is maybe the deeper recording, it has the
+incandescent <cite>Goodbye Pork Pie Hat</cite>, the studied <cite>Fables of
+Faubus</cite>, the slow funk of <cite>Pussy Cat Dues</cite>, the silky
+trombone blues of <cite>Jelly Roll</cite>, and pretty well no wasted notes.</p>
+<p>The sound quality on both records is pretty wonderful; it’s amazing what
+you can accomplish by pointing high-quality electromechanical microphones at a
+stage and capturing the output on high-quality magnetic tape.  None of that
+digital crap, you know.</p>
+<h2 id='p-3'>Sampling It</h2>
+<p>That’d be silly.  Both <cite>Ah Um</cite> and <cite>Antibes</cite> are
+superb records that will stretch your mind and have you boppin’.  So go
+buy a shiny silver disc or two already.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/11/'>
+ <title>Apple App Attrition</title>
+ <link href='Mac-Crash' />
+ <link rel='replies'        thr:count='14'        type='application/xhtml+xml'        href='Mac-Crash#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/11/Mac-Crash</id>
+ <published>2006-12-11T12:00:00-08:00</published>
+ <updated>2006-12-11T22:51:39-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Mac OS X/Gripes' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Mac OS X' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Gripes' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Open Source' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Open Source' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Yes, it’s another anguished chapter in my relationship with OS X
+and its posse.   Baubles already hanging on this chain include
+<a href="/ongoing/When/200x/2006/08/16/Back-to-the-Mac">Back to the Mac</a>,
+<a href="/ongoing/When/200x/2006/06/15/Switch-From-Mac">Time to Switch?</a>,
+and
+<a href="/ongoing/When/200x/2005/03/29/Switch">Unswitch</a>.  Weirdly, unless
+my logfiles are lying, people like reading them.  Anyhow, I had a
+<em>hard</em> crash this afternoon when I unplugged my external screen, and
+after OS X came back, both Mail.app and
+<a href="http://www.newsgator.com/NGOLProduct.aspx?ProdID=NetNewsWire">NetNewsWire</a> had lost their memory.
+It turns out NetNewsWire takes a daily backup of your subscriptions (that
+Brent Simmons, <em>he da man!</em>) so that only took a couple of minutes to
+recover.
+But Mail.app, like iCal, seems to think a crash is a good enough reason to
+<a href="/ongoing/When/200x/2006/05/11/iCal-still-sucks">discard user data</a>; all
+my preferences and profiles were gonzo, I had to start from scratch.  It still had my
+old POP mail without the account they belonged to, but it’d forgotten about my
+Sun IMAP world. 
+I got it working again, but then there were some folders I didn’t recognize,
+so I deleted them, and now it’s borked again; says “Synchronizing with server”
+and never comes back.  So I said the hell with it and now I’m running 
+Thunderbird, which ain’t as pretty but seems to work.  I’m still OK with OS X,
+but the number of its apps I use is down to Address Book, iTunes, iMovie, and (until the
+microsecond I find an alternative) iCal.  Apple makes nice computers and a
+good operating system. Aside from movies or music, I’d stay away from the rest
+of the apps.  OK, let’s try to be fair: I use computers and applications way
+harder than most, and plenty of people are unlikely to push these apps into
+breakage. 
+And Apple’s mail and calendar and browser and so on are polished and easy to
+use.
+But I just can’t rely on them any longer.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/11/'>
+ <title>Java Thunder</title>
+ <link href='Java' />
+ <link rel='replies'        thr:count='5'        type='application/xhtml+xml'        href='Java#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/11/Java</id>
+ <published>2006-12-11T12:00:00-08:00</published>
+ <updated>2006-12-11T15:54:48-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Java' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Java' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>The Java ecosystem is a news factory these days.  Herewith a few words on Java SE 6, JRuby 0.9.2, and Groovy 1.0 RC1.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>The Java ecosystem is a news factory these days.  Herewith a few words on
+Java SE 6, JRuby 0.9.2, and Groovy 1.0 RC1.</p>
+<h2 id='p-1'>Groovy!</h2>
+<p><a href="http://glaforge.free.fr/weblog/index.php?itemid=189">Guillame
+Laforge announced</a> Groovy 1.0 RC1.  I’ve been among the skeptical, those
+saying “Yeah, Groovy looks cool, but I have real issues about the language
+syntax and semantics not having reached 1.0.”  Well, looks like they’re going
+to make those issues go away.  Which means we should all have a closer look at
+things like
+<a href="http://grails.codehaus.org/">Grails</a>.</p>
+<h2 id='p-2'>Java!</h2>
+<p>They sent me tons of slide-shows and white-papers and so on about all the
+cool stuff in Java SE 6, which should be up on 
+<a href="http://java.sun.com">java.sun.com</a> by the time you read this.
+I’m not going to try to cover that waterfront.
+Java has become so big and so ubiquitous that if you’re somewhere in the
+computing biz, something about this release probably touches your life.</p>
+<p>The horse’s mouth would in this case be Mark Reinhold’s
+<a href="http://blogs.sun.com/mr/entry/flashing_past_the_finish">Flashing past
+the ﬁnish</a>; check it out.</p>
+<p><i>[Update: The
+<a href="https://jdk-distros.dev.java.net/developer.html">GNU/Linux</a>
+distros are ready, same-day; that’s a first.]</i></p>
+<p>I’ll mention two issues: performance and support.</p>
+<img src="Java-6-perf.png" alt="Performance graph, Java 1.1-6" />
+<p>Actual real people I know doing actual real
+work that pushes Java to the edge have been making happy noises about the
+performance; to a degree greater than that graph would suggest.  It’s hard to
+believe that after all these years that there’s much left to squeeze out of
+the JVM; you have to be impressed.
+<i>[Update: and check
+<a href="http://www.tbray.org/ongoing/When/200x/2006/12/11/Java#c1165865048.341140">Martin
+Probst</a> in the comments.]</i></p>
+<p>I’m no expert on this, but apparently the structure by which you can buy
+support for Java apps has been re-built, for example see
+<a href="http://www.sun.com/service/javamultiplatform/index.xml">Sun Spectrum
+Java Multi Platform</a>.  People have been working terribly hard on this and
+expect great things.</p>
+<h2 id='p-3'>JRuby!</h2>
+<p>The JRuby releases come thick &amp; fast these days.
+<a href="http://docs.codehaus.org/display/JRUBY/2006/12/10">JRuby 0.9.2</a> is
+another rung in the ladder; they’re closing in on
+a bunch of their targets notably including Rails.
+These are some of the guys I mentioned in the paragraph above who have been
+smiling about Java 6 performance.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/10/'>
+ <title>On Email</title>
+ <link href='EMail' />
+ <link rel='replies'        thr:count='23'        type='application/xhtml+xml'        href='EMail#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/10/EMail</id>
+ <published>2006-12-10T12:00:00-08:00</published>
+ <updated>2006-12-10T13:15:20-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Internet' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Internet' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Life Online' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Life Online' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>For years, I&#x2019;ve had two email addresses; the current job and the long-term personal one.  The latter is unfortunately one of the world&#x2019;s most public, appearing among other places on the front of the <a href='http://www.w3.org/TR/REC-xml/'>XML specification</a>, and thus gets a lot of spam.  I mean really a lot.  Which was causing some pretty severe pain, but I&#x2019;m using the Gmail dodge, and that helps quite a bit.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>For years, I’ve had two email addresses; the current job and the long-term
+personal one.  The latter is unfortunately one of the world’s most public,
+appearing among other places on the front of the
+<a href="http://www.w3.org/TR/REC-xml/">XML specification</a>, and thus gets a
+lot of spam.  I mean really a lot.  Which was causing some pretty severe pain,
+but I’m using the Gmail dodge, and that helps quite a bit.</p>
+<p>Mail client filtering these days is not too bad (except for the penny-stock
+scum) but still, the volume (via POP3) was causing problems.  On the ISP side,
+if I went offline
+for a few days the mail spool would fill up and things would start bouncing.
+And on my laptop, everything would get irritatingly sluggish when all the
+spam was downloaded and filtered.  Particularly if I’d been offline for a
+while, like say two hours.</p>
+<p>I was thinking about changing ISPs and server-side filtering and IMAP and so on,
+and feeling grumpy about the work, so instead I just redirected all my
+personal email to my Gmail account (one tick-box at the ISP).   It works pretty well.</p>
+<p>The Gmail spam
+filter isn’t perfect but it’s not bad, and it all happens on some big data
+farm out there that Google’s paying for; the amount of data that gets pushed
+back and forth between my Mac and the Net has been slashed astoundingly, two
+or three orders of magnitude, I bet, if I measured it.</p>
+<p>Above my inbox is sometimes a little one-liner text ad (can’t complain,
+somebody’s gotta be paying for this) and sometimes a little wee news snippet,
+apparently driven by a random number
+generator.
+Hey Google, both the ads and news need some work, I’ve never felt the
+slightest urge to click on either.</p>
+<p>Also, it’s nice to have search that works; something about my mail backlog
+persistently blows up Spotlight.</p>
+<p>One nice thing about Gmail is the keyboard shortcuts; my only real gripe is
+that there’s no shortcut for “delete”; I’m on all these nicely-archived
+mailing lists, for the 90% or so of the messages that I don’t care about, I just
+want to make ’em go away, why do I have to click on a button?  There’s a
+GreaseMonkey plug-in for this, which <em>might</em> be enough to convert me
+from Camino to Firefox.</p>
+<p>Amusingly, in a few weeks of doing this, with not that much archived, and
+letting Gmail erase the spam and trash after 30 days, I’m using 220MB, or, as
+they say “(8%) of your 2792 MB”.  With that kind of volume, it’s astounding
+that the Internet is holding together at all.  And, uh, 2792?  Anyone have an
+explanation for that number?
+<i>[Update: Check the comments, the 2792 number is explained repeatedly.]</i></p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/10/'>
+ <title>On Bacon</title>
+ <link href='Bacon' />
+ <link rel='replies'        thr:count='5'        type='application/xhtml+xml'        href='Bacon#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/10/Bacon</id>
+ <published>2006-12-10T12:00:00-08:00</published>
+ <updated>2006-12-10T11:32:57-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Food and Drink' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Food and Drink' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>You buy it shrink-wrapped in the supermarket, right?  And it’s not bad;
+perhaps a slightly guilty pleasure and certainly best enjoyed in moderation.
+But you know, that’s not real bacon; somehow, despite having grown up partly
+on a farm, until a few weeks ago I’d never tasted the real thing.
+On Main Street in Vancouver (which is not and has never been the main street)
+at the corner of 20th Ave you’ll find Continental Sausage Co., which I guess
+supplies restaurants and has an unpretentious little deli that we’ve started
+patronizing.  The meats are in the German style and the ambiance
+and pace are definitely of another era.  Anyhow, on impulse one Friday I ordered six
+slices of bacon for Sunday breakfast, and she pulled out a big brown slab and
+sliced them on the spot.  Oh my goodness gracious, it’s nothing at all
+like what the supermarket has.  Now what I <em>do</em> remember from the farm
+is fresh eggs, laid in the last day or so.  I wonder where I can find those in
+Vancouver?</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/08/'>
+ <title>The Dash View</title>
+ <link href='Calendar' />
+ <link rel='replies'        thr:count='6'        type='application/xhtml+xml'        href='Calendar#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/08/Calendar</id>
+ <published>2006-12-08T12:00:00-08:00</published>
+ <updated>2006-12-08T22:15:32-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Publishing' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Publishing' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Hey, check out
+<a href="http://www.dashes.com/anil/2006/12/08/my_favorite_vie">Anil Dash’s
+cool tabular calendar</a>, summarizing the history of his blog.
+I liked it so much that I
+<a href="/ongoing/When/">made one</a>, too.  Hmm, I can think  of lots of
+different ways to organize it, will have to try some alternatives.  Thanks, Anil!</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/07/'>
+ <title>Microsoft XML, the Mac Angle</title>
+ <link href='Mac-Microsoft-XML' />
+ <link rel='replies'        thr:count='6'        type='application/xhtml+xml'        href='Mac-Microsoft-XML#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/07/Mac-Microsoft-XML</id>
+ <published>2006-12-07T12:00:00-08:00</published>
+ <updated>2006-12-08T21:18:26-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/XML' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='XML' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Microsoft' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Microsoft' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Mac OS X' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Mac OS X' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>There&#x2019;s been a lot of noise these last few days about the Microsoft Office XML file formats; the world doesn&#x2019;t need my opinion again.  I&#x2019;d vaguely noted that Mac Office would be a little behind on the new XML, then <a href='http://www.webmink.net/'>Simon Phipps</a> shot me links to a couple of closer looks, which shed an instructive light.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>There’s been a lot of noise these last few days about the Microsoft Office
+XML file formats; the world doesn’t need my opinion again.  I’d vaguely noted
+that Mac Office would be a little behind on the new XML, then
+<a href="http://www.webmink.net/">Simon Phipps</a> shot me links to a couple
+of closer looks, which shed an instructive light.</p>
+<p>Andrew Shebanow
+<a href="http://blogs.adobe.com/shebanation/2006/12/open_xml_one-way.html">does
+some numbers</a> based on what we’re hearing and tries to estimate
+how many person-years it would take to implement MSOXML; yow!</p>
+<p>The impact is that for the next few months, Mac people, just like Linux and
+Solaris people and everyone else who doesn’t use Windows, aren’t going to be
+able to read Office’s native file format.  That’s OK, Sheridan Jones
+<a href="http://blogs.msdn.com/macmojo/archive/2006/12/05/converters-coming-free-and-fairly-fast.aspx">suggests
+a workaround</a>: “For now, we recommend that Mac users advise their friends
+and colleagues using Office 2007 to save their documents as a
+‘Word/Excel/PowerPoint 97-2003 Document’ (.doc, .xls, .ppt) to ensure the
+documents can be shared across platforms.”  Right, then.</p>
+<p>Students of message management will be amused at the conversation launched 
+by 
+<a href="http://www.schwieb.com/blog/">Erik Schwiebert</a> in
+<a href="http://www.schwieb.com/blog/2006/12/05/conversion-factors/">Conversion
+factors</a>.
+He dives deep on the Mac Office file-format issues.  One fairly
+astounding statement was “there are certainly a variety of XML parsers out
+there, including libxml, but the only one that ships on Mac OS by default is
+libxml and it doesn’t support everything that the new file formats need.”
+Now that’s guaranteed to raise eyebrows in markup-land.
+Predictably, the comments got a little heated, and it didn’t help when Erik
+added “libxml didn’t handle the latest open standards that the XML spec
+details”.   I’m trying hard to find a way to see that as anything other than a
+blatant lie, but it’s tough.</p>
+<p>Eventually Rick Schaut (who seems like a Real Smart Guy) pulled aside the
+curtain of marketing weasel-speak and 
+<a href="http://www.schwieb.com/blog/2006/12/05/conversion-factors/#comment-5270">laid out</a> the 
+actual real engineering issues regarding libxml and MSXML and they’re not
+surprising or nefarious; but you rarely see such a nakedly exposed linguistic
+framing gradient.</p>
+<p>I should close by saying that I’m a huge fan of the MacBU and think that 
+Mac Office is probably the single best piece of software that Microsoft ships,
+and that I’ll probably end up buying it.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/07/'>
+ <title>Hot Job Market</title>
+ <link href='People' />
+ <link rel='replies'        thr:count='9'        type='application/xhtml+xml'        href='People#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/07/People</id>
+ <published>2006-12-07T12:00:00-08:00</published>
+ <updated>2006-12-07T13:27:21-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>It seems that everybody I’ve talked to in the last little while has found a
+way to work it into the conversation: “Oh, and I’m hiring; know any good developers?”
+Plus, the pace of calls from head-hunters has
+picked up.  It’s about as hot as I can remember it being, ever, including
+the bubble.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/06/'>
+ <title>Electricity</title>
+ <link href='Electricity' />
+ <link rel='replies'        thr:count='1'        type='application/xhtml+xml'        href='Electricity#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/06/Electricity</id>
+ <published>2006-12-06T12:00:00-08:00</published>
+ <updated>2006-12-06T21:12:04-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Environment' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Environment' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Two Carr-provoked posts in a row today; 
+check out 
+<a href="http://www.roughtype.com/archives/2006/12/avatars_consume.php">Avatars consume as much electricity as Brazilians</a>,
+and then the quantitative comment from our own enviroguru
+<a href="http://blogs.sun.com/enviro/">Dave Douglas</a>.
+Suppose you wanted to know for sure how many watts your databoxes are sucking?
+Well, our server people have come up with a clever little marketing gimmick, the
+<a href="http://www.sun.com/servers/coolthreads/tnb/power.jsp">Try and Buy
+Power Meter Program</a>; pick up a T1000 or T2000 through T&amp;B and they’ll
+send along an actual power meter.  Kind of symbolic since they only cost about
+$30, but still, I bet this motivates a few people to have a look who wouldn’t
+have, otherwise; which has to be a good thing.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/06/'>
+ <title>Music Libre</title>
+ <link href='Free-Music' />
+ <link rel='replies'        thr:count='1'        type='application/xhtml+xml'        href='Free-Music#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/06/Free-Music</id>
+ <published>2006-12-06T12:00:00-08:00</published>
+ <updated>2006-12-06T21:11:31-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business/Intellectual Property' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Intellectual Property' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Nick Carr’s excellent
+<a href="http://www.roughtype.com/archives/2006/12/curtains_for_mu.php">Curtains for music DRM?</a>
+is an explanation, simple enough to be understood even by a music-biz exec (at
+least the brighter ones like those at EMI) as to why this whole notion of
+selling DRM’ed bits, then trying to reach into your customers’ computers to
+micromanage their use, is just too stupid to live.  Cory Doctorow and I and
+other people have been banging this drum for years, but Carr has captured the
+essence, in business-friendly language, in eight short paragraphs.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/06/'>
+ <title>Traffic Generators</title>
+ <link href='Slashdot' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='Slashdot#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/06/Slashdot</id>
+ <published>2006-12-06T12:00:00-08:00</published>
+ <updated>2006-12-06T13:10:58-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Life Online' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Life Online' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Time was,
+<a href="http://slashdot.org/">Slashdot</a> was the big, big, dog.
+The
+<a href="/ongoing/When/200x/2003/03/19/Who">first time I got hit</a>, 3½ years
+ago, there were 27,000 hits in the first day and around 40K in aggregate over
+the next few.  This last Monday, two days ago, Slashdot hit my
+<a href="/ongoing/When/200x/2006/11/27/Choose-Relax">XML schema-language
+piece</a> at 7PM Pacific.  As of now, mid-day Wednesday, I’ve had 8,361 hits.
+Now, there are mitigating factors: the Slashdot link to 
+<span class='o'>ongoing</span> was kind of hard to see, and quite likely in
+the years since 2003, the set of Slashdot readers who care about the things I
+write about have mostly subscribed, so they’d seen that piece already.  But
+still.
+By way of comparison, I got 
+17,849 links in the first 48 hours to
+<a href="/ongoing/When/200x/2006/11/12/OSS-Java">Java Is Free</a>; 
+<a href="http://reddit.com/">Reddit</a> was the leading referrer with 5,623.
+Times change.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/05/'>
+ <title>The Valley</title>
+ <link href='California' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='California#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/05/California</id>
+ <published>2006-12-05T12:00:00-08:00</published>
+ <updated>2006-12-05T22:28:22-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Places/California' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Places' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='California' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>The plane landed early and there was even a gate ready so I got out of SFO
+PDQ, even gaming the
+<a href="/ongoing/When/200x/2004/04/28/SFOnotes">stupid monorail</a>,
+sometimes if you miss the blue train you can 
+hop the red one around the short half of the loop and catch it.  
+But then 101 slower each
+mile south till the fire-truck blocking two lanes down by 87.
+Anyhow I got to watch the huge full moon grow smaller and whiter drifting up,
+but in the right place, just south of Oracle, that the planes,
+starlike points of white light, were drifting above and below it against the dusk
+like fireflies.  And on the talk radio two different right-wingers
+saying that even Dubya is a pussy now, America needs to blow up some
+more mosques (I’m not making this up) and on another AM station, Christian,
+a neo-Calvinist in a slow round cartoon voice: “You may think you
+love Jesus but <a href="http://en.wikipedia.org/wiki/Unconditional_election">that’s not
+enough</a>, on that glorious day you might find yourself cast down!”  I spun the
+dial and with relief found some decent rock &amp; roll, the only sane thing
+on that California highway.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/04/'>
+ <title>Defining HTML</title>
+ <link href='Mozilla-What' />
+ <link rel='replies'        thr:count='2'        type='application/xhtml+xml'        href='Mozilla-What#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/04/Mozilla-What</id>
+ <published>2006-12-04T12:00:00-08:00</published>
+ <updated>2006-12-04T17:19:20-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>There’s a new thing in the world.  Since I got mixed up in the Web a dozen
+years ago, there’ve always been groups of people trying to standardize HTML (at
+the IETF, at the W3C, wherever) and as long as I can remember, they’ve been
+genially ignored, mostly, by browser makers.
+Maybe no longer; it seems that the
+<a href="http://www.whatwg.org/">WHAT-WG</a> has broken through and been
+noticed.
+Mozilla engineer Rob Sayre 
+<a href="http://www.imc.org/atom-syntax/mail-archive/msg19192.html">tells</a>
+us that WHAT-WG is better than the previous contenders to the
+HTML-standardization throne, 
+that Firefox has already picked up one piece of their draft-ware, and will
+be implementing more.
+Meanwhile, Sam Ruby is
+<a href="http://www.intertwingly.net/blog/2006/12/01/The-White-Pebble">doing
+outstanding work</a>, apparently persuading the WHATters of the virtues keeping
+what they’re calling “HTML5” somewhat compatible with the rest of the world’s
+markup.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/03/'>
+ <title>Wikipedia Churn</title>
+ <link href='Wikipedia' />
+ <link rel='replies'        thr:count='5'        type='application/xhtml+xml'        href='Wikipedia#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/03/Wikipedia</id>
+ <published>2006-12-03T12:00:00-08:00</published>
+ <updated>2006-12-03T22:48:05-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Publishing/Reference' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Publishing' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Reference' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Life Online' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Life Online' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>There’s been something happening recently in my little corner of Wikipedia,
+and I don’t know if it’s an anomaly or evidence of a trend; so this is raw
+random anecdotal data.  By “my little corner” I mean the small collection
+of articles that I track via a recent-changes Atom feed, have contributed to
+quite a bit, and feel a little bit of shared responsibility for.  There’s been
+a surge of recent editorial activity, with super-energetic (and
+apparently well-informed) new contributors trimming and
+tweaking and growing the articles, often several times per day.
+In general, while I haven’t been convinced that 100% of the changes are
+improvements, the quality of the articles as a whole is definitely trending
+up.
+Also, the random drive-by teenage defacements are getting fixed
+<em>really</em> fast.
+Anyone else seeing this?</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/03/'>
+ <title>Web Application Security</title>
+ <link href='REST-Security' />
+ <link rel='replies'        thr:count='5'        type='application/xhtml+xml'        href='REST-Security#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/03/REST-Security</id>
+ <published>2006-12-03T12:00:00-08:00</published>
+ <updated>2006-12-03T22:37:26-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Security' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Security' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>A pretty fierce debate has broken out on how to do security for
+Web-applications (REST, WS-*, 
+whatever).  I’m gratified that it seems to have started in the comments to
+<a href="/ongoing/When/200x/2006/11/16/WS-Socratic">S for Simple</a>.
+The proponents are
+<a href="http://1raindrop.typepad.com/">Gunnar Peterson</a> and
+<a href="http://wanderingbarque.com/nonintersecting/">Pete Lacey</a>, and what
+they have to say is interesting.  I think Gunnar didn’t do a good enough job of
+filling in one of the bases of his position, although in private email he sent
+me a link to
+<a href="http://www.ebankingsecurity.com/ebanking_bad_for_your_bank_balance.pdf">a
+PDF from eBankingSecurity.com</a> which is worth a look.  The point is that a
+significant proportion of Windows PCs are compromised with trojans and
+keystroke-loggers and other flavors of bad-ware; significant enough that
+the pretty-decent transport-level security provided by TLS is immaterial.
+Those of us who are technically-competent and don’t use Windows
+can feel individually secure, but that doesn’t mean Gunnar doesn’t have a point.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/11/30/'>
+ <title>Intel Java Voodoo Huh?</title>
+ <link href='Intel-Java' />
+ <link rel='replies'        thr:count='19'        type='application/xhtml+xml'        href='Intel-Java#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/11/30/Intel-Java</id>
+ <published>2006-11-30T12:00:00-08:00</published>
+ <updated>2006-12-03T08:32:20-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Java' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Java' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Check out
+<a href="http://www.theinquirer.net/default.aspx?article=24781">Intel's new
+instructions to Rockton round the clock</a> from <cite>the Inquirer</cite>.
+This is consistent with what
+<a href="http://blogs.codehaus.org/people/geir/">Geir Magnusson</a> said in
+his (very good) OSCON presentation; that Intel might like to load a
+custom JVM with secret code that took advantage of
+their inside knowledge of the silicon, so Java would run better on Intel; one
+reason they might have preferred Apache to GPL licensing for the Sun Java code.
+Me, I’m puzzled.  If there are special instructions to make Java bytecodes (or
+.NET CLR code) run fast, uh, how are they going to keep them secret, and why
+wouldn’t they end up in <em>every</em> JVM and CLR implementation?
+And why wouldn’t this be good for Intel? 
+There are disassemblers and so on, you know, and plenty of hackers who are
+accomplished at picking apart x86 binaries.
+Maybe there’s something else we don’t know.
+<i>[Update: Check the comments.  That Inquirer article is from way last year,
+and Geir Magnusson says I’m all wrong about Intel.
+So maybe there’s no story here.]</i></p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/02/'>
+ <title>St&#xe9;phane Dion</title>
+ <link href='Stephane-Dion' />
+ <link rel='replies'        thr:count='7'        type='application/xhtml+xml'        href='Stephane-Dion#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/02/Stephane-Dion</id>
+ <published>2006-12-02T12:00:00-08:00</published>
+ <updated>2006-12-02T21:25:06-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Politics' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Politics' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Places/Canada' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Places' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Canada' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<title>Stéphane Dion</title>
+<p>So the Liberals picked the pencil-neck geek with the bad hair, and his
+acceptance speech wasn’t very good TV.   Still, he’s kind of appealing, he’s
+real smart, and he knows how the system works.  That cynical old lizard
+Chrétien gave a darn good speech, I thought.  Harper, Dion, Layton, Duceppe;
+there are lots of countries whose citizens are looking at worse choices.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/01/'>
+ <title>Liberal Oratory</title>
+ <link href='Liberals' />
+ <link rel='replies'        thr:count='5'        type='application/xhtml+xml'        href='Liberals#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/01/Liberals</id>
+ <published>2006-12-01T12:00:00-08:00</published>
+ <updated>2006-12-01T22:26:37-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Politics' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Politics' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Places/Canada' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Places' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Canada' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>In Canada, we have three significant political parties. The right-wing Conservatives (Tories) occasionally get to form the government (like now, for instance). The centrist Liberals are sometimes called &#x201c;the natural governing party&#x201d; and have definitely spent more years in office; at the moment they&#x2019;re in opposition after getting a well-deserved spanking from the voters over a nasty little corruption scandal.  Then there&#x2019;s social-democratic NDP. The Liberals are currently having a convention to pick their next leader, quite possibly our next Prime Minister.  Tonight we had the big speeches from all eight (!) candidates and the first ballot. Probably of interest only to Canadian-politics fans.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>In Canada, we have three significant political parties. The right-wing
+Conservatives (Tories) occasionally get to form the government (like
+now, for instance).
+The centrist Liberals are sometimes called “the natural governing party” and
+have definitely spent more years in office; at the moment they’re in
+opposition after getting a well-deserved spanking
+from the voters over a nasty little corruption scandal.  Then there’s
+social-democratic NDP.
+The Liberals are currently having a convention to pick their next leader,
+quite possibly our next Prime Minister.  Tonight we had the big speeches from
+all eight (!) candidates and the first ballot.
+Probably of interest only to Canadian-politics fans.</p>
+<p>All the red—T-shirts, ribbons, ties, dresses, faces—makes for good TV.
+The Liberals’ historic tight interlock with the immigrant communities is
+obvious, looking at the convention floor.</p>
+<p>What’s the deal with the candidate videos?  If I were a delegate I’d be pissed; I can
+watch the video at home any time; this was the chance to hear them set the air
+in vibration with their own lungs; if I were one of them, I’d take every
+available minute to talk live.</p>
+<h2 id='p-5'>The Second Tier</h2>
+<p><i>Martha Hall Findlay</i> She’s sincere, lovable, appealing, but just not
+that great a speaker.  The implicit indictment—the only woman on the platform
+is a no-hope trailer—is pretty stinging.</p>
+<p><i>Scott Brison</i>  A good speaker, handles his voice well, and an
+appealing guy.
+He turned his
+speech into a powerful environmentalist global-warming pitch; not a hard one
+to make, these days.  A few enjoyable zingers:  “Quoting Bill Clinton, It’s
+the <em>green</em> economy, stupid!”  
+He said that green business was potentially another Klondike: “A green rush”.  “What’s
+Harper saying about the environment this week?  What did the Bush White House say
+last week?”
+Maybe he’s got himself a crack at the environment portfolio in some future
+Liberal government.</p>
+<p><i>Joe Volpe:</i> I could hardly bring myself to listen to this pathetic
+hack, and when I did tune in there was nothing there: clichés delivered
+without benefit of rhythm or flow. </p>
+<p><i>Ken Dryden:</i>  He’s not much of a speaker, his face and voice both slow
+and heavy.  I appreciate his attempt at a poetic invocation of Canada,
+starting with sunrise in Newfoundland.  And the single best piece of language
+construction; his pieces-of-Canada rap veered from exalted and touchy-feely to
+gritty and funny, meeting someone down on his luck at 10PM outside Vancouver’s
+safe-injection center, who said “Hey, Ken Dryden!  He shoots, he scores!”
+(Canadians will know why this is funny.)
+He came alive quite a bit on global warming, and had a few good lines:  “We
+don’t like the poor being poor”.  “This is a find-a-way world; we’re a
+find-a-way country.  The answers aren’t in ideologies.” </p>
+<p>And now on to the evening’s big stars.</p>
+<h2 id='p-1'>Stéphane Dion</h2>
+<p>His warm-up act, some recently-elected Ontario MP,  banged the
+environmental drum; maybe a little too long, since Dion ran out of time.
+Dion’s probably my fave candidate just because he’s so smart and strong on the
+issues and it’s possible to believe he’s in it largely for reasons of
+public-spiritedness.</p>
+<p>His good lines were mostly in eloquent French: “There’s more culture in a
+bowl of yogurt than the Conservative government.”
+“Tories don’t really like government; since we Liberals are compassionate,
+we should show them some compassion and run them out of government.”</p>
+<p>In English he said “We have a Prime Minister who thinks that child-care is
+delivered through the mailbox” and “The
+economy and the environment; the people and the planet” and 
+“There are three pillars: the market economy, social justice, and the
+environment. 
+The NDP doesn’t understand the market economy, and the Conservatives don’t
+understand social justice.”</p> 
+<p>His English is maybe
+weak enough to hurt 
+his electability; but Lauren said  “His accent’s kind of cute”.</p>
+<p>He echoed Brison’s line about there being good money, as well as good
+morals, in green business, saying Canada has a chance to be a leader.</p>
+<h2 id='p-2'>Gerard Kennedy</h2>
+<p>I hated most of this speech; it was polished polished polished polished;
+but mostly just the mouthing of platitudes.  
+His real message is “I can win an election” which many say is the core of what
+the Liberals are about.  He would be, as he pointed out, 
+“the first Liberal leader born and raised in Western Canada;
+will not spot the Tories 80 seats west of Kenora.” </p>
+<p>In his closing minutes, he came alive
+talking about his lengthy food-bank experience (which is a credit to him), and
+the general decency of people, given a chance.</p>
+<h2 id='p-3'>Bob Rae</h2>
+<p>On the upside, he didn’t have anyone to introduce him, but on the downside,
+his video was way too long.  He spoke without a teleprompter, walking free on
+stage, which I thought worked well.</p>
+<p>His speech was smooth and powerful, with good rhythm.  
+But he wasn’t saying that much. </p>
+<p>He made a good point along the lines of “Yes, those guys are right about the
+environment, but we need to convince Canadians to be green not just in general
+but in particular.”</p>
+<p>I can’t actually remember much of what he said, but he came across as
+grown-up, trustworthy, smart; a safe pair of hands, maybe?   He really should
+have spoken more French, though, because when he did, it wasn’t too bad.</p>
+<h2 id='p-4'>Michael Ignatieff</h2>
+<p>He’s carrying a ton of baggage because he’s never really lived in Canada as
+an adult, but he’s obviously a smart and accomplished guy, and when you’re
+hiring a CEO, it’s a good idea to look for someone with connections.</p>
+<p>Another overly-long video.
+I thought he was great-looking but Lauren was unimpressed.
+He had a good opening; “Tonight’s the night the Liberal party begins again”
+and his mix of English and French was elegant.</p>
+<p>At the beginning of his speech his words were weirdly slow, but he warmed
+up and I thought delivered the sharpest political oratory of the night.</p>
+<p>“The party of hope—<i>le parti d’espoir</i>—and hope begins with
+opportunity.
+Opportunity has to begin with education... we must be the party that says to
+every young Canadian who wants to go to college: ‘You get the grades, you get
+to go.’”
+“We must put a price on pollution and on carbon emission and we will.”</p>
+<p>I thought his getting two call-and-responses going, one in French, was
+good political theater.  He touched one traditional Liberal button:
+“National Unity is the Liberal Party’s most important work; it always has
+been and it always will be.” But then stepped outside with “Let’s win some
+seats in Alberta.”</p> 
+<p>His Tory-bashing was not as effective as the others.  But still, a pretty
+good speech.</p>
+<h2 id='p-6'>Results, First Ballot</h2>
+<div class="caption">
+<table>
+<tr align="center"><td></td><th>Votes</th><th>%</th></tr>
+<tr align="right"><td>Ignatieff</td><td>1412</td><td>29.3</td></tr>
+<tr align="right"><td>Rae</td><td>977</td><td>20.3</td></tr>
+<tr align="right"><td>Dion</td><td>856</td><td>17.8</td></tr>
+<tr align="right"><td>Kennedy</td><td>854</td><td>17.7</td></tr>
+<tr align="right"><td>Dryden</td><td>238</td><td>4.9</td></tr>
+<tr align="right"><td>Brison</td><td>192</td><td>4.0</td></tr>
+<tr align="right"><td>Volpe</td><td>156</td><td>3.2</td></tr>
+<tr align="right"><td>Findlay</td><td>130</td><td>2.7</td></tr>
+</table>
+</div><p></p>
+<p>Findlay’s dropped from the next ballot and Volpe went to Rae.</p>
+<p>What does it mean?  Nobody knows.  Since people think Dion’s speech was
+poor, he would have been hurting, except for he managed to squeak past Kennedy
+into third place.  Ignatieff significantly under-performed expectations; the
+conventional wisdom is that he has little growth potential.</p>
+<p>Nobody, <em>nobody</em>, has a useful prediction for the second ballot.</p>
+<h2 id='p-7'>Conclusion</h2>
+<p>Me, I’d bet on Rae vs. Dion in the last ballot, and think the Liberals
+would do OK with either.  But that’s not the key take-away.</p>
+<p>What’s important is that this is wonderful, gripping, political theater,
+the tired whorish old Liberal party has managed to put on its best clothes and
+brightest faces and seem interesting and even intermittently inspiring; they
+might convince some people they actually stand for something.
+I wouldn’t be surprised if political parties from elsewhere in the world are
+watching this with eager attention.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2006/12/01/'>
+ <title>Hold Still!</title>
+ <link href='Hold-Still' />
+ <link rel='replies'        thr:count='12'        type='application/xhtml+xml'        href='Hold-Still#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2006/12/01/Hold-Still</id>
+ <published>2006-12-01T12:00:00-08:00</published>
+ <updated>2006-12-01T15:56:16-08:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business/Internet' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Internet' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>The animation in Web display ads is outta
+control, <em>outta control, I tell ya!</em>  They slither and shake and squirm
+and flash and jitter and morph and I’m gonna start
+bleeding from the eyeballs.  I’ve always eschewed ad-blockers and
+Flash-blockers, because advertising <em>should</em> be part of the ecosystem; but
+things have gone too far.
+Ads in magazines don’t offend me in the slightest, I even enjoy some,
+have even been informed about something I might buy.
+But on the Web... my instinct tells me that these things not only hurt my
+brain, they can hardly be achieving the intended effect. </p>
+</div></content></entry>
+
+</feed>
