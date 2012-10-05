@@ -98,7 +98,7 @@ function handleAttributes (attrs, el) {
       parser.in_xhtml = true;
       parser.xhtml = {'#name': el, '#': ''};
     }
-    simplifiedAttributes[prefix + attr.local] = attr.value.trim();
+    simplifiedAttributes[prefix + attr.local] = attr.value ? attr.value.trim() : '';
   });
   return simplifiedAttributes;
 }
@@ -586,10 +586,11 @@ function FeedParser (options) {
   var parser = this;
   parser._reset();
   parser.options = options || {};
+  if (!('strict' in parser.options)) parser.options.strict = false;
   if (!('normalize' in parser.options)) parser.options.normalize = true;
   if (!('addmeta' in parser.options)) parser.options.addmeta = true;
   if (parser.options.feedurl) parser.xmlbase.unshift({ '#name': 'xml', '#': parser.options.feedurl});
-  parser.stream = sax.createStream(false /* strict mode - no */, {lowercase: true, xmlns: true }); // https://github.com/isaacs/sax-js
+  parser.stream = sax.createStream(parser.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true }); // https://github.com/isaacs/sax-js
   parser.stream.on('error', function (e){ parser.handleSaxError(e, parser); });
   parser.stream.on('opentag', function (n){ parser.handleOpenTag(n, parser); });
   parser.stream.on('closetag', function (el){ parser.handleCloseTag(el, parser); });

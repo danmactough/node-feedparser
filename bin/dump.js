@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /*
  * Parse a feed and dump the result to the console
  *
@@ -5,7 +6,7 @@
  *
  */
 var util = require('util')
-  , FeedParser = require('./')
+  , FeedParser = require('../')
   , parser = new FeedParser()
   , file = process.argv[2];
 
