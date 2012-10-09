@@ -20,6 +20,7 @@ var sax = require('sax')
 /**
  * FeedParser constructor. Most apps will only use one instance.
  *
+ * @param {Object} options
  * @api public
  */
 function FeedParser (options) {
@@ -84,6 +85,7 @@ util.inherits(FeedParser, EventEmitter);
  * Emits an 'error' event on each XML parser error
  *
  * @param {String} string of XML representing the feed
+ * @param {Object} options
  * @param {Function} callback
  * @api public
  */
@@ -109,6 +111,7 @@ FeedParser.prototype.parseString = function(string, options, callback) {
  * See parseString for more info.
  *
  * @param {String} path to the feed file or a fully qualified uri or parsed url object from url.parse()
+ * @param {Object} options
  * @param {Function} callback
  * @api public
  */
@@ -142,6 +145,7 @@ FeedParser.prototype.parseFile = function(file, options, callback) {
  * See parseString for more info.
  *
  * @param {String} fully qualified uri or a parsed url object from url.parse()
+ * @param {Object} options
  * @param {Function} callback
  * @api public
  */
@@ -180,6 +184,7 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
  * See parseString for more info.
  *
  * @param {Readable Stream}
+ * @param {Object} options
  * @param {Function} callback
  * @api public
  */
