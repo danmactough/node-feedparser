@@ -982,3 +982,18 @@ FeedParser.prototype._setCallback = function (callback){
 };
 
 exports = module.exports = FeedParser;
+
+exports.parseString = parseStatic.bind(null, 'parseString');
+exports.parseFile = parseStatic.bind(null, 'parseFile');
+exports.parseUrl = parseStatic.bind(null, 'parseUrl');
+exports.parseStream = parseStatic.bind(null, 'parseStream');
+
+function parseStatic (method, feed, options, callback) {
+  options = options || {};
+  if ('function' === typeof options) {
+    callback = options;
+    options = {};
+  }
+  var parser = new FeedParser (options);
+  parser[method](feed, options, callback);
+}
