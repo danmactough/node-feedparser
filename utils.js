@@ -92,6 +92,9 @@ function get(obj, subkey) {
 }
 exports.get = get;
 
+/*
+ * Expose require('url').resolve
+ */
 function resolve (baseUrl, pathUrl) {
   return URL.resolve(baseUrl, pathUrl);
 }
@@ -119,3 +122,42 @@ function nsprefix (uri) {
   return NS[uri];
 }
 exports.nsprefix = nsprefix;
+
+/*
+ * Walk a node and re-resolve the urls using the given baseurl
+ *
+ * @param {Object} node
+ * @param {String} baseurl
+ * @return {Object} modified node
+ */
+function reresolve (node, baseurl) {
+  if (!node || !baseurl) {
+    return false; // Nothing to do.
+  }
+
+  function resolveLevel (level) {
+    var els = Object.keys(level);
+    els.forEach(function(el){
+      if (Array.isArray(level[el])) {
+        level[el].forEach(resolveLevel);
+      } else {
+        if (level[el].constructor.name === 'Object') {
+          if (el == 'logo' || el == 'icon') {
+            level[el]['#'] = URL.resolve(baseurl, level[el]['#']);
+          } else {
+            var attrs = Object.keys(level[el]);
+            attrs.forEach(function(name){
+              if (name == 'href' || name == 'src' || name == 'uri') {
+                level[el][name] = URL.resolve(baseurl, level[el][name]);
+              }
+            });
+          }
+        }
+      }
+    });
+    return level;
+  }
+
+  return resolveLevel(node);
+}
+exports.reresolve = reresolve;

@@ -386,7 +386,7 @@ FeedParser.prototype.handleCloseTag = function (el){
       this.emit('meta', this.meta);
     }
     if (!baseurl && this.xmlbase && this.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
-      n = reresolve(n, this.xmlbase[0]['#']);
+      n = utils.reresolve(n, this.xmlbase[0]['#']);
     }
     item = this.handleItem(n, this.meta['#type'], this.options);
     if (this.options.addmeta) {
@@ -541,7 +541,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                   meta.xmlurl = meta.xmlUrl = link['@']['href'];
                   if (this.xmlbase && this.xmlbase.length === 0) {
                     this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
-                    this.stack[0] = reresolve(this.stack[0], meta.xmlurl);
+                    this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
                   }
                 }
               } else {
@@ -559,7 +559,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                 meta.xmlurl = meta.xmlUrl = el['@']['href'];
                 if (this.xmlbase && this.xmlbase.length === 0) {
                   this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
-                  this.stack[0] = reresolve(this.stack[0], meta.xmlurl);
+                  this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
                 }
               }
             } else {
@@ -982,35 +982,3 @@ FeedParser.prototype._setCallback = function (callback){
 };
 
 exports = module.exports = FeedParser;
-
-function reresolve (node, baseurl) {
-
-  if (!node || !baseurl) {
-    return false; // Nothing to do.
-  }
-
-  function resolveLevel (level) {
-    var els = Object.keys(level);
-    els.forEach(function(el){
-      if (Array.isArray(level[el])) {
-        level[el].forEach(resolveLevel);
-      } else {
-        if (level[el].constructor.name === 'Object') {
-          if (el == 'logo' || el == 'icon') {
-            level[el]['#'] = utils.resolve(baseurl, level[el]['#']);
-          } else {
-            var attrs = Object.keys(level[el]);
-            attrs.forEach(function(name){
-              if (name == 'href' || name == 'src' || name == 'uri') {
-                level[el][name] = utils.resolve(baseurl, level[el][name]);
-              }
-            });
-          }
-        }
-      }
-    });
-    return level;
-  }
-
-  return resolveLevel(node);
-}
