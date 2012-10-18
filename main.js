@@ -34,7 +34,8 @@ util.inherits(FeedParser, EventEmitter);
 
 FeedParser.prototype.initialize = function initialize () {
   var context = {
-      meta: {
+      options: this.options
+    , meta: {
         '#ns': []
       , '@': []
       }
@@ -50,7 +51,6 @@ FeedParser.prototype.initialize = function initialize () {
     , callback: undefined
     , stream: sax.createStream(this.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true }) // https://github.com/isaacs/sax-js
     };
-  // if (this.options.feedurl) context.xmlbase.unshift({ '#name': 'xml', '#': this.options.feedurl});
   context.stream.on('error', this.handleError.bind(context, this.handleSaxError.bind(context)));
   context.stream.on('opentag', this.handleOpenTag.bind(this, context));
   context.stream.on('closetag',this.handleCloseTag.bind(this, context));
@@ -58,7 +58,7 @@ FeedParser.prototype.initialize = function initialize () {
   context.stream.on('cdata', this.handleText.bind(this, context));
   context.stream.on('end', this.handleEnd.bind(this, context));
   return context;
-}
+};
 
 /**
  * Parses a feed contained in a string.
@@ -109,18 +109,19 @@ FeedParser.prototype.initialize = function initialize () {
  */
 
 FeedParser.prototype.parseString = function(string, options, callback) {
-  if (arguments.length === 2 && typeof options === 'function') {
+  var context = this.initialize();
+  options = options || {};
+  if ('function' === typeof options) {
     callback = options;
-    options = null;
+    options = {};
   }
-  if (options) {
-    if ('normalize' in options) this.options.normalize = options.normalize;
-    if ('addmeta' in options) this.options.addmeta = options.addmeta;
-    if (options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
-  }
-  this._setCallback(callback);
-  this.stream
-    .on('error', this.handleError.bind(this))
+  if ('normalize' in options) context.options.normalize = options.normalize;
+  if ('addmeta' in options) context.options.addmeta = options.addmeta;
+  if (options.feedurl) context.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
+  if ('function' === typeof callback) context.callback = callback.bind(context);
+
+  context.stream
+    .on('error', this.handleError.bind(this, context))
     .end(string, 'utf8');
 };
 
@@ -135,23 +136,24 @@ FeedParser.prototype.parseString = function(string, options, callback) {
  */
 
 FeedParser.prototype.parseFile = function(file, options, callback) {
-  if (/^https?:/.test(file) || (typeof file === 'object' && 'protocol' in file)) {
-    return this.parseUrl.call(this, file, options, callback);
+  if (/^https?:/.test(file) || ('object' === typeof file && 'protocol' in file)) {
+    return this.parseUrl.apply(this, arguments);
   }
 
-  if (arguments.length === 2 && typeof options === 'function') {
+  var context = this.initialize();
+  options = options || {};
+  if ('function' === typeof options) {
     callback = options;
-    options = null;
+    options = {};
   }
-  if (options) {
-    if ('normalize' in options) this.options.normalize = options.normalize;
-    if ('addmeta' in options) this.options.addmeta = options.addmeta;
-    if (options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
-  }
-  this._setCallback(callback);
+  if ('normalize' in options) context.options.normalize = options.normalize;
+  if ('addmeta' in options) context.options.addmeta = options.addmeta;
+  if (options.feedurl) context.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
+  if ('function' === typeof callback) context.callback = callback.bind(context);
+
   fs.createReadStream(file)
-    .on('error', this.handleError.bind(this))
-    .pipe(this.stream);
+    .on('error', this.handleError.bind(this, context))
+    .pipe(context.stream);
 };
 
 /**
@@ -170,14 +172,14 @@ FeedParser.prototype.parseFile = function(file, options, callback) {
 
 FeedParser.prototype.parseUrl = function(url, options, callback) {
   var context = this.initialize();
-  if (arguments.length === 2 && typeof options === 'function') {
+  options = options || {};
+  if ('function' === typeof options) {
     callback = options;
-    options = null;
+    options = {};
   }
-  if (options) {
-    if ('normalize' in options) this.options.normalize = options.normalize;
-    if ('addmeta' in options) this.options.addmeta = options.addmeta;
-  }
+  if ('normalize' in options) context.options.normalize = options.normalize;
+  if ('addmeta' in options) context.options.addmeta = options.addmeta;
+
   if (!context.xmlbase.length) { // #parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       context.xmlbase.unshift({ '#name': 'xml', '#': url});
@@ -185,11 +187,10 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
       context.xmlbase.unshift({ '#name': 'xml', '#': url.href});
     }
   }
-  if ('function' === typeof callback) {
-    context.callback = callback.bind(context);
-  }
+  if ('function' === typeof callback) context.callback = callback.bind(context);
+
   request(url)
-    .on('error', this.handleError.bind(context))
+    .on('error', this.handleError.bind(this, context))
     .pipe(context.stream);
 };
 
@@ -211,19 +212,20 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
  */
 
 FeedParser.prototype.parseStream = function(stream, options, callback) {
-  if (arguments.length === 2 && typeof options === 'function') {
+  var context = this.initialize();
+  options = options || {};
+  if ('function' === typeof options) {
     callback = options;
-    options = null;
+    options = {};
   }
-  if (options) {
-    if ('normalize' in options) this.options.normalize = options.normalize;
-    if ('addmeta' in options) this.options.addmeta = options.addmeta;
-    if (options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
-  }
-  this._setCallback(callback);
+  if ('normalize' in options) context.options.normalize = options.normalize;
+  if ('addmeta' in options) context.options.addmeta = options.addmeta;
+  if (options.feedurl) context.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
+  if ('function' === typeof callback) context.callback = callback.bind(context);
+
   stream
-    .on('error', this.handleError.bind(this))
-    .pipe(this.stream);
+    .on('error', this.handleError.bind(this, context))
+    .pipe(context.stream);
 };
 
 FeedParser.prototype.handleEnd = function (context){
@@ -240,7 +242,6 @@ FeedParser.prototype.handleEnd = function (context){
       context.callback(null, context.meta, context.articles);
     }
   }
-  // this._reset();
 };
 
 FeedParser.prototype.handleSaxError = function (context){
@@ -403,14 +404,14 @@ FeedParser.prototype.handleCloseTag = function (context, el){
       (node['#local'] == 'entry' && (node['#prefix'] === '' || node['#type'] === 'atom'))) { // We have an article!
 
     if (!context.meta.title) { // We haven't yet parsed all the metadata
-      utils.merge(context.meta, this.handleMeta.call(context, context.stack[0], context.meta['#type'], this.options));
+      utils.merge(context.meta, this.handleMeta.call(context, context.stack[0], context.meta['#type'], context.options));
       this.emit('meta', context.meta);
     }
     if (!baseurl && context.xmlbase && context.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
       n = utils.reresolve(n, context.xmlbase[0]['#']);
     }
-    item = this.handleItem.call(context, n, context.meta['#type'], this.options);
-    if (this.options.addmeta) {
+    item = this.handleItem.call(context, n, context.meta['#type'], context.options);
+    if (context.options.addmeta) {
       item.meta = context.meta;
     }
     if (context.meta.author && !item.author) item.author = context.meta.author;
@@ -421,7 +422,7 @@ FeedParser.prototype.handleCloseTag = function (context, el){
                node['#name'] === 'feed' ||
                (node['#local'] === 'channel' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
                (node['#local'] === 'feed' && (node['#prefix'] === '' || node['#type'] === 'atom')) ) ) {
-    utils.merge(context.meta, this.handleMeta.call(context, n, context.meta['#type'], this.options));
+    utils.merge(context.meta, this.handleMeta.call(context, n, context.meta['#type'], context.options));
     this.emit('meta', context.meta);
   }
 
@@ -750,7 +751,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
 FeedParser.prototype.handleItem = function handleItem (node, type, options){
   if (!type || !node) return {};
 
-  var context = item;
+  var context = this;
   var item = {}
     , normalize = !options || (options && options.normalize)
     ;
@@ -984,39 +985,4 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   return item;
 };
 
-FeedParser.prototype._reset = function (){
-  this.meta = {};
-  this.meta['#ns'] = [];
-  this.meta['@'] = [];
-  this.articles = [];
-  this.stack = [];
-  this.nodes = {};
-  this.xmlbase = [];
-  this.in_xhtml = false;
-  this.xhtml = {}; /* Where to store xhtml elements as associative
-                      array with keys: '#' (containing the text)
-                      and '#name' (containing the XML element name) */
-  this.errors = [];
-  this.callback = undefined;
-};
-
-FeedParser.prototype._setCallback = function (callback){
-  this.callback = ('function' == typeof callback) ? callback : undefined;
-};
-
 exports = module.exports = FeedParser;
-
-exports.parseString = parseStatic.bind(null, 'parseString');
-exports.parseFile = parseStatic.bind(null, 'parseFile');
-exports.parseUrl = parseStatic.bind(null, 'parseUrl');
-exports.parseStream = parseStatic.bind(null, 'parseStream');
-
-function parseStatic (method, feed, options, callback) {
-  options = options || {};
-  if ('function' === typeof options) {
-    callback = options;
-    options = {};
-  }
-  var parser = new FeedParser (options);
-  parser[method](feed, options, callback);
-}
