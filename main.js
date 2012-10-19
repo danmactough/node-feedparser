@@ -981,19 +981,40 @@ FeedParser.prototype._setCallback = function (callback){
   this.callback = ('function' == typeof callback) ? callback : undefined;
 };
 
-exports = module.exports = FeedParser;
-
-exports.parseString = parseStatic.bind(null, 'parseString');
-exports.parseFile = parseStatic.bind(null, 'parseFile');
-exports.parseUrl = parseStatic.bind(null, 'parseUrl');
-exports.parseStream = parseStatic.bind(null, 'parseStream');
-
-function parseStatic (method, feed, options, callback) {
+function parser (options) {
   options = options || {};
   if ('function' === typeof options) {
     callback = options;
     options = {};
   }
-  var parser = new FeedParser (options);
-  parser[method](feed, options, callback);
+  var p = new FeedParser(options);
+  return p;
 }
+
+parser.parseUrl = function (url, options, callback) {
+  options = options || {};
+  if ('function' === typeof options) {
+    callback = options;
+    options = {};
+  }
+  if ('normalize' in options) this.options.normalize = options.normalize;
+  if ('addmeta' in options) this.options.addmeta = options.addmeta;
+
+  var p = parser(options);
+
+  if (!p.xmlbase.length) { // #parseFile may have already populated this value
+    if (/^https?:/.test(url)) {
+      p.xmlbase.unshift({ '#name': 'xml', '#': url});
+    } else if (typeof url == 'object' && 'href' in url) {
+      p.xmlbase.unshift({ '#name': 'xml', '#': url.href});
+    }
+  }
+  p._setCallback(callback);
+  request(url)
+    .on('error', p.handleError)
+    .pipe(p.stream);
+  return p;
+}
+
+module.exports = parser;
+// exports = module.exports = FeedParser;
