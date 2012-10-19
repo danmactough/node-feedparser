@@ -226,8 +226,6 @@ FeedParser.prototype.parseStream = function(stream, options, callback) {
 };
 
 FeedParser.prototype.handleEnd = function (){
-  this.emit('end', this.articles);
-
   if ('function' === typeof this.callback) {
     if (this.errors.length) {
       var error = this.errors.pop();
@@ -239,7 +237,8 @@ FeedParser.prototype.handleEnd = function (){
       this.callback(null, this.meta, this.articles);
     }
   }
-  this.init();
+  if (!this.errors.length) { this.emit('complete', this.meta, this.articles); }
+  this.emit('end');
 };
 
 FeedParser.prototype.handleSaxError = function (){
@@ -265,7 +264,8 @@ FeedParser.prototype.handleError = function (next, e){
   if (typeof next === 'function') {
     next();
   } else {
-    this.handleEnd(this);
+    this.stream.removeAllListeners();
+    this.emit('end');
   }
 };
 
@@ -1012,8 +1012,17 @@ parser.parseUrl = function (url, options, callback) {
   p._setCallback(callback);
   request(url)
     .on('error', p.handleError)
+    .on('response', handleResponse.bind(p))
     .pipe(p.stream);
   return p;
+}
+
+function handleResponse (response) {
+  this.emit('response', response);
+  if (response.statusCode !== 200) {
+    this.handleError(new Error(response.statusCode));
+  }
+  return;
 }
 
 module.exports = parser;
