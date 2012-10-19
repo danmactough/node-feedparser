@@ -42,6 +42,26 @@ function FeedParser (options) {
 }
 util.inherits(FeedParser, EventEmitter);
 
+FeedParser.prototype.init = function (){
+  this.meta = {};
+  this.meta['#ns'] = [];
+  this.meta['@'] = [];
+  this.articles = [];
+  this.stack = [];
+  this.nodes = {};
+  this.xmlbase = [];
+  this.in_xhtml = false;
+  this.xhtml = {}; /* Where to store xhtml elements as associative
+                      array with keys: '#' (containing the text)
+                      and '#name' (containing the XML element name) */
+  this.errors = [];
+  this.callback = undefined;
+};
+
+FeedParser.prototype._setCallback = function (callback){
+  this.callback = ('function' == typeof callback) ? callback : undefined;
+};
+
 /**
  * Parses a feed contained in a string.
  *
@@ -959,26 +979,6 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       item.categories = utils.unique(item.categories);
   }
   return item;
-};
-
-FeedParser.prototype.init = function (){
-  this.meta = {};
-  this.meta['#ns'] = [];
-  this.meta['@'] = [];
-  this.articles = [];
-  this.stack = [];
-  this.nodes = {};
-  this.xmlbase = [];
-  this.in_xhtml = false;
-  this.xhtml = {}; /* Where to store xhtml elements as associative
-                      array with keys: '#' (containing the text)
-                      and '#name' (containing the XML element name) */
-  this.errors = [];
-  this.callback = undefined;
-};
-
-FeedParser.prototype._setCallback = function (callback){
-  this.callback = ('function' == typeof callback) ? callback : undefined;
 };
 
 function parser (options) {
