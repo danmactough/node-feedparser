@@ -25,7 +25,7 @@ var sax = require('sax')
  */
 function FeedParser (options) {
 
-  this._reset();
+  this.init();
   this.options = options || {};
   if (!('strict' in this.options)) this.options.strict = false;
   if (!('normalize' in this.options)) this.options.normalize = true;
@@ -219,7 +219,7 @@ FeedParser.prototype.handleEnd = function (){
       this.callback(null, this.meta, this.articles);
     }
   }
-  this._reset();
+  this.init();
 };
 
 FeedParser.prototype.handleSaxError = function (){
@@ -961,7 +961,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   return item;
 };
 
-FeedParser.prototype._reset = function (){
+FeedParser.prototype.init = function (){
   this.meta = {};
   this.meta['#ns'] = [];
   this.meta['@'] = [];
