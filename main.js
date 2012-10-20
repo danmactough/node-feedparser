@@ -5,7 +5,7 @@
  http://yabfog.com
 
 **********************************************************************/
-
+/*jshint sub:true, laxcomma:true */
 /**
  * Module dependencies.
  */
@@ -24,28 +24,31 @@ var sax = require('sax')
  * @api public
  */
 function FeedParser (options) {
-
+  this.parseOpts(options);
   this.init();
-  this.options = options || {};
-  if (!('strict' in this.options)) this.options.strict = false;
-  if (!('normalize' in this.options)) this.options.normalize = true;
-  if (!('addmeta' in this.options)) this.options.addmeta = true;
-  if (this.options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': this.options.feedurl});
-  this.stream = sax.createStream(this.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true }); // https://github.com/isaacs/sax-js
+  EventEmitter.call(this);
+}
+util.inherits(FeedParser, EventEmitter);
+
+/*
+ * Initializes the SAX stream
+ *
+ * Initializes the class-variables
+ */
+FeedParser.prototype.init = function (){
+  // See https://github.com/isaacs/sax-js for more info
+  this.stream = sax.createStream(this.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true });
   this.stream.on('error', this.handleError.bind(this, this.handleSaxError.bind(this)));
   this.stream.on('opentag', this.handleOpenTag.bind(this));
   this.stream.on('closetag',this.handleCloseTag.bind(this));
   this.stream.on('text', this.handleText.bind(this));
   this.stream.on('cdata', this.handleText.bind(this));
   this.stream.on('end', this.handleEnd.bind(this));
-  EventEmitter.call(this);
-}
-util.inherits(FeedParser, EventEmitter);
 
-FeedParser.prototype.init = function (){
-  this.meta = {};
-  this.meta['#ns'] = [];
-  this.meta['@'] = [];
+  this.meta = {
+    '#ns': []
+  , '@': []
+  };
   this.articles = [];
   this.stack = [];
   this.nodes = {};
@@ -55,7 +58,19 @@ FeedParser.prototype.init = function (){
                       array with keys: '#' (containing the text)
                       and '#name' (containing the XML element name) */
   this.errors = [];
+  this.silenceErrors = false;
   this.callback = undefined;
+};
+
+/*
+ * Parse options
+ */
+FeedParser.prototype.parseOpts = function (options) {
+  this.options = options || {};
+  if (!('strict' in this.options)) this.options.strict = false;
+  if (!('normalize' in this.options)) this.options.normalize = true;
+  if (!('addmeta' in this.options)) this.options.addmeta = true;
+  if (this.options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': this.options.feedurl});
 };
 
 FeedParser.prototype._setCallback = function (callback){
@@ -242,9 +257,9 @@ FeedParser.prototype.handleEnd = function (){
 };
 
 FeedParser.prototype.handleSaxError = function (){
-  if (this._parser) {
-    this._parser.error = null;
-    this._parser.resume();
+  if (this.stream._parser) {
+    this.stream._parser.error = null;
+    this.stream._parser.resume();
   }
 };
 
@@ -257,7 +272,7 @@ FeedParser.prototype.handleError = function (next, e){
   }
   // Only emit the error event if we are not using CPS or
   // if we have a listener on 'error' even if we are using CPS
-  if (!this.callback || this.listeners('error').length) {
+  if (!this.silenceErrors && (!this.callback || this.listeners('error').length)) {
     this.emit('error', e);
   }
   this.errors.push(e);
@@ -981,49 +996,124 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   return item;
 };
 
-function parser (options) {
-  options = options || {};
+function parser (options, callback) {
   if ('function' === typeof options) {
     callback = options;
     options = {};
   }
   var p = new FeedParser(options);
+  p._setCallback(callback);
   return p;
 }
 
-parser.parseUrl = function (url, options, callback) {
-  options = options || {};
-  if ('function' === typeof options) {
-    callback = options;
-    options = {};
+FeedParser.parseString = function (string, options, callback) {
+  var p = parser(options, callback);
+  p.stream
+    .on('error', p.handleError.bind(p))
+    .end(string, Buffer.isBuffer(string) ? null : 'utf8'); // Accomodate a Buffer in addition to a String
+};
+
+/**
+ * Parses a feed from a file or (for compatability with libxml) a url.
+ * See parseString for more info.
+ *
+ * @param {String} path to the feed file or a fully qualified uri or parsed url object from url.parse()
+ * @param {Object} options
+ * @param {Function} callback
+ * @api public
+ */
+
+FeedParser.parseFile = function (file, options, callback) {
+  if (/^https?:/.test(file) || (typeof file === 'object' && ('protocol' in file || 'uri' in file || 'url' in file))) {
+    return FeedParser.parseUrl(file, options, callback);
   }
-  if ('normalize' in options) this.options.normalize = options.normalize;
-  if ('addmeta' in options) this.options.addmeta = options.addmeta;
+  var p = parser(options, callback);
+  fs.createReadStream(file)
+    .on('error', p.handleError.bind(p))
+    .pipe(p.stream);
+};
 
-  var p = parser(options);
+/**
+ * Parses a feed from a Stream.
+ *
+ * Example:
+ *    fp = new FeedParser();
+ *    fp.on('article', function (article){ // do something });
+ *    fp.parseStream(fs.createReadStream('file.xml')[, callback]);
+ *
+ *
+ * See parseString for more info.
+ *
+ * @param {Readable Stream}
+ * @param {Object} options
+ * @param {Function} callback
+ * @api public
+ */
 
-  if (!p.xmlbase.length) { // #parseFile may have already populated this value
+FeedParser.parseStream = function (stream, options, callback) {
+  var p = parser(options, callback);
+  stream
+    .on('error', p.handleError.bind(p))
+    .pipe(p.stream);
+};
+
+/**
+ * Parses a feed from a url.
+ *
+ * Please consider whether it would be better to perform conditional GETs
+ * and pass in the results instead.
+ *
+ * See parseString for more info.
+ *
+ * @param {String} fully qualified uri or a parsed url object from url.parse()
+ * @param {Object} options
+ * @param {Function} callback
+ * @api public
+ */
+FeedParser.parseUrl = function (url, options, callback) {
+  var p = parser(options, callback);
+  if (!p.xmlbase.length) { // parser.parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       p.xmlbase.unshift({ '#name': 'xml', '#': url});
     } else if (typeof url == 'object' && 'href' in url) {
       p.xmlbase.unshift({ '#name': 'xml', '#': url.href});
     }
   }
-  p._setCallback(callback);
   request(url)
-    .on('error', p.handleError)
+    .on('error', p.handleError.bind(p))
     .on('response', handleResponse.bind(p))
     .pipe(p.stream);
   return p;
-}
+};
 
 function handleResponse (response) {
   this.emit('response', response);
-  if (response.statusCode !== 200) {
-    this.handleError(new Error(response.statusCode));
+  var code = response.statusCode;
+  var codeReason = response.request.httpModule.STATUS_CODES[code] || 'Unknown Failure';
+  var contentType = response.headers && response.headers['content-type'];
+  var e = new Error();
+  if (code !== 200) {
+    if (code === 304) {
+      this.emit('notModified');
+      this.meta = this.articles = null;
+      this.silenceErrors = true;
+      this.removeAllListeners('complete');
+      this.removeAllListeners('meta');
+      this.removeAllListeners('article');
+      this.handleEnd();
+    }
+    else {
+      e.message = 'Remote server responded: ' + codeReason;
+      e.code = code;
+      this.handleError(e);
+    }
   }
+  else if (/html/.test(contentType)) {
+    e.message = 'Remote server did not respond with a feed';
+    e.code = code;
+    this.handleError(e);
+  } 
   return;
 }
 
-module.exports = parser;
-// exports = module.exports = FeedParser;
+exports = module.exports = FeedParser;
