@@ -23,5 +23,20 @@ describe('feedparser', function(){
       });
     });
   });
+  describe('.parseString', function(){
+    before(function(done){
+      FeedParser.parseString(str, function (err, _meta, _articles){
+        assert.ifError(err);
+        meta = _meta;
+        articles = _articles;
+        done();
+      });
+    });
+    describe('meta', function(){
+      it('should have the link "http://intertwingly.net/blog/"', function(){
+        assert.equal('http://intertwingly.net/blog/', meta.link);
+      });
+    });
+  });
 });
 
