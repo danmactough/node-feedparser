@@ -521,6 +521,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('published'):
       case('modified'):
       case('updated'):
+      case('lastBuildDate'):
       case('dc:date'):
         var date = utils.get(el) ? new Date(el['#']) : null;
         if (!date) break;
@@ -603,6 +604,14 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           meta.generator += (meta.generator ? ' ' : '') + 'v' + el['@'].version;
         if (utils.get(el['@'], 'uri'))
           meta.generator += meta.generator ? ' (' + el['@'].uri + ')' : el['@'].uri;
+        break;
+      case('itunes:keywords'):
+      case('media:keywords'):
+      case('keywords'):
+        if(!meta.keywords) {
+            var keywordstring = utils.get(el);
+            meta.keywords = keywordstring.split(',');
+        }
         break;
       case('category'):
       case('dc:subject'):
