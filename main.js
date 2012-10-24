@@ -1125,7 +1125,7 @@ FeedParser.parseUrl = function (url, options, callback) {
     var e = new Error();
     if (code !== 200) {
       if (code === 304) {
-        fp.emit('notModified');
+        fp.emit('304');
         fp.meta = fp.articles = null;
         fp.silenceErrors = true;
         fp.removeAllListeners('complete');
