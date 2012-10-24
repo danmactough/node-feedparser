@@ -1,6 +1,6 @@
 MOCHA = ./node_modules/mocha/bin/mocha
 
 test:
-	@$(MOCHA) --reporter list
+	@$(MOCHA) --reporter spec
 
 .PHONY: test
