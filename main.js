@@ -66,7 +66,7 @@ FeedParser.prototype.init = function (){
  * Parse options
  */
 FeedParser.prototype.parseOpts = function (options) {
-  debugger; this.options = options || {};
+  this.options = options || {};
   if (!('strict' in this.options)) this.options.strict = false;
   if (!('normalize' in this.options)) this.options.normalize = true;
   if (!('addmeta' in this.options)) this.options.addmeta = true;
@@ -125,6 +125,7 @@ FeedParser.prototype._setCallback = function (callback){
  * @api public
  */
 FeedParser.prototype.parseString = function(string, options, callback) {
+  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseString');
   if (arguments.length === 2 && typeof options === 'function') {
     callback = options;
     options = null;
@@ -150,6 +151,7 @@ FeedParser.prototype.parseString = function(string, options, callback) {
  * @api public
  */
 FeedParser.prototype.parseFile = function(file, options, callback) {
+  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseFile');
   if (/^https?:/.test(file) || (typeof file === 'object' && 'protocol' in file)) {
     return this.parseUrl.call(this, file, options, callback);
   }
@@ -183,6 +185,7 @@ FeedParser.prototype.parseFile = function(file, options, callback) {
  * @api public
  */
 FeedParser.prototype.parseUrl = function(url, options, callback) {
+  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseUrl');
   if (arguments.length === 2 && typeof options === 'function') {
     callback = options;
     options = null;
@@ -221,6 +224,7 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
  * @api public
  */
 FeedParser.prototype.parseStream = function(stream, options, callback) {
+  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseStream');
   if (arguments.length === 2 && typeof options === 'function') {
     callback = options;
     options = null;
@@ -1113,6 +1117,35 @@ FeedParser.parseStream = function (stream, options, callback) {
  */
 FeedParser.parseUrl = function (url, options, callback) {
   var fp = feedparser(options, callback);
+  var handleResponse = function (response) {
+    fp.emit('response', response);
+    var code = response.statusCode;
+    var codeReason = response.request.httpModule.STATUS_CODES[code] || 'Unknown Failure';
+    var contentType = response.headers && response.headers['content-type'];
+    var e = new Error();
+    if (code !== 200) {
+      if (code === 304) {
+        fp.emit('notModified');
+        fp.meta = fp.articles = null;
+        fp.silenceErrors = true;
+        fp.removeAllListeners('complete');
+        fp.removeAllListeners('meta');
+        fp.removeAllListeners('article');
+        fp.handleEnd();
+      }
+      else {
+        e.message = 'Remote server responded: ' + codeReason;
+        e.code = code;
+        fp.handleError(e);
+      }
+    }
+    else if (/html/.test(contentType)) {
+      e.message = 'Remote server did not respond with a feed';
+      e.code = code;
+      fp.handleError(e);
+    }
+    return;
+  };
   if (!fp.xmlbase.length) { // parser.parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       fp.xmlbase.unshift({ '#name': 'xml', '#': url});
@@ -1126,35 +1159,5 @@ FeedParser.parseUrl = function (url, options, callback) {
     .pipe(fp.stream);
   return fp;
 };
-
-function handleResponse (response) {
-  this.emit('response', response);
-  var code = response.statusCode;
-  var codeReason = response.request.httpModule.STATUS_CODES[code] || 'Unknown Failure';
-  var contentType = response.headers && response.headers['content-type'];
-  var e = new Error();
-  if (code !== 200) {
-    if (code === 304) {
-      this.emit('notModified');
-      this.meta = this.articles = null;
-      this.silenceErrors = true;
-      this.removeAllListeners('complete');
-      this.removeAllListeners('meta');
-      this.removeAllListeners('article');
-      this.handleEnd();
-    }
-    else {
-      e.message = 'Remote server responded: ' + codeReason;
-      e.code = code;
-      this.handleError(e);
-    }
-  }
-  else if (/html/.test(contentType)) {
-    e.message = 'Remote server did not respond with a feed';
-    e.code = code;
-    this.handleError(e);
-  } 
-  return;
-}
 
 exports = module.exports = FeedParser;
