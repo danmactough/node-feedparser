@@ -14,7 +14,7 @@ if (!file) {
   process.exit(2);
 }
 parser.on('error', console.error);
-parser.on('end', function(){
+parser.on('complete', function(){
   console.log(util.inspect(arguments, null, 10));
 });
 parser.parseFile(file);
