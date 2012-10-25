@@ -6,15 +6,14 @@
  *
  */
 var util = require('util')
-  , FeedParser = require('../')
-  , parser = new FeedParser()
+  , feedparser = require('../')
   , file = process.argv[2];
 
 if (!file) {
   process.exit(2);
 }
-parser.on('error', console.error);
-parser.on('complete', function(){
-  console.log(util.inspect(arguments, null, 10));
-});
-parser.parseFile(file);
+feedparser.parseFile(file)
+  .on('error', console.error)
+  .on('complete', function(){
+    console.log(util.inspect(arguments, null, 10));
+  });
