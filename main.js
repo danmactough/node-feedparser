@@ -1058,6 +1058,7 @@ FeedParser.parseString = function (string, options, callback) {
   fp.stream
     .on('error', fp.handleError.bind(fp))
     .end(string, Buffer.isBuffer(string) ? null : 'utf8'); // Accomodate a Buffer in addition to a String
+  return fp;
 };
 
 /**
@@ -1077,6 +1078,7 @@ FeedParser.parseFile = function (file, options, callback) {
   fs.createReadStream(file)
     .on('error', fp.handleError.bind(fp))
     .pipe(fp.stream);
+  return fp;
 };
 
 /**
@@ -1100,6 +1102,7 @@ FeedParser.parseStream = function (stream, options, callback) {
   stream
     .on('error', fp.handleError.bind(fp))
     .pipe(fp.stream);
+  return fp;
 };
 
 /**
