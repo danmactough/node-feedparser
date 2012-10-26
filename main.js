@@ -11,6 +11,7 @@
  */
 var sax = require('sax')
   , request = require('request')
+  , addressparser = require('addressparser')
   , fs = require('fs')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
@@ -608,10 +609,18 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('managingeditor'):
       case('webmaster'):
       case('author'):
-        if (meta.author === null || name == 'managingeditor')
-          meta.author = utils.get(el);
-        if (name == 'author')
+        var author = {};
+        if (name == 'author') {
           meta.author = utils.get(el.name) || utils.get(el.email) || utils.get(el.uri);
+        }
+        else if (utils.get(el)) {
+          author = addressparser(utils.get(el))[0];
+          el['name'] = author.name;
+          el['email'] = author.address;
+          if (meta.author === null || name == 'managingeditor') {
+            meta.author = author.name || author.address;
+          }
+        }
         break;
       case('language'):
         meta.language = utils.get(el);
@@ -855,7 +864,15 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         item.guid = utils.get(el);
         break;
       case('author'):
-        item.author = utils.get(el.name) || utils.get(el.email) || utils.get(el.uri);
+        var author = {};
+        if (utils.get(el)) { // RSS
+          author = addressparser(utils.get(el))[0];
+          el['name'] = author.name;
+          el['email'] = author.address;
+          item.author = author.name || author.address;
+        } else {
+          item.author = utils.get(el.name) || utils.get(el.email) || utils.get(el.uri);
+        }
         break;
       case('dc:creator'):
         item.author = utils.get(el);
