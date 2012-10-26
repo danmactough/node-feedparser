@@ -8,6 +8,7 @@ Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
 - [sax](https://github.com/isaacs/sax-js)
 - [request](https://github.com/mikeal/request)
+- [addressparser](https://github.com/andris9/addressparser)
 
 ## Installation
 
