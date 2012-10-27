@@ -1140,7 +1140,11 @@ FeedParser.parseUrl = function (url, options, callback) {
   var handleResponse = function (response) {
     fp.emit('response', response);
     var code = response.statusCode;
-    var codeReason = response.request.httpModule.STATUS_CODES[code] || 'Unknown Failure';
+    if (response.request.httpModule.STATUS_CODES != undefined) {
+      var codeReason = response.request.httpModule.STATUS_CODES[code] || 'Unknown Failure';
+    } else {
+      var codeReason = "Unknown Failure"
+    }
     var contentType = response.headers && response.headers['content-type'];
     var e = new Error();
     if (code !== 200) {
