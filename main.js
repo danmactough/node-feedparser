@@ -15,6 +15,7 @@ var sax = require('sax')
   , fs = require('fs')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
+  , STATUS_CODES = require('http').STATUS_CODES
   , utils = require('./utils')
   ;
 
@@ -1140,7 +1141,7 @@ FeedParser.parseUrl = function (url, options, callback) {
   var handleResponse = function (response) {
     fp.emit('response', response);
     var code = response.statusCode;
-    var codeReason = response.request.httpModule.STATUS_CODES[code] || 'Unknown Failure';
+    var codeReason = STATUS_CODES[code] || 'Unknown Failure';
     var contentType = response.headers && response.headers['content-type'];
     var e = new Error();
     if (code !== 200) {
