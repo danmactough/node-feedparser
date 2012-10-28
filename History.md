@@ -1,4 +1,9 @@
 
+v0.10.6 / 2012-10-27 
+==================
+
+  * Fix issue #33 uncaught exception trying to get the text string for an HTTP status code.
+
 v0.10.5 / 2012-10-26 
 ==================
 
