@@ -1,4 +1,9 @@
 
+v0.10.7 / 2012-11-01 
+==================
+
+  * Fix issue #34 .parseString() emitting too soon. All `emit()` and `callback()` are wrapped in `process.nextTick()`. Bump version.
+
 v0.10.6 / 2012-10-27 
 ==================
 

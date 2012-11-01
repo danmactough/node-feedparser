@@ -76,7 +76,15 @@ FeedParser.prototype.parseOpts = function (options) {
 };
 
 FeedParser.prototype._setCallback = function (callback){
-  this.callback = ('function' == typeof callback) ? callback : undefined;
+  var self = this;
+  if ('function' === typeof callback) {
+    this.callback = function () {
+      var args = arguments;
+      process.nextTick(function () {
+        callback.apply(self, args);
+      });
+    };
+  }
 };
 
 /**
@@ -199,7 +207,7 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
   if (!this.xmlbase.length) { // #parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       this.xmlbase.unshift({ '#name': 'xml', '#': url});
-    } else if (typeof url == 'object' && 'href' in url) {
+    } else if (typeof url === 'object' && 'href' in url) {
       this.xmlbase.unshift({ '#name': 'xml', '#': url.href});
     }
   }
@@ -254,8 +262,8 @@ FeedParser.prototype.handleEnd = function (){
       this.callback(null, this.meta, this.articles);
     }
   }
-  if (!this.errors.length) { this.emit('complete', this.meta, this.articles); }
-  this.emit('end');
+  if (!this.errors.length) { this.nextEmit('complete', this.meta, this.articles); }
+  this.nextEmit('end');
 };
 
 FeedParser.prototype.handleSaxError = function (){
@@ -275,7 +283,7 @@ FeedParser.prototype.handleError = function (next, e){
   // Only emit the error event if we are not using CPS or
   // if we have a listener on 'error' even if we are using CPS
   if (!this.silenceErrors && (!this.callback || this.listeners('error').length)) {
-    this.emit('error', e);
+    this.nextEmit('error', e);
   }
   this.errors.push(e);
   if (typeof next === 'function') {
@@ -420,7 +428,7 @@ FeedParser.prototype.handleCloseTag = function (el){
 
     if (!this.meta.title) { // We haven't yet parsed all the metadata
       utils.merge(this.meta, this.handleMeta(this.stack[0], this.meta['#type'], this.options));
-      this.emit('meta', this.meta);
+      this.nextEmit('meta', this.meta);
     }
     if (!baseurl && this.xmlbase && this.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
       n = utils.reresolve(n, this.xmlbase[0]['#']);
@@ -430,7 +438,7 @@ FeedParser.prototype.handleCloseTag = function (el){
       item.meta = this.meta;
     }
     if (this.meta.author && !item.author) item.author = this.meta.author;
-    this.emit('article', item);
+    this.nextEmit('article', item);
     this.articles.push(item);
   } else if (!this.meta.title && // We haven't yet parsed all the metadata
               (node['#name'] === 'channel' ||
@@ -438,7 +446,7 @@ FeedParser.prototype.handleCloseTag = function (el){
                (node['#local'] === 'channel' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
                (node['#local'] === 'feed' && (node['#prefix'] === '' || node['#type'] === 'atom')) ) ) {
     utils.merge(this.meta, this.handleMeta(n, this.meta['#type'], this.options));
-    this.emit('meta', this.meta);
+    this.nextEmit('meta', this.meta);
   }
 
   if (this.stack.length > 0) {
@@ -1013,6 +1021,13 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   }
   return item;
 };
+FeedParser.prototype.nextEmit = function () {
+  var self = this;
+  var args = [].slice.call(arguments);
+  process.nextTick(function(){
+    self.emit.apply(self, args);
+  });
+};
 
 function feedparser (options, callback) {
   if ('function' === typeof options) {
@@ -1139,14 +1154,14 @@ FeedParser.parseStream = function (stream, options, callback) {
 FeedParser.parseUrl = function (url, options, callback) {
   var fp = feedparser(options, callback);
   var handleResponse = function (response) {
-    fp.emit('response', response);
+    fp.nextEmit('response', response);
     var code = response.statusCode;
     var codeReason = STATUS_CODES[code] || 'Unknown Failure';
     var contentType = response.headers && response.headers['content-type'];
     var e = new Error();
     if (code !== 200) {
       if (code === 304) {
-        fp.emit('304');
+        fp.nextEmit('304');
         fp.meta = fp.articles = null;
         fp.silenceErrors = true;
         fp.removeAllListeners('complete');
@@ -1170,7 +1185,7 @@ FeedParser.parseUrl = function (url, options, callback) {
   if (!fp.xmlbase.length) { // parser.parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       fp.xmlbase.unshift({ '#name': 'xml', '#': url});
-    } else if (typeof url == 'object' && 'href' in url) {
+    } else if (typeof url === 'object' && 'href' in url) {
       fp.xmlbase.unshift({ '#name': 'xml', '#': url.href});
     }
   }
