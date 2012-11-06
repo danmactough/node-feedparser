@@ -1,4 +1,11 @@
 
+v0.10.8 / 2012-11-06 
+==================
+
+  * Ensure we only emit `end` once. Bump version.
+  * Change FeedParser.parseStream so it doesn't try to attach to a `stream` that is not defined. A user could pass in a stream thinking it's valid, but the stream has been destroyed. Try not to throw.
+  * Change FeedParser#handleError to not remove 'error' listeners on `this.stream`
+
 v0.10.7 / 2012-11-01 
 ==================
 

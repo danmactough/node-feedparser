@@ -264,6 +264,12 @@ FeedParser.prototype.handleEnd = function (){
   }
   if (!this.errors.length) { this.nextEmit('complete', this.meta, this.articles); }
   this.nextEmit('end');
+  if (this.stream) {
+    this.stream.removeAllListeners('end');
+    this.stream.removeAllListeners('error');
+  }
+  this.stream.on('error', function() {});
+  this.stream._parser.close();
 };
 
 FeedParser.prototype.handleSaxError = function (){
@@ -1175,12 +1181,14 @@ FeedParser.parseUrl = function (url, options, callback) {
         e.message = 'Remote server responded: ' + codeReason;
         e.code = code;
         fp.handleError(e);
+        response.request && response.request.abort();
       }
     }
     else if (/html/.test(contentType)) {
       e.message = 'Remote server did not respond with a feed';
       e.code = code;
       fp.handleError(e);
+      response.request && response.request.abort();
     }
     return;
   };
@@ -1193,8 +1201,9 @@ FeedParser.parseUrl = function (url, options, callback) {
   }
   request(url)
     .on('error', fp.handleError.bind(fp))
-    .on('response', handleResponse.bind(fp))
-    .pipe(fp.stream);
+    .on('response', handleResponse)
+    .pipe(fp.stream)
+    ;
   return fp;
 };
 
