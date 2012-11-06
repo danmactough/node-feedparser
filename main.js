@@ -1134,7 +1134,7 @@ FeedParser.parseFile = function (file, options, callback) {
  */
 FeedParser.parseStream = function (stream, options, callback) {
   var fp = feedparser(options, callback);
-  stream
+  stream && stream
     .on('error', fp.handleError.bind(fp))
     .pipe(fp.stream);
   return fp;
