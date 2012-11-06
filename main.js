@@ -289,7 +289,9 @@ FeedParser.prototype.handleError = function (next, e){
   if (typeof next === 'function') {
     next();
   } else {
-    this.stream.removeAllListeners();
+    ['opentag', 'closetag', 'text', 'cdata', 'end'].forEach(function(ev){
+      this.stream && this.stream.removeAllListeners(ev);
+    });
     this.handleEnd();
   }
 };
