@@ -1199,7 +1199,11 @@ FeedParser.parseUrl = function (url, options, callback) {
       fp.xmlbase.unshift({ '#name': 'xml', '#': url.href});
     }
   }
-  request(url)
+  var req = {
+    uri: url,
+    headers: { 'Accept-Encoding': 'identity' }
+  };
+  request(req)
     .on('error', fp.handleError.bind(fp))
     .on('response', handleResponse)
     .pipe(fp.stream)
