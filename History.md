@@ -1,4 +1,11 @@
 
+v.0.10.9 / 2012-12-03 
+==================
+
+  * Add "Accept-Encoding: identity" header on HTTP requests to only fetch uncompressed data. Resolves issue #36.
+  * Merge pull request #37 from jchris/patch-1
+  * make example work with new api
+
 v0.10.8 / 2012-11-06 
 ==================
 
