@@ -1,4 +1,17 @@
 
+v0.10.10 / 2012-12-28 
+==================
+
+  * Add example and test for passing request headers to .parseUrl()
+  * Enable FeedParser.parseUrl to accept a Request object with headers
+  * Update utils.merge() to be safer about relying on Object properties
+  * Skip failing test that's not failing. Maybe the remote server changed something.
+  * Cleanup 5f642af. Don't overwrite media:thumbnail array.
+  * Increase test timeout. Fix incorrect test usage of deepEqual instead of strictEqual.
+  * Merge pull request #41 from rborn/master
+  * fix for multiple media:thumbnail
+  * Add test for fetching uncompressed feed.
+
 v.0.10.9 / 2012-12-03 
 ==================
 
