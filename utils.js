@@ -6,6 +6,15 @@ var URL = require('url')
   , NS = require('./namespaces')
   ;
 
+
+/**
+ * Safe hasOwnProperty
+ * See: http://www.devthought.com/2012/01/18/an-object-is-not-a-hash/
+ */
+function has (obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
 /**
  * Merge object b with object a.
  *
@@ -17,7 +26,7 @@ var URL = require('url')
  *
  * merge(a, b, true);
  * // => { foo: 'bar', bar: 'baz' }
- * 
+ *
  * @param {Object} a
  * @param {Object} b
  * @param {Boolean} [noforce] Optionally, don't overwrite any existing keys in a found in b
@@ -26,10 +35,12 @@ var URL = require('url')
 function merge (a, b, noforce) {
   if (a && b && a === Object(a) && b === Object(b)) {
     for (var key in b) {
-      if (noforce) {
-        if (!a.hasOwnProperty(key)) a[key] = b[key];
-      } else {
-        a[key] = b[key];
+      if (has(b, key)) {
+        if (noforce) {
+          if (!a.hasOwnProperty(key)) a[key] = b[key];
+        } else {
+          a[key] = b[key];
+        }
       }
     }
   }
