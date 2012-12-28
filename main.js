@@ -758,15 +758,12 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     if (!meta.image.url) {
       if (node['itunes:image']) meta.image.url = utils.get(node['itunes:image']['@'], 'href');
       else if (node['media:thumbnail']) {
-          if (Array.isArray(node['media:thumbnail'])) {
-			           node['media:thumbnail'] = node['media:thumbnail'][0];
-		        }
-          meta.image.url = utils.get(node['media:thumbnail']['@'], 'url');
+        if (Array.isArray(node['media:thumbnail'])) {
+          node['media:thumbnail'] = node['media:thumbnail'][0];
+        }
+        meta.image.url = utils.get(node['media:thumbnail']['@'], 'url');
       }
-
-      // else if (node['media:thumbnail']) meta.image.url = utils.get(node['media:thumbnail']['@'], 'url');
-
-}
+    }
     if (!meta.copyright) {
       if (node['media:copyright']) meta.copyright = utils.get(node['media:copyright']);
       else if (node['dc:rights']) meta.copyright = utils.get(node['dc:rights']);
@@ -1027,15 +1024,13 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
     }
     if (!item.image.url) {
       if (node['itunes:image']) item.image.url = utils.get(node['itunes:image']['@'], 'href');
-//      else if (node['media:thumbnail']) item.image.url = utils.get(node['media:thumbnail']['@'], 'url');
-
       else if (node['media:thumbnail']) {
- 	        if (Array.isArray(node['media:thumbnail'])) {
-			           node['media:thumbnail'] = node['media:thumbnail'][0];
-		        }
- 		       item.image.url = utils.get(node['media:thumbnail']['@'], 'url');
-	     }
-
+        if (Array.isArray(node['media:thumbnail'])) {
+          item.image.url = utils.get(node['media:thumbnail'][0]['@'], 'url');
+        } else {
+          item.image.url = utils.get(node['media:thumbnail']['@'], 'url');
+        }
+      }
       else if (node['media:content'] && node['media:content']['media:thumbnail']) item.image.url = utils.get(node['media:content']['media:thumbnail']['@'], 'url');
       else if (node['media:group'] && node['media:group']['media:thumbnail']) item.image.url = utils.get(node['media:group']['media:thumbnail']['@'], 'url');
       else if (node['media:group'] && node['media:group']['media:content'] && node['media:group']['media:content']['media:thumbnail']) item.image.url = utils.get(node['media:group']['media:content']['media:thumbnail']['@'], 'url');
