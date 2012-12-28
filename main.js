@@ -252,6 +252,12 @@ FeedParser.prototype.parseStream = function(stream, options, callback) {
 };
 
 FeedParser.prototype.handleEnd = function (){
+  // We made it to the end without throwing, but let's make sure we were actually
+  // parsing a feed
+  if (!this.errors.length && this.meta && !this.meta['#type']) {
+    this.meta['#type'] = 'INVALID'; // Set a value so we don't cause an infinite loop
+    return this.handleError(new Error('Remote server did not respond with a feed'));
+  }
   if ('function' === typeof this.callback) {
     if (this.errors.length) {
       var error = this.errors.pop();
@@ -1196,13 +1202,9 @@ FeedParser.parseUrl = function (url, options, callback) {
         fp.handleError(e);
         response.request && response.request.abort();
       }
+      return;
     }
-    else if (/html/.test(contentType)) {
-      e.message = 'Remote server did not respond with a feed';
-      e.code = code;
-      fp.handleError(e);
-      response.request && response.request.abort();
-    }
+    fp.meta['#content-type'] = contentType;
     return;
   };
   if (!fp.xmlbase.length) { // parser.parseFile may have already populated this value
