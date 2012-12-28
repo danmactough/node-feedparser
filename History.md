@@ -1,5 +1,11 @@
 
-v0.10.10 / 2012-12-28 
+v0.10.11 / 2012-12-28
+==================
+
+  * Update tests
+  * Change HTTP Content-Type head checking to allow parsing valid feeds with incorrect Content-Type header. Add value of Content-Type header to meta.
+
+v0.10.10 / 2012-12-28
 ==================
 
   * Add example and test for passing request headers to .parseUrl()
@@ -12,31 +18,31 @@ v0.10.10 / 2012-12-28
   * fix for multiple media:thumbnail
   * Add test for fetching uncompressed feed.
 
-v.0.10.9 / 2012-12-03 
+v.0.10.9 / 2012-12-03
 ==================
 
   * Add "Accept-Encoding: identity" header on HTTP requests to only fetch uncompressed data. Resolves issue #36.
   * Merge pull request #37 from jchris/patch-1
   * make example work with new api
 
-v0.10.8 / 2012-11-06 
+v0.10.8 / 2012-11-06
 ==================
 
   * Ensure we only emit `end` once. Bump version.
   * Change FeedParser.parseStream so it doesn't try to attach to a `stream` that is not defined. A user could pass in a stream thinking it's valid, but the stream has been destroyed. Try not to throw.
   * Change FeedParser#handleError to not remove 'error' listeners on `this.stream`
 
-v0.10.7 / 2012-11-01 
+v0.10.7 / 2012-11-01
 ==================
 
   * Fix issue #34 .parseString() emitting too soon. All `emit()` and `callback()` are wrapped in `process.nextTick()`. Bump version.
 
-v0.10.6 / 2012-10-27 
+v0.10.6 / 2012-10-27
 ==================
 
   * Fix issue #33 uncaught exception trying to get the text string for an HTTP status code.
 
-v0.10.5 / 2012-10-26 
+v0.10.5 / 2012-10-26
 ==================
 
   * Bump version. Update README with additional dependency. Add History.md.
