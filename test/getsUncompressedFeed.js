@@ -6,7 +6,7 @@ var assert = require('assert')
 
 describe('feedparser', function(){
   describe('#parseUrl', function(){
-    it('old API should return an error', function(done) {
+    it.skip('old API should return an error', function(done) {
       feedparser.parseUrl(feed, function (error, meta, articles) {
         assert.ok(error instanceof Error);
         done();
