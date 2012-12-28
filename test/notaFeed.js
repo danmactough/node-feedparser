@@ -5,11 +5,11 @@ var assert = require('assert')
 
 describe('feedparser', function(){
   describe('#parseUrl', function(){
-    it('should not throw', function(done) {
-      this.timeout(10000);
+    it('should call back with an error and no meta or articles', function(done) {
       feedparser.parseUrl('http://lifehacker.com', function (error, meta, articles) {
-        assert.ifError(error);
-        assert.equal(articles.length, 0);
+        assert.notEqual(error, null);
+        assert.equal(meta, null);
+        assert.equal(articles, null);
         done();
       });
     });
