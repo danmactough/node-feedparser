@@ -13,6 +13,7 @@ var sax = require('sax')
   , request = require('request')
   , addressparser = require('addressparser')
   , fs = require('fs')
+  , URL = require('url')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
   , STATUS_CODES = require('http').STATUS_CODES
@@ -1165,7 +1166,8 @@ FeedParser.parseStream = function (stream, options, callback) {
  *
  * See parseString for more info.
  *
- * @param {String} fully qualified uri or a parsed url object from url.parse()
+ * @param {String|Object} fully qualified uri, parsed url object from url.parse(),
+ *                        or a Request object with uri|url and headers
  * @param {Object} options
  * @param {Function} callback
  * @api public
@@ -1206,14 +1208,36 @@ FeedParser.parseUrl = function (url, options, callback) {
   if (!fp.xmlbase.length) { // parser.parseFile may have already populated this value
     if (/^https?:/.test(url)) {
       fp.xmlbase.unshift({ '#name': 'xml', '#': url});
-    } else if (typeof url === 'object' && 'href' in url) {
-      fp.xmlbase.unshift({ '#name': 'xml', '#': url.href});
+    } else if (typeof url === 'object') {
+      if ('href' in url) {
+        fp.xmlbase.unshift({ '#name': 'xml', '#': URL.format(url)});
+      }
+      else if ('url' in url || 'uri' in url) {
+        if ('url' in url) {
+          url.uri = url.url;
+          delete url.url;
+        }
+        if (/^https?:/.test(url.uri)) {
+          fp.xmlbase.unshift({ '#name': 'xml', '#': url.uri});
+        } else if (typeof url.uri === 'object') {
+          fp.xmlbase.unshift({ '#name': 'xml', '#': URL.format(url.uri)});
+        }
+      }
     }
   }
-  var req = {
-    uri: url,
-    headers: { 'Accept-Encoding': 'identity' }
-  };
+  var req = {};
+  var headers = { 'Accept-Encoding': 'identity' };
+  if (typeof url === 'object') {
+    if ('headers' in url) {
+      utils.merge(headers, url.headers);
+    }
+    req.uri = url.uri || url.url;
+  }
+  else {
+    req.uri = url;
+  }
+  req.headers = headers;
+
   request(req)
     .on('error', fp.handleError.bind(fp))
     .on('response', handleResponse)
