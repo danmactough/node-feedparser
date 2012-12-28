@@ -1,6 +1,6 @@
 MOCHA = ./node_modules/mocha/bin/mocha
 
 test:
-	@$(MOCHA) --reporter spec
+	@$(MOCHA) --timeout 5s --reporter spec
 
 .PHONY: test

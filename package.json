@@ -32,6 +32,6 @@
     "mocha": "1.x"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --reporter spec"
+    "test": "./node_modules/mocha/bin/mocha --timeout 5s --reporter spec"
   }
 }

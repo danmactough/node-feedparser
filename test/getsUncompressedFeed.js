@@ -17,8 +17,8 @@ describe('feedparser', function(){
     it('new API should work just fine', function(done) {
       FeedParser.parseUrl(feed, function (error, meta, articles) {
         assert.ifError(error);
-        assert.notDeepEqual(meta, null);
-        assert.notDeepEqual(articles, null);
+        assert.notStrictEqual(meta, null);
+        assert.notStrictEqual(articles, null);
         done();
       });
     });
