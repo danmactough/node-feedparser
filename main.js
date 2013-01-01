@@ -1181,6 +1181,7 @@ FeedParser.parseStream = function (stream, options, callback) {
 FeedParser.parseUrl = function (url, options, callback) {
   var fp = feedparser(options, callback);
   var handleResponse = function (response) {
+    fp.response = response;
     fp.nextEmit('response', response);
     var code = response.statusCode;
     var codeReason = STATUS_CODES[code] || 'Unknown Failure';
