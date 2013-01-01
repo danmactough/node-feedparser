@@ -1,4 +1,9 @@
 
+v0.10.12 / 2012-12-31 
+==================
+
+  * Expose HTTP response on FeedParser instance
+
 v0.10.11 / 2012-12-28
 ==================
 
