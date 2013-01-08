@@ -1,5 +1,10 @@
 
-v0.10.12 / 2012-12-31 
+v0.10.13 / 2013-01-08
+==================
+
+  * Bump sax version
+
+v0.10.12 / 2012-12-31
 ==================
 
   * Expose HTTP response on FeedParser instance
