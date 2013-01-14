@@ -136,7 +136,7 @@ FeedParser.prototype._setCallback = function (callback){
  * @api public
  */
 FeedParser.prototype.parseString = function(string, options, callback) {
-  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseString');
+  if (!this.options.silent) console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseString');
   if (arguments.length === 2 && typeof options === 'function') {
     callback = options;
     options = null;
@@ -162,7 +162,7 @@ FeedParser.prototype.parseString = function(string, options, callback) {
  * @api public
  */
 FeedParser.prototype.parseFile = function(file, options, callback) {
-  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseFile');
+  if (!this.options.silent) console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseFile');
   if (/^https?:/.test(file) || (typeof file === 'object' && 'protocol' in file)) {
     return this.parseUrl.call(this, file, options, callback);
   }
@@ -196,7 +196,7 @@ FeedParser.prototype.parseFile = function(file, options, callback) {
  * @api public
  */
 FeedParser.prototype.parseUrl = function(url, options, callback) {
-  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseUrl');
+  if (!this.options.silent) console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseUrl');
   if (arguments.length === 2 && typeof options === 'function') {
     callback = options;
     options = null;
@@ -235,7 +235,7 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
  * @api public
  */
 FeedParser.prototype.parseStream = function(stream, options, callback) {
-  console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseStream');
+  if (!this.options.silent) console.warn('The prototype method %s is deprecated. Please refer to the documentation for the new API.', 'FeedParser#parseStream');
   if (arguments.length === 2 && typeof options === 'function') {
     callback = options;
     options = null;
