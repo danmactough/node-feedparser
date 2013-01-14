@@ -1,42 +1,37 @@
-var assert = require('assert')
-  , fs = require('fs')
-  , str = fs.readFileSync(__dirname + '/feeds/intertwingly.atom')
-  , meta = {}
-  , articles = []
-  , FeedParser = require('../')
-  , feedparser = new FeedParser()
-  ;
-
 describe('feedparser', function(){
-  describe('#parseString', function(){
-    before(function(done){
-      feedparser.parseString(str, function (err, _meta, _articles){
-        assert.ifError(err);
-        meta = _meta;
-        articles = _articles;
-        done();
+
+  var feedparser = new FeedParser({silent: true})
+    , str = require('fs').readFileSync(__dirname + '/feeds/intertwingly.atom')
+    , meta = {}
+    , articles = []
+    ;
+
+  describe('Feed uses relative URIs but no root xml:base', function () {
+    describe('#parseString', function(){
+      before(function(done){
+        feedparser.parseString(str, function (err, _meta, _articles){
+          assert.ifError(err);
+          meta = _meta;
+          articles = _articles;
+          done();
+        });
       });
-    });
-    describe('meta', function(){
-      it('should have the link "http://intertwingly.net/blog/"', function(){
+      it('can infer the URI base', function(){
         assert.equal('http://intertwingly.net/blog/', meta.link);
       });
     });
-  });
-  describe('.parseString', function(){
-    before(function(done){
-      FeedParser.parseString(str, function (err, _meta, _articles){
-        assert.ifError(err);
-        meta = _meta;
-        articles = _articles;
-        done();
+    describe('.parseString', function(){
+      before(function(done){
+        FeedParser.parseString(str, function (err, _meta, _articles){
+          assert.ifError(err);
+          meta = _meta;
+          articles = _articles;
+          done();
+        });
       });
-    });
-    describe('meta', function(){
-      it('should have the link "http://intertwingly.net/blog/"', function(){
+      it('can infer the URI base', function(){
         assert.equal('http://intertwingly.net/blog/', meta.link);
       });
     });
   });
 });
-

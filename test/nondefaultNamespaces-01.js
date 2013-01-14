@@ -1,12 +1,11 @@
-var assert = require('assert')
-  , FeedParser = require('../')
-  , feedparser = new FeedParser()
-  , feed = __dirname + '/feeds/complexNamespaceFeed.xml'
-  , meta = {}
-  , articles = {}
-  ;
-
 describe('feedparser', function(){
+
+  var feedparser = new FeedParser({silent: true})
+    , feed = __dirname + '/feeds/complexNamespaceFeed.xml'
+    , meta = {}
+    , articles = {}
+    ;
+
   describe('complexNamespaceFeed', function(){
     before(function(done){
       feedparser.parseFile(feed, function (error, _meta, _articles) {

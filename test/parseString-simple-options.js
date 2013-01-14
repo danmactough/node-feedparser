@@ -1,13 +1,11 @@
-var assert = require('assert')
-  , fs = require('fs')
-  , str = fs.readFileSync(__dirname + '/feeds/rss2sample.xml')
-  , meta = {}
-  , articles = []
-  , FeedParser = require('../')
-  , feedparser = new FeedParser()
-  ;
-
 describe('feedparser', function(){
+
+  var feedparser = new FeedParser({silent: true})
+    , str = require('fs').readFileSync(__dirname + '/feeds/rss2sample.xml')
+    , meta = {}
+    , articles = []
+    ;
+
   describe('#parseString with options { normalize: false, addmeta: false }', function(){
     before(function(done){
       feedparser.parseString(str, { normalize: false, addmeta: false }, function (err, _meta, _articles){

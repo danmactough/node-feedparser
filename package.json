@@ -29,9 +29,10 @@
     "addressparser": "~0.1.3"
   },
   "devDependencies": {
-    "mocha": "1.x"
+    "mocha": "1.x",
+    "buffet": "0.4.x"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --timeout 5s --reporter spec"
+    "test": "./node_modules/mocha/bin/mocha"
   }
 }

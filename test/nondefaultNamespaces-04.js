@@ -1,12 +1,11 @@
-var assert = require('assert')
-  , FeedParser = require('../')
-  , feedparser = new FeedParser()
-  , feed = __dirname + '/feeds/nondefaultnamespace-xhtml.atom'
-  , meta = {}
-  , articles = {}
-  ;
-
 describe('feedparser', function(){
+
+  var feedparser = new FeedParser({silent: true})
+    , feed = __dirname + '/feeds/nondefaultnamespace-xhtml.atom'
+    , meta = {}
+    , articles = {}
+    ;
+
   describe('nondefaultnamespace Test case 2: default namespace Atom; XHTML namespace mapped to a prefix', function(){
     before(function(done){
       feedparser.parseFile(feed, function (error, _meta, _articles) {
