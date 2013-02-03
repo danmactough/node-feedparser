@@ -9,7 +9,8 @@ describe('feedparser', function(){
       this.timeout(10000);
       feedparser.parseUrl(feed, function (error, meta, articles) {
         assert(error instanceof Error, error.message);
-        assert.equal(error.message, 'getaddrinfo ENOENT');
+        // Exact error code seems to differ -- maybe by os
+        assert.ok(error.message === 'getaddrinfo ENOENT' || error.message === 'getaddrinfo ENOTFOUND');
         done();
       });
     });
@@ -19,7 +20,8 @@ describe('feedparser', function(){
       this.timeout(10000);
       FeedParser.parseUrl(feed, function (error, meta, articles) {
         assert(error instanceof Error, error.message);
-        assert.equal(error.message, 'getaddrinfo ENOENT');
+        // Exact error code seems to differ -- maybe by os
+        assert.ok(error.message === 'getaddrinfo ENOENT' || error.message === 'getaddrinfo ENOTFOUND');
         done();
       });
     });
