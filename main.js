@@ -12,6 +12,7 @@
 var sax = require('sax')
   , request = require('request')
   , addressparser = require('addressparser')
+  , indexOfObject = require('array-indexofobject')
   , fs = require('fs')
   , URL = require('url')
   , util = require('util')
@@ -816,7 +817,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   }
 
   Object.keys(node).forEach(function(name){
-    var el = node[name];
+    var el = node[name]
+      , enclosure = {};
     if (normalize) {
       switch(name){
       case('title'):
@@ -853,7 +855,6 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
                 if (link['@']['rel'] == 'alternate') item.link = link['@']['href'];
                 if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
                 if (link['@']['rel'] == 'enclosure') {
-                  var enclosure = {};
                   enclosure.url = link['@']['href'];
                   enclosure.type = utils.get(link['@'], 'type');
                   enclosure.length = utils.get(link['@'], 'length');
@@ -873,7 +874,6 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
               if (el['@']['rel'] == 'alternate') item.link = el['@']['href'];
               if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
               if (el['@']['rel'] == 'enclosure') {
-                var enclosure = {};
                 enclosure.url = el['@']['href'];
                 enclosure.type = utils.get(el['@'], 'type');
                 enclosure.length = utils.get(el['@'], 'length');
@@ -921,20 +921,45 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         }
         break;
       case('enclosure'):
-      case('media:content'):
-        var _enclosure = {};
         if (Array.isArray(el)) {
           el.forEach(function (enc){
-            _enclosure.url = utils.get(enc['@'], 'url');
-            _enclosure.type = utils.get(enc['@'], 'type') || utils.get(enc['@'], 'medium');
-            _enclosure.length = utils.get(enc['@'], 'length') || utils.get(enc['@'], 'filesize');
-            item.enclosures.push(_enclosure);
+            enclosure.url = utils.get(enc['@'], 'url');
+            enclosure.type = utils.get(enc['@'], 'type');
+            enclosure.length = utils.get(enc['@'], 'length');
+            if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+              item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
+            } else {
+              item.enclosures.push(enclosure);
+            }
           });
         } else {
-          _enclosure.url = utils.get(el['@'], 'url');
-          _enclosure.type = utils.get(el['@'], 'type') || utils.get(el['@'], 'medium');
-          _enclosure.length = utils.get(el['@'], 'length') || utils.get(el['@'], 'filesize');
-          item.enclosures.push(_enclosure);
+          enclosure.url = utils.get(el['@'], 'url');
+          enclosure.type = utils.get(el['@'], 'type');
+          enclosure.length = utils.get(el['@'], 'length');
+          if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+            item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
+          } else {
+            item.enclosures.push(enclosure);
+          }
+        }
+        break;
+      case('media:content'):
+        if (Array.isArray(el)) {
+          el.forEach(function (enc){
+            enclosure.url = utils.get(enc['@'], 'url');
+            enclosure.type = utils.get(enc['@'], 'type') || utils.get(enc['@'], 'medium');
+            enclosure.length = utils.get(enc['@'], 'filesize');
+            if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+              item.enclosures.push(enclosure);
+            }
+          });
+        } else {
+          enclosure.url = utils.get(el['@'], 'url');
+          enclosure.type = utils.get(el['@'], 'type') || utils.get(el['@'], 'medium');
+          enclosure.length = utils.get(el['@'], 'filesize');
+          if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+            item.enclosures.push(enclosure);
+          }
         }
         break;
       case('enc:enclosure'): // Can't find this in use for an example to debug. Only example found does not comply with the spec -- can't code THAT!
