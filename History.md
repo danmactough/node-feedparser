@@ -1,4 +1,14 @@
 
+v0.11.0 / 2013-02-03
+==================
+
+  * Dedupe enclosures. Resolves #45.
+  * Change test to be more lenient about which error code is returned as it seems to differ for no known reason
+  * Drop support for node pre-v0.8.x
+  * Refactor tests to not fetch remote URLs
+  * Tell TravisCI to only run tests on master
+  * Enable silencing the deprecation warnings
+
 v0.10.13 / 2013-01-08
 ==================
 
