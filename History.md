@@ -1,4 +1,10 @@
 
+v0.12.0 / 2013-02-12
+==================
+
+  * Expose rssCloud/pubsubhubbub on `meta.cloud` property. Resolves #47.
+  * Expose "has" util
+
 v0.11.0 / 2013-02-03
 ==================
 
