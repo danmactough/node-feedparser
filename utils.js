@@ -14,6 +14,7 @@ var URL = require('url')
 function has (obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
+exports.has = has;
 
 /**
  * Merge object b with object a.
