@@ -561,6 +561,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     ['title','description','date', 'pubdate', 'pubDate','link', 'xmlurl', 'xmlUrl','author','language','favicon','copyright','generator'].forEach(function (property){
       meta[property] = null;
     });
+    meta.cloud = {};
     meta.image = {};
     meta.categories = [];
   }
@@ -605,6 +606,10 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                     this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
                   }
                 }
+                else if (link['@']['rel'] == 'hub') {
+                  meta.cloud.type = 'hub';
+                  meta.cloud.href = link['@']['href'];
+                }
               } else {
                 meta.link = link['@']['href'];
               }
@@ -622,6 +627,10 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                   this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
                   this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
                 }
+              }
+              else if (el['@']['rel'] == 'hub') {
+                meta.cloud.type = 'hub';
+                meta.cloud.href = el['@']['href'];
               }
             } else {
               meta.link = el['@']['href'];
@@ -646,6 +655,14 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
             meta.author = author.name || author.address;
           }
         }
+        break;
+      case('cloud'):
+        Object.keys(el['@']).forEach(function (attr) {
+          if (utils.has(el['@'], attr)) {
+            meta.cloud[attr] = el['@'][attr];
+          }
+        });
+        meta.cloud.type = 'rsscloud';
         break;
       case('language'):
         meta.language = utils.get(el);
