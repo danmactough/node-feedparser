@@ -19,6 +19,7 @@ var sax = require('sax')
   , EventEmitter = require('events').EventEmitter
   , STATUS_CODES = require('http').STATUS_CODES
   , utils = require('./utils')
+  , moment = require('moment')
   ;
 
 /**
@@ -145,6 +146,7 @@ FeedParser.prototype.parseString = function(string, options, callback) {
   if (options) {
     if ('normalize' in options) this.options.normalize = options.normalize;
     if ('addmeta' in options) this.options.addmeta = options.addmeta;
+    if ('dateformat' in options) this.options.dateformat = options.dateformat;
     if (options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
   }
   this._setCallback(callback);
@@ -175,6 +177,7 @@ FeedParser.prototype.parseFile = function(file, options, callback) {
   if (options) {
     if ('normalize' in options) this.options.normalize = options.normalize;
     if ('addmeta' in options) this.options.addmeta = options.addmeta;
+    if ('dateformat' in options) this.options.dateformat = options.dateformat;
     if (options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
   }
   this._setCallback(callback);
@@ -205,6 +208,7 @@ FeedParser.prototype.parseUrl = function(url, options, callback) {
   if (options) {
     if ('normalize' in options) this.options.normalize = options.normalize;
     if ('addmeta' in options) this.options.addmeta = options.addmeta;
+    if ('dateformat' in options) this.options.dateformat = options.dateformat;
   }
   if (!this.xmlbase.length) { // #parseFile may have already populated this value
     if (/^https?:/.test(url)) {
@@ -244,6 +248,7 @@ FeedParser.prototype.parseStream = function(stream, options, callback) {
   if (options) {
     if ('normalize' in options) this.options.normalize = options.normalize;
     if ('addmeta' in options) this.options.addmeta = options.addmeta;
+    if ('dateformat' in options) this.options.dateformat = options.dateformat;
     if (options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': options.feedurl});
   }
   this._setCallback(callback);
@@ -555,7 +560,18 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
 
   var meta = {}
     , normalize = !options || (options && options.normalize)
+    , dateparser
     ;
+
+  if (options && options.dateformat) {
+    dateparser = function(datestr) {
+      return moment(datestr, options.dateformat).toDate();
+    };
+  } else {
+    dateparser = function(datestr) {
+      return moment(datestr).toDate();
+    };
+  }
 
   if (normalize) {
     ['title','description','date', 'pubdate', 'pubDate','link', 'xmlurl', 'xmlUrl','author','language','favicon','copyright','generator'].forEach(function (property){
@@ -583,7 +599,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(el['#']) : null;
+        var date = utils.get(el) ? dateparser(el['#']) : null;
         if (!date) break;
         if (meta.pubdate === null || name == 'pubdate' || name == 'published')
           meta.pubdate = meta.pubDate = date;
@@ -804,7 +820,18 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
   var item = {}
     , normalize = !options || (options && options.normalize)
+    , dateparser
     ;
+
+  if (options && options.dateformat) {
+    dateparser = function(datestr) {
+      return moment(datestr, options.dateformat).toDate();
+    };
+  } else {
+    dateparser = function(datestr) {
+      return moment(datestr).toDate();
+    };
+  }
 
   if (normalize) {
     ['title','description','summary','date','pubdate','pubDate','link','guid','author','comments', 'origlink'].forEach(function (property){
@@ -839,7 +866,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(el['#']) : null;
+        var date = utils.get(el) ? dateparser(el['#']) : null;
         if (!date) break;
         if (item.pubdate === null || name == 'pubdate' || name == 'published' || name == 'issued')
           item.pubdate = item.pubDate = date;

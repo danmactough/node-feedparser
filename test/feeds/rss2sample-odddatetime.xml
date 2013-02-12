@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="../../templates/rssformatting2.xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+<atom:link href="http://www.esinet.norfolk.gov.uk/cadmin/ecourier/newsnorfolkschools2.xml" rel="self" type="application/rss+xml" />
+<title>Norfolk Schools - News and MI Sheets</title>
+<link>http://www.schools.norfolk.gov.uk</link>
+<description>The MI sheets  released to governors.</description>
+<language>en</language>
+<copyright>Copyright 2013, Norfolk County Council</copyright>
+<ttl>60</ttl>
+<lastBuildDate>09/02/2013</lastBuildDate>
+<image>
+<url>http://www.esinet.norfolk.gov.uk/images/esinetrss.gif</url>
+<title>Norfolk Schools - Governor MI Sheets</title>
+<link>http://www.schools.norfolk.gov.uk</link>
+</image>
+
+
+<item>
+<title>Inspection of Private Fostering Service</title>
+<link>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19176</link>
+<guid>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19176</guid>
+
+<description><![CDATA[<table width="100%" border="0"><tr><td valign="top" width="50"><img src="http://schools.norfolk.gov.uk/myportal/custom/files_uploaded/livery_library/Action.gif"></td><td valign="middle"><a href='https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19176'>Inspection of Private Fostering Service</a></td></tr></table>]]></description>
+<pubDate>08/02/2013 12:00:00</pubDate>
+<category>news</category>
+</item>
+
+
+<item>
+<title>Services to Schools contract 2013-14</title>
+<link>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19170</link>
+<guid>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19170</guid>
+
+<description><![CDATA[<table width="100%" border="0"><tr><td valign="top" width="50"><img src="http://schools.norfolk.gov.uk/myportal/custom/files_uploaded/livery_library/Information.gif"></td><td valign="middle"><a href='https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19170'>Services to Schools contract 2013-14</a></td></tr></table>]]></description>
+<pubDate>08/02/2013 12:00:00</pubDate>
+<category>news</category>
+</item>
+
+
+<item>
+<title>Statutory training for EYFS schools and settings</title>
+<link>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19167</link>
+<guid>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19167</guid>
+
+<description><![CDATA[<table width="100%" border="0"><tr><td valign="top" width="50"><img src="http://schools.norfolk.gov.uk/myportal/custom/files_uploaded/livery_library/Information.gif"></td><td valign="middle"><a href='https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19167'>Statutory training for EYFS schools and settings</a></td></tr></table>]]></description>
+<pubDate>08/02/2013 12:00:00</pubDate>
+<category>news</category>
+</item>
+
+
+<item>
+<title>2013-14 Budget Planner Software</title>
+<link>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19165</link>
+<guid>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19165</guid>
+
+<description><![CDATA[<table width="100%" border="0"><tr><td valign="top" width="50"><img src="http://schools.norfolk.gov.uk/myportal/custom/files_uploaded/livery_library/Action.gif"></td><td valign="middle"><a href='https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19165'>2013-14 Budget Planner Software</a></td></tr></table>]]></description>
+<pubDate>08/02/2013 12:00:00</pubDate>
+<category>news</category>
+</item>
+
+
+<item>
+<title>Teachers Pensions - Employee Contributions</title>
+<link>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19149</link>
+<guid>https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19149</guid>
+
+<description><![CDATA[<table width="100%" border="0"><tr><td valign="top" width="50"><img src="http://schools.norfolk.gov.uk/myportal/custom/files_uploaded/livery_library/Flyer.gif"></td><td valign="middle"><a href='https://csapps.norfolk.gov.uk/csshared/ecourier2/misheet.asp?misheetid=19149'>Teachers Pensions - Employee Contributions</a></td></tr></table>]]></description>
+<pubDate>08/02/2013 12:00:00</pubDate>
+<category>news</category>
+</item>
+
+</channel>
+</rss>

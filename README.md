@@ -76,6 +76,9 @@ about what that `request` options object might look like.
 - `addmeta` - Set to `false` to override Feedparser's default behavior, which
   is to add the feed's `meta` information to each `article`.
 
+- `dateformat` - Optionally set a specific format for parsing of the dates (e.g.
+  for different locales). The format is [moment style](http://momentjs.com/docs/#/parsing/string-format/).
+
 - `feedurl` - The url (string) of the feed. FeedParser is very good at
   resolving relative urls in feeds. But some feeds use relative urls without
   declaring the `xml:base` attribute any place in the feed. This is perfectly
