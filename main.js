@@ -13,6 +13,7 @@ var sax = require('sax')
   , request = require('request')
   , addressparser = require('addressparser')
   , indexOfObject = require('array-indexofobject')
+  , resanitize = require('resanitize')
   , fs = require('fs')
   , URL = require('url')
   , util = require('util')
@@ -810,9 +811,13 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         }
       }
     }
-    if (meta.categories.length)
+    if (meta.categories.length) {
       meta.categories = utils.unique(meta.categories);
+    }
+    meta.title = meta.title && resanitize.stripHtml(meta.title);
+    meta.description = meta.description && resanitize.stripHtml(meta.description);
   }
+
   return meta;
 };
 
@@ -1084,8 +1089,10 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       else if (node['media:group'] && node['media:group']['media:thumbnail']) item.image.url = utils.get(node['media:group']['media:thumbnail']['@'], 'url');
       else if (node['media:group'] && node['media:group']['media:content'] && node['media:group']['media:content']['media:thumbnail']) item.image.url = utils.get(node['media:group']['media:content']['media:thumbnail']['@'], 'url');
     }
-    if (item.categories.length)
+    if (item.categories.length) {
       item.categories = utils.unique(item.categories);
+    }
+    item.title = item.title && resanitize.stripHtml(item.title);
   }
   return item;
 };
