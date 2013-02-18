@@ -75,6 +75,11 @@ FeedParser.prototype.parseOpts = function (options) {
   if (!('strict' in this.options)) this.options.strict = false;
   if (!('normalize' in this.options)) this.options.normalize = true;
   if (!('addmeta' in this.options)) this.options.addmeta = true;
+  if ('MAX_BUFFER_LENGTH' in this.options) {
+    sax.MAX_BUFFER_LENGTH = this.options.MAX_BUFFER_LENGTH; // set to Infinity to have unlimited buffers
+  } else {
+    sax.MAX_BUFFER_LENGTH = 16 * 1024 * 1024; // 16M versus the 64K default
+  }
   if (this.options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': this.options.feedurl});
 };
 
