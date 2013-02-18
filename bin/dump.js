@@ -15,5 +15,5 @@ if (!file) {
 feedparser.parseFile(file)
   .on('error', console.error)
   .on('complete', function(){
-    console.log(util.inspect(arguments, null, 10));
+    console.log(util.inspect(arguments, null, 10, true));
   });

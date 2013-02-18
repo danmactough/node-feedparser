@@ -4,11 +4,16 @@
 This module adds methods for RSS, Atom, and RDF feed parsing in node.js using
 Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
+Feedparser properly handles XML namespaces, including those in sadistic feeds
+that define a non-default namespace for the main feed elements.
+
 ## Requirements
 
 - [sax](https://github.com/isaacs/sax-js)
 - [request](https://github.com/mikeal/request)
 - [addressparser](https://github.com/andris9/addressparser)
+- [resanitize](https://github.com/danmactough/node-resanitize)
+- [array-indexofobject](https://github.com/danmactough/node-array-indexofobject)
 
 ## Installation
 
@@ -16,32 +21,15 @@ Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 npm install feedparser
 ```
 
-## Changes since v0.9.x
+## Changes since v0.12.x
 
-The module now exports `parseString`, `parseFile`, `parseUrl`, and `parseStream`
-as static functions. You no longer need to create a `FeedParser` instance or use
-the prototype methods. Due to confusion about how to implement those methods in
-application code, using the prototype methods is now **DEPRECATED**.
+- The old API (in which you created an instance of feedparser and used prototype
+methods of that instance) has been removed.
 
-As a major enhancement, Feedparser is now able to properly handle XML
-namespaces, including those in sadistic feeds that define a non-default
-namespace for the main feed elements.
-
-### Old API (Deprecated)
-```javascript
-var FeedParser = require('feedparser')
-  , parser = new FeedParser()
-  ;
-parser.on('article', console.log);
-parser.parseString(string);
-```
-
-### New API
-```javascript
-var feedparser = require('feedparser');
-feedparser.parseString(string)
-  .on('article', console.log);
-```
+- The `title` and `description` properties of `meta` and the `title` property of
+each `item` have any HTML stripped if you let feedparser normalize the output.
+If you really need the HTML in those elements, there are always the originals:
+e.g., `meta['atom:subtitle']['#']`.
 
 ## Usage
 
@@ -263,7 +251,7 @@ the original inspiration and a starting point.
 
 (The MIT License)
 
-Copyright (c) 2011-2012 Dan MacTough &lt;danmactough@gmail.com&gt;
+Copyright (c) 2011-2013 Dan MacTough &lt;danmactough@gmail.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
