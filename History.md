@@ -1,4 +1,13 @@
 
+v0.13.0 / 2013-02-18
+==================
+
+  * Remove old API. Update docs, examples and tests.
+  * Fix .parseUrl url parameter processing. Throw early if no valid url is given. Also pass all options to request. Add tests. Closes #44 and #46.
+  * Add url to error when possible. Change "Not a feed" error message because it's not always a remote server. Update tests. Closes #43."
+  * Raise default sax.MAX_BUFFER_LENGTH to 16M and allow it to be set in options. Closes #38.
+  * Strip HTML from `meta.title`, `meta.description` and `item.title`
+
 v0.12.0 / 2013-02-12
 ==================
 
