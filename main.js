@@ -1188,7 +1188,7 @@ FeedParser.parseString = function (string, options, callback) {
  * @api public
  */
 FeedParser.parseFile = function (file, options, callback) {
-  if (/^https?:/.test(file) || (typeof file === 'object' && ('protocol' in file || 'uri' in file || 'url' in file))) {
+  if (/^https?:/.test(file) || (typeof file === 'object' && ('href' in file || 'uri' in file || 'url' in file))) {
     return FeedParser.parseUrl(file, options, callback);
   }
   var fp = feedparser(options, callback);
@@ -1238,6 +1238,7 @@ FeedParser.parseStream = function (stream, options, callback) {
  */
 FeedParser.parseUrl = function (url, options, callback) {
   var fp = feedparser(options, callback);
+
   var handleResponse = function (response) {
     fp.response = response;
     fp.nextEmit('response', response);
@@ -1267,40 +1268,60 @@ FeedParser.parseUrl = function (url, options, callback) {
     fp.meta['#content-type'] = contentType;
     return;
   };
-  if (!fp.xmlbase.length) { // parser.parseFile may have already populated this value
-    if (/^https?:/.test(url)) {
-      fp.xmlbase.unshift({ '#name': 'xml', '#': url});
-    } else if (typeof url === 'object') {
-      if ('href' in url) {
-        fp.xmlbase.unshift({ '#name': 'xml', '#': URL.format(url)});
+
+  // Make sure we have a url and normalize the request object
+  var invalid = 'Invalid URL: must be a string or valid request object - %s';
+
+  if (/^https?:/.test(url)) {
+    url = {
+      uri: url
+    };
+  } else if (url && typeof url === 'object') {
+    if ('href' in url) { // parsed url
+      if (!/^https?:/.test(URL.format(url))) {
+        throw (new Error(util.format(invalid, url)));
       }
-      else if ('url' in url || 'uri' in url) {
-        if ('url' in url) {
+      url = {
+        url: url
+      };
+    } else {
+      if (url.url && url.uri) delete url.uri; // wtf?!
+      if (! (url.url || url.uri) ) throw (new Error(util.format(invalid, url)));
+      if (url.url) {
+        if (/^https?:/.test(url.url)) {
           url.uri = url.url;
           delete url.url;
+        } else if ( !(typeof url.url === 'object' && 'href' in url.url && /^https?:/.test(URL.format(url.url))) ) {
+          // not a string, not a parsed url
+          throw (new Error(util.format(invalid, url.url)));
         }
-        if (/^https?:/.test(url.uri)) {
-          fp.xmlbase.unshift({ '#name': 'xml', '#': url.uri});
-        } else if (typeof url.uri === 'object') {
-          fp.xmlbase.unshift({ '#name': 'xml', '#': URL.format(url.uri)});
+      }
+      if (url.uri) {
+        if ( typeof url.uri === 'object' && 'href' in url.uri && /^https?:/.test(URL.format(url.uri)) ) {
+          url.url = url.uri;
+          delete url.uri;
+        } else if (!/^https?:/.test(url.uri)) {
+          // not a string, not a parsed url
+          throw (new Error(util.format(invalid, url.uri)));
         }
       }
     }
+  } else {
+    throw (new Error(util.format(invalid, url)));
   }
-  var req = {};
-  var headers = { 'Accept-Encoding': 'identity' };
-  if (typeof url === 'object') {
-    if ('headers' in url) {
-      utils.merge(headers, url.headers);
-    }
-    req.uri = url.uri || url.url;
-  }
-  else {
-    req.uri = url;
-  }
-  req.headers = headers;
 
-  request(req)
+  url.headers = url.headers || {};
+  url.headers['Accept-Encoding'] = 'identity';
+
+  if (!fp.xmlbase.length) {
+    if (url.uri) {
+      fp.xmlbase.unshift({ '#name': 'xml', '#': url.uri });
+    } else if (url.url) {
+      fp.xmlbase.unshift({ '#name': 'xml', '#': URL.format(url.url) });
+    }
+  }
+
+  request(url)
     .on('error', fp.handleError.bind(fp))
     .on('response', handleResponse)
     .pipe(fp.stream)
