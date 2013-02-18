@@ -263,7 +263,11 @@ FeedParser.prototype.handleEnd = function (){
   // parsing a feed
   if (!this.errors.length && this.meta && !this.meta['#type']) {
     this.meta['#type'] = 'INVALID'; // Set a value so we don't cause an infinite loop
-    return this.handleError(new Error('Remote server did not respond with a feed'));
+    var e = new Error('Not a feed');
+    if (this.response && this.response.request && this.response.request.href) {
+      e.url = this.response.request.href;
+    }
+    return this.handleError(e);
   }
   if ('function' === typeof this.callback) {
     if (this.errors.length) {
@@ -1254,6 +1258,7 @@ FeedParser.parseUrl = function (url, options, callback) {
       else {
         e.message = 'Remote server responded: ' + codeReason;
         e.code = code;
+        e.url = url;
         fp.handleError(e);
         response.request && response.request.abort();
       }

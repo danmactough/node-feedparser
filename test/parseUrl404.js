@@ -26,4 +26,22 @@ describe('feedparser', function(){
       });
     });
   });
+  describe('.parseUrl', function () {
+
+    before(function (done) {
+      server(done);
+    });
+
+    after(function (done) {
+      server.close(done);
+    });
+
+    it('should return a 404 error', function (done) {
+      FeedParser.parseUrl('http://localhost:21337/nosuchfeed.xml', function (error, meta, articles) {
+        assert(error instanceof Error, error.message);
+        assert.equal(error.code, 404);
+        done();
+      });
+    });
+  })
 });
