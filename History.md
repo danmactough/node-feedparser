@@ -1,5 +1,11 @@
 
-v.0.13.1 / 2013-02-21
+v0.13.2 / 2013-02-21
+==================
+
+  * Fix issue where namespaced elements with the same local part as a root element were being treated as having the save name, e.g., atom:link in an rss feed being part of the 'link' element.
+  * Remove stray console.log from test
+
+v0.13.1 / 2013-02-21
 ==================
 
   * Deal with the astonishing fact that someone thinks a feed with 4 diffenet cloud/pubsubhubub elements is helpful. Resolves #49.
