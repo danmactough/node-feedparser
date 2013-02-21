@@ -1,4 +1,9 @@
 
+v.0.13.1 / 2013-02-21
+==================
+
+  * Deal with the astonishing fact that someone thinks a feed with 4 diffenet cloud/pubsubhubub elements is helpful. Resolves #49.
+
 v0.13.0 / 2013-02-18
 ==================
 
