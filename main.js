@@ -453,7 +453,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                     this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
                   }
                 }
-                else if (link['@']['rel'] == 'hub') {
+                else if (link['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
                   meta.cloud.type = 'hub';
                   meta.cloud.href = link['@']['href'];
                 }
@@ -475,7 +475,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                   this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
                 }
               }
-              else if (el['@']['rel'] == 'hub') {
+              else if (el['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
                 meta.cloud.type = 'hub';
                 meta.cloud.href = el['@']['href'];
               }
@@ -504,11 +504,26 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         }
         break;
       case('cloud'):
-        Object.keys(el['@']).forEach(function (attr) {
-          if (utils.has(el['@'], attr)) {
-            meta.cloud[attr] = el['@'][attr];
-          }
-        });
+        // I can't believe someone actually would put two cloud elements in their channel
+        // but it happened
+        // Nevertheless, there can be only one
+        meta.cloud = {}; // This will ensure that rssCloud "wins" here,
+                         // If pubsubhubbub is also declared, it's still available
+                         // in the link elements
+        if (Array.isArray(el)) {
+          Object.keys(el[0]['@']).forEach(function (attr) {
+            if (utils.has(el[0]['@'], attr)) {
+              meta.cloud[attr] = el[0]['@'][attr];
+            }
+          });
+        }
+        else {
+          Object.keys(el['@']).forEach(function (attr) {
+            if (utils.has(el['@'], attr)) {
+              meta.cloud[attr] = el['@'][attr];
+            }
+          });
+        }
         meta.cloud.type = 'rsscloud';
         break;
       case('language'):
