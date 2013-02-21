@@ -14,7 +14,6 @@ describe('feedparser', function(){
     describe('.parseUrl', function(){
       it('should call back with an error and no meta or articles', function(done) {
         FeedParser.parseUrl(feed, function (error, meta, articles) {
-          console.error(error);
           assert.ok(error instanceof Error);
           assert.equal(error.message, 'Not a feed');
           assert.equal(error.url, feed);
