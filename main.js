@@ -315,6 +315,8 @@ FeedParser.prototype.handleCloseTag = function (el){
   if (this.stack.length > 0) {
     if (node['#prefix'] && node['#local'] && !node['#type']) {
       stdEl = node['#prefix'] + ':' + node['#local'];
+    } else if (node['#name'] && node['#type'] && node['#type'] !== this.meta['#type']) {
+      stdEl = node['#name'];
     } else {
       stdEl = node['#local'] || node['#name'];
     }
