@@ -160,7 +160,12 @@ function reresolve (node, baseurl) {
             var attrs = Object.keys(level[el]);
             attrs.forEach(function(name){
               if (name == 'href' || name == 'src' || name == 'uri') {
-                level[el][name] = URL.resolve(baseurl, level[el][name]);
+                if ('string' === typeof level[el][name]) {
+                  level[el][name] = URL.resolve(baseurl, level[el][name]);
+                }
+                else if ('#' in level[el][name]) {
+                  level[el][name]['#'] = URL.resolve(baseurl, level[el][name]['#']);
+                }
               }
             });
           }
