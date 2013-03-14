@@ -1,4 +1,9 @@
 
+v0.13.3 / 2013-03-14
+==================
+
+  * Fix reresolve function to not assume that node property is a string. Closes #50.
+
 v0.13.2 / 2013-02-21
 ==================
 
