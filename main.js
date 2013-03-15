@@ -337,7 +337,7 @@ FeedParser.prototype.handleText = function (text){
     this.xhtml['#'] += text;
   } else {
     if (this.stack.length) {
-      if ('#' in this.stack[0]) {
+      if (this.stack[0] && '#' in this.stack[0]) {
         this.stack[0]['#'] += text;
       } else {
         this.stack[0]['#'] = text;
