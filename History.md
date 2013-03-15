@@ -1,4 +1,9 @@
 
+v0.13.4 / 2013-03-15
+==================
+
+  * Fix unsafe usage of 'in' when variable may be not an object. Closes #51.
+
 v0.13.3 / 2013-03-14
 ==================
 
