@@ -203,7 +203,7 @@ regardless of how they were capitalized in the original feed. ("xmlUrl" and
 places ease-of-use over purity -- hopefully, you will never need to think about
 whether you should camelCase "pubDate" ever again.
 
-### List of meta propreties
+### List of meta properties
 
 * title
 * description
@@ -219,7 +219,7 @@ whether you should camelCase "pubDate" ever again.
 * generator
 * categories (an Array of Strings)
 
-### List of article propreties
+### List of article properties
 
 * title
 * description (frequently, the full article content)
