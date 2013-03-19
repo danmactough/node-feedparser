@@ -120,8 +120,9 @@ request(reqObj, function (err, response, body){
     .on('article', callback);
 });
 
-// Stream piping
-request(reqObj).pipe(feedparser.stream);
+// Streams
+feedparser.parseStream(request(reqObj))
+  .on('article', callback);
 
 // Or you could try letting feedparser handle working with request (experimental)
 feedparser.parseUrl(reqObj)
@@ -133,9 +134,6 @@ feedparser.parseUrl(reqObj)
 // Using the stream interface with a file (or string)
 // A good alternative to parseFile() or parseString() when you have a large local file
 feedparser.parseStream(fs.createReadStream('./feed'))
-  .on('article', callback);
-// Or
-fs.createReadStream('./feed').pipe(feedparser.stream)
   .on('article', callback);
 ```
 
@@ -168,7 +166,7 @@ function callback (error, meta, articles){
 
 feedparser.parseFile('./feed', callback);
 
-// To use the stream interface with a callback, you *MUST* use parseStream(), not piping
+// Or use a stream instead of loading the whole file into memory
 feedparser.parseStream(fs.createReadStream('./feed'), callback);
 ```
 
