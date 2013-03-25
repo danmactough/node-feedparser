@@ -191,6 +191,11 @@ e.g., `meta['atom:subtitle']['#']`.
 * enclosures (an Array of Objects, each representing a podcast or other enclosure and having a `url` property and possibly `type` and `length` properties)
 * meta (an Object containing all the feed meta properties; especially handy when using the EventEmitter interface to listen to `article` emissions)
 
+## Help
+
+- Don't be afraid to report an [issue](https://github.com/danmactough/node-feedparser/issues).
+- You can drop by IRC, too: [#node-feedparser on freenode](http://webchat.freenode.net/?channels=node-feedparser&uio=d4).
+
 ## Contributors
 
 The following are the major contributors of `node-feedparser` (in no specific
