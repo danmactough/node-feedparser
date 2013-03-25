@@ -67,7 +67,6 @@ FeedParser.prototype.init = function (){
                       and '#name' (containing the XML element name) */
   this.errors = [];
   this.silenceErrors = false;
-  this.callback = undefined;
 };
 
 /*
@@ -84,18 +83,6 @@ FeedParser.prototype.parseOpts = function (options) {
     sax.MAX_BUFFER_LENGTH = 16 * 1024 * 1024; // 16M versus the 64K default
   }
   if (this.options.feedurl) this.xmlbase.unshift({ '#name': 'xml', '#': this.options.feedurl});
-};
-
-FeedParser.prototype._setCallback = function (callback){
-  var self = this;
-  if ('function' === typeof callback) {
-    this.callback = function () {
-      var args = arguments;
-      process.nextTick(function () {
-        callback.apply(self, args);
-      });
-    };
-  }
 };
 
 FeedParser.prototype.handleEnd = function (){
@@ -989,7 +976,7 @@ function feedparser (options, callback) {
     options = {};
   }
   var fp = new FeedParser(options);
-  fp._setCallback(callback);
+  fp.callback = callback;
   return fp;
 }
 
