@@ -107,8 +107,8 @@ FeedParser.prototype.handleEnd = function (){
       this.callback(null, this.meta, this.articles);
     }
   }
-  if (!this.errors.length) { this.nextEmit('complete', this.meta, this.articles); }
-  this.nextEmit('end');
+  if (!this.errors.length) { this.emit('complete', this.meta, this.articles); }
+  this.emit('end');
   if (this.stream) {
     this.stream.removeAllListeners('end');
     this.stream.removeAllListeners('error');
@@ -134,7 +134,7 @@ FeedParser.prototype.handleError = function (next, e){
   // Only emit the error event if we are not using CPS or
   // if we have a listener on 'error' even if we are using CPS
   if (!this.silenceErrors && (!this.callback || this.listeners('error').length)) {
-    this.nextEmit('error', e);
+    this.emit('error', e);
   }
   this.errors.push(e);
   if (typeof next === 'function') {
@@ -281,7 +281,7 @@ FeedParser.prototype.handleCloseTag = function (el){
 
     if (!this.meta.title) { // We haven't yet parsed all the metadata
       utils.merge(this.meta, this.handleMeta(this.stack[0], this.meta['#type'], this.options));
-      this.nextEmit('meta', this.meta);
+      this.emit('meta', this.meta);
     }
     if (!baseurl && this.xmlbase && this.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
       n = utils.reresolve(n, this.xmlbase[0]['#']);
@@ -291,7 +291,7 @@ FeedParser.prototype.handleCloseTag = function (el){
       item.meta = this.meta;
     }
     if (this.meta.author && !item.author) item.author = this.meta.author;
-    this.nextEmit('article', item);
+    this.emit('article', item);
     this.articles.push(item);
   } else if (!this.meta.title && // We haven't yet parsed all the metadata
               (node['#name'] === 'channel' ||
@@ -299,7 +299,7 @@ FeedParser.prototype.handleCloseTag = function (el){
                (node['#local'] === 'channel' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
                (node['#local'] === 'feed' && (node['#prefix'] === '' || node['#type'] === 'atom')) ) ) {
     utils.merge(this.meta, this.handleMeta(n, this.meta['#type'], this.options));
-    this.nextEmit('meta', this.meta);
+    this.emit('meta', this.meta);
   }
 
   if (this.stack.length > 0) {
@@ -950,14 +950,6 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   return item;
 };
 
-FeedParser.prototype.nextEmit = function () {
-  var self = this;
-  var args = [].slice.call(arguments);
-  process.nextTick(function(){
-    self.emit.apply(self, args);
-  });
-};
-
 // Naive Stream API
 FeedParser.prototype.write = function (data) {
   this.stream.write(data);
@@ -1029,9 +1021,12 @@ function feedparser (options, callback) {
  */
 FeedParser.parseString = function (string, options, callback) {
   var fp = feedparser(options, callback);
-  fp.stream
-    .on('error', fp.handleError.bind(fp))
-    .end(string, Buffer.isBuffer(string) ? null : 'utf8'); // Accomodate a Buffer in addition to a String
+  // Must delay to give caller a change to attach event handlers
+  process.nextTick(function(){
+    fp.stream
+      .on('error', fp.handleError.bind(fp))
+      .end(string, Buffer.isBuffer(string) ? null : 'utf8'); // Accomodate a Buffer in addition to a String
+  });
   return fp;
 };
 
@@ -1098,14 +1093,14 @@ FeedParser.parseUrl = function (url, options, callback) {
 
   var handleResponse = function (response) {
     fp.response = response;
-    fp.nextEmit('response', response);
+    fp.emit('response', response);
     var code = response.statusCode;
     var codeReason = STATUS_CODES[code] || 'Unknown Failure';
     var contentType = response.headers && response.headers['content-type'];
     var e = new Error();
     if (code !== 200) {
       if (code === 304) {
-        fp.nextEmit('304');
+        fp.emit('304');
         fp.meta = fp.articles = null;
         fp.silenceErrors = true;
         fp.removeAllListeners('complete');
