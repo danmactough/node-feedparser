@@ -1,4 +1,18 @@
 
+v0.14.0 / 2013-03-25
+==================
+
+  * Update examples
+  * Update README
+  * Remove nextEmit. Only use nextTick on parseString (other methods don't need it).
+  * Remove _setCallback and set the callback directly. Don't use nextTick.
+  * Add basic test for writable stream input api
+  * Add basic tests for callback and event apis
+  * Implement naive v0.8-style Stream API
+  * Fix README (incorrect stream pipe examples)
+  * Merge pull request #52 from supahgreg/master
+  * Correcting a typo in README.md
+
 v0.13.4 / 2013-03-15
 ==================
 
