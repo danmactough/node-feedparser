@@ -18,6 +18,7 @@ var sax = require('sax')
   , URL = require('url')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
+  , Stream = require('stream').Stream
   , STATUS_CODES = require('http').STATUS_CODES
   , utils = require('./utils')
   ;
@@ -40,9 +41,11 @@ function FeedParser (options) {
   this.stream.on('text', this.handleText.bind(this));
   this.stream.on('cdata', this.handleText.bind(this));
   this.stream.on('end', this.handleEnd.bind(this));
-  EventEmitter.call(this);
+  Stream.call(this);
+  this.writable = true;
+  this.readable = true;
 }
-util.inherits(FeedParser, EventEmitter);
+util.inherits(FeedParser, Stream);
 
 /*
  * Initializes the SAX stream
@@ -967,6 +970,18 @@ FeedParser.prototype.nextEmit = function () {
     self.emit.apply(self, args);
   });
 };
+
+// Naive Stream API
+FeedParser.prototype.write = function (data) {
+  this.stream.write(data);
+  return true;
+}
+
+FeedParser.prototype.end = function (chunk) {
+  if (chunk && chunk.length) this.stream.write(chunk);
+  this.stream.end();
+  return true;
+}
 
 function feedparser (options, callback) {
   if ('function' === typeof options) {
