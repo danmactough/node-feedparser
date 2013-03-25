@@ -4,8 +4,11 @@
 This module adds methods for RSS, Atom, and RDF feed parsing in node.js using
 Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
-Feedparser properly handles XML namespaces, including those in sadistic feeds
-that define a non-default namespace for the main feed elements.
+Feedparser has a couple features you don't usually see:
+
+1. It resolves relative URLs (such as those seen in Tim Bray's "ongoing" [feed](http://www.tbray.org/ongoing/ongoing.atom)).
+2. It properly handles XML namespaces (including those in sadistic feeds
+that define a non-default namespace for the main feed elements).
 
 ## Requirements
 
@@ -21,17 +24,58 @@ that define a non-default namespace for the main feed elements.
 npm install feedparser
 ```
 
-## Changes since v0.12.x
+## Changes since v0.13.x
 
-- The old API (in which you created an instance of feedparser and used prototype
-methods of that instance) has been removed.
-
-- The `title` and `description` properties of `meta` and the `title` property of
-each `item` have any HTML stripped if you let feedparser normalize the output.
-If you really need the HTML in those elements, there are always the originals:
-e.g., `meta['atom:subtitle']['#']`.
+- The ability to handle `.pipe()` is back. The libxml-like helper methods will
+probably be going away in the next minor (or major) version release -- as soon
+as I'm sure the stream API is stable and compatible with Node v0.10.x.
 
 ## Usage
+
+The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream).
+
+```js
+
+var FeedParser = require('feedparser')
+  , request = require('request');
+
+request('http://somefeedurl.xml')
+  .pipe(new FeedParser([options]))
+  .on('error', function(error) {
+    // always handle errors
+  })
+  .on('meta', function (meta) {
+    // do something
+  })
+  .on('article', function (article) {
+    // do something else
+  });
+  .on('end', function () {
+   // do the next thing
+  });
+```
+
+### options
+
+- `normalize` - Set to `false` to override Feedparser's default behavior,
+  which is to parse feeds into an object that contains the generic properties
+  patterned after (although not identical to) the RSS 2.0 format, regardless
+  of the feed's format.
+
+- `addmeta` - Set to `false` to override Feedparser's default behavior, which
+  is to add the feed's `meta` information to each `article`.
+
+- `feedurl` - The url (string) of the feed. FeedParser is very good at
+  resolving relative urls in feeds. But some feeds use relative urls without
+  declaring the `xml:base` attribute any place in the feed. This is perfectly
+  valid, but we don't know know the feed's url before we start parsing the feed
+  and trying to resolve those relative urls. If we discover the feed's url, we
+  will go back and resolve the relative urls we've already seen, but this takes
+  a little time (not much). If you want to be sure we never have to re-resolve
+  relative urls (or if FeedParser is failing to properly resolve relative urls),
+  you should set the `feedurl` option. Otherwise, feel free to ignore this option.
+
+## libxml-like Helper Methods (deprecated)
 
 ### parser.parseString(string, [options], [callback])
 
@@ -54,121 +98,28 @@ about what that `request` options object might look like.
 
 - `readableStream` - a [Readable Stream](http://nodejs.org/api/stream.html#stream_readable_stream)
 
-### options
-
-- `normalize` - Set to `false` to override Feedparser's default behavior,
-  which is to parse feeds into an object that contains the generic properties
-  patterned after (although not identical to) the RSS 2.0 format, regardless
-  of the feed's format.
-
-- `addmeta` - Set to `false` to override Feedparser's default behavior, which
-  is to add the feed's `meta` information to each `article`.
-
-- `feedurl` - The url (string) of the feed. FeedParser is very good at
-  resolving relative urls in feeds. But some feeds use relative urls without
-  declaring the `xml:base` attribute any place in the feed. This is perfectly
-  valid, but if we are parsing the feed with the `parseString`, `parseFile`,
-  or `parseStream` method, we don't know know the feed's url before we start
-  parsing the feed and trying to resolve those relative urls. If we discover
-  the feed's url, we will go back and resolve the relative urls we've already
-  seen, but this takes a little time (not much). If you want to be sure we
-  never have to re-resolve relative urls (or if FeedParser is failing to
-  properly resolve relative urls), you should set `feedurl`.
-
 ## Examples
 
-```javascript
-var feedparser = require('feedparser')
-  , fs = require('fs') // used in the examples below
-  ;
-```
+See the `examples` directory.
 
-### Use as an EventEmitter
+## API
 
-(For brevity in this pseudo-code, I'm not handling errors. But you need to
-handle errors in your code.)
+### Events Emitted
 
-```javascript
-
-function callback (article) {
-  console.log('Got article: %s', JSON.stringify(article));
-}
-
-// You can give a local file path to parseFile()
-feedparser.parseFile('./feed')
-  .on('article', callback);
-
-// For libxml compatibility, you can also give a URL to parseFile()
-feedparser.parseFile('http://cyber.law.harvard.edu/rss/examples/rss2sample.xml')
-  .on('article', callback);
-
-// Or, you can give that URL to parseUrl()
-feedparser.parseUrl('http://cyber.law.harvard.edu/rss/examples/rss2sample.xml')
-  .on('article', callback);
-
-// But you should probably be using conditional GETs and passing the results to
-// parseString() or piping it right into the stream, if possible
-
-var request = require('request');
-var reqObj = {'uri': 'http://cyber.law.harvard.edu/rss/examples/rss2sample.xml',
-              'headers': {'If-Modified-Since' : <your cached 'lastModified' value>,
-                          'If-None-Match' : <your cached 'etag' value>}};
-
-// parseString()
-request(reqObj, function (err, response, body){
-  feedparser.parseString(body)
-    .on('article', callback);
-});
-
-// Streams
-feedparser.parseStream(request(reqObj))
-  .on('article', callback);
-
-// Or you could try letting feedparser handle working with request (experimental)
-feedparser.parseUrl(reqObj)
-  .on('response', function (response){
-    // do something like save the HTTP headers for a future request
-  })
-  .on('article', callback);
-
-// Using the stream interface with a file (or string)
-// A good alternative to parseFile() or parseString() when you have a large local file
-feedparser.parseStream(fs.createReadStream('./feed'))
-  .on('article', callback);
-```
-
-#### Events
-* `complete` - called with `meta` and `articles` when parsing is complete
-* `end` - called with no parameters when parsing is complete or aborted (e.g., due to error)
-* `error` - called with `error` whenever there is a an error of any kind (SAXEror, Feedparser error, request error, etc.)
+* `error` - called with `error` whenever there is a an error of any kind (SAXError, Feedparser error, request error, etc.)
 * `meta` - called with `meta` when it has been parsed
 * `article` - called with a single `article` when each article has been parsed
+* `complete` - called with `meta` and `articles` when parsing is complete
+* `end` - called with no parameters when parsing is complete or aborted (e.g., due to error)
 * `response` - called with the HTTP `response` only when a url has been fetched via parseUrl or parseFile
 * `304` - called with no parameters when when a url has been fetched with a conditional GET via parseUrl or parseFile and the remote server responds with '304 Not Modified'
 
-### Use with a callback
+### callback(error, meta, articles)
 
-When the feed is finished being parsed, if you provide a callback, it gets
-called with three parameters: error, meta, and articles.
-
-```javascript
-function callback (error, meta, articles){
-  if (error) console.error(error);
-  else {
-    console.log('Feed info');
-    console.log('%s - %s - %s', meta.title, meta.link, meta.xmlurl);
-    console.log('Articles');
-    articles.forEach(function (article){
-      console.log('%s - %s (%s)', article.date, article.title, article.link);
-    });
-  }
-}
-
-feedparser.parseFile('./feed', callback);
-
-// Or use a stream instead of loading the whole file into memory
-feedparser.parseStream(fs.createReadStream('./feed'), callback);
-```
+You can provide a callback (i.e., via the libxml-like helper methods) to be
+called when the feed is finished being parsed. Because the helper methods are
+deprecated, you should consider the ability to provide a callback deprecated,
+as well. Use events instead.
 
 ## What is the parsed output produced by feedparser?
 
@@ -200,6 +151,11 @@ regardless of how they were capitalized in the original feed. ("xmlUrl" and
 "pubDate" also are still used to provide backwards compatibility.) This decision
 places ease-of-use over purity -- hopefully, you will never need to think about
 whether you should camelCase "pubDate" ever again.
+
+The `title` and `description` properties of `meta` and the `title` property of
+each `article` have any HTML stripped if you let feedparser normalize the output.
+If you really need the HTML in those elements, there are always the originals:
+e.g., `meta['atom:subtitle']['#']`.
 
 ### List of meta properties
 
