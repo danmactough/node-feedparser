@@ -49,7 +49,7 @@ request('http://somefeedurl.xml')
   })
   .on('article', function (article) {
     // do something else
-  });
+  })
   .on('end', function () {
    // do the next thing
   });
