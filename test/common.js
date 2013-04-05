@@ -1,4 +1,4 @@
-/*global assert: true, FeedParser: true, server: true*/
+/*global assert:true, FeedParser:true, server:true*/
 var URL = require('url');
 
 assert = require('assert');
