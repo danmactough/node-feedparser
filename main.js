@@ -142,7 +142,7 @@ FeedParser.prototype.handleError = function (next, e){
   } else {
     ['opentag', 'closetag', 'text', 'cdata', 'end'].forEach(function(ev){
       this.stream && this.stream.removeAllListeners(ev);
-    });
+    }, this);
     this.handleEnd();
   }
 };
