@@ -17,7 +17,7 @@ describe('Writeable Stream Input API', function () {
 
   describe('.pipe()', function () {
     it('works', function (done) {
-      require('fs').createReadStream(feedPath).pipe(new FeedParser())
+      require('fs').createReadStream(feedPath).pipe(FeedParser())
         .on('error', function (err) {
           assert.ifError(err);
           events.push('error');
