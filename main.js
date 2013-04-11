@@ -36,6 +36,7 @@ function FeedParser (options) {
   // See https://github.com/isaacs/sax-js for more info
   this.stream = sax.createStream(this.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true });
   this.stream.on('error', this.handleError.bind(this, this.handleSaxError.bind(this)));
+  this.stream.on('processinginstruction', this.handleProcessingInstruction.bind(this));
   this.stream.on('opentag', this.handleOpenTag.bind(this));
   this.stream.on('closetag',this.handleCloseTag.bind(this));
   this.stream.on('text', this.handleText.bind(this));
@@ -56,6 +57,7 @@ FeedParser.prototype.init = function (){
   this.meta = {
     '#ns': []
   , '@': []
+  , '#xml': {}
   };
   this.articles = [];
   this.stack = [];
@@ -140,11 +142,20 @@ FeedParser.prototype.handleError = function (next, e){
   if (typeof next === 'function') {
     next();
   } else {
-    ['opentag', 'closetag', 'text', 'cdata', 'end'].forEach(function(ev){
+    ['processinginstruction', 'opentag', 'closetag', 'text', 'cdata', 'end'].forEach(function(ev){
       this.stream && this.stream.removeAllListeners(ev);
     }, this);
     this.handleEnd();
   }
+};
+
+FeedParser.prototype.handleProcessingInstruction = function (node) {
+  if (node.name !== 'xml') return;
+  this.meta['#xml'] = node.body.split(' ').reduce(function (map, attr) {
+    var parts = attr.split('=');
+    map[parts[0]] = parts[1] && parts[1].length > 2 && parts[1].match(/^.(.*?).$/)[1];
+    return map;
+  }, {});
 };
 
 FeedParser.prototype.handleOpenTag = function (node){
@@ -1117,7 +1128,24 @@ FeedParser.parseUrl = function (url, options, callback) {
       }
       return;
     }
-    fp.meta['#content-type'] = contentType;
+    (function () {
+      var parts = contentType.split(/; ?/);
+      var mediatype = parts[0]
+        , mediatype_parts = mediatype.split('/')
+        , parameters = parts.length ? parts.slice(1) : [];
+      fp.meta['#content-type'] = parameters.reduce(function (map, param) {
+        var pair = param.split('=');
+        map['@'][pair[0]] = pair[1];
+        return map;
+      },{
+        '#': contentType,
+        '@': {
+          'media-type': mediatype,
+          'type': mediatype_parts[0],
+          'subtype': mediatype_parts[1],
+        }
+      });
+    })();
     return;
   };
 
