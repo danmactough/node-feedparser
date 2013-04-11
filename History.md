@@ -1,4 +1,14 @@
 
+v0.15.0 / 2013-04-11
+==================
+
+  * Tweak #content-type; add #xml to meta
+  * Tweak stream api test
+  * Fix missing scope
+  * Linting
+  * Fix typo in README code example
+  * Update README to add link to Issues page and IRC
+
 v0.14.0 / 2013-03-25
 ==================
 
