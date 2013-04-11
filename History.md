@@ -1,4 +1,12 @@
 
+v0.15.0 / 2013-04-11
+==================
+
+  * Tweak #content-type; add #xml to meta
+  * Tweak stream api test
+  * Fix missing scope
+  * Linting
+
 v0.14.0 / 2013-03-25
 ==================
 
