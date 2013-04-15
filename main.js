@@ -1107,7 +1107,7 @@ FeedParser.parseUrl = function (url, options, callback) {
     fp.emit('response', response);
     var code = response.statusCode;
     var codeReason = STATUS_CODES[code] || 'Unknown Failure';
-    var contentType = response.headers && response.headers['content-type'];
+    var contentType = response.headers && response.headers['content-type'] || '';
     var e = new Error();
     if (code !== 200) {
       if (code === 304) {
