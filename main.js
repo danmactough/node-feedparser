@@ -678,6 +678,14 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     if (meta.categories.length) {
       meta.categories = utils.unique(meta.categories);
     }
+    if (!meta.link) {
+      if (meta['atom:id'] && utils.get(meta['atom:id']) && /^https?:/.test(utils.get(meta['atom:id']))) {
+        meta.link = utils.get(meta['atom:id']);
+      }
+    }
+    if (!meta.xmlurl && this.options.feedurl) {
+      meta.xmlurl = meta.xmlUrl = this.options.feedurl;
+    }
     meta.title = meta.title && resanitize.stripHtml(meta.title);
     meta.description = meta.description && resanitize.stripHtml(meta.description);
   }
@@ -739,6 +747,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
               if (utils.get(link['@'], 'rel')) {
                 if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
                 if (link['@']['rel'] == 'alternate') item.link = link['@']['href'];
+                if (link['@']['rel'] == 'self' && !item.link) item.link = link['@']['href'];
                 if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
                 if (link['@']['rel'] == 'enclosure') {
                   enclosure.url = link['@']['href'];
@@ -758,6 +767,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
             if (utils.get(el['@'], 'rel')) {
               if (el['@']['rel'] == 'canonical') item.origlink = el['@']['href'];
               if (el['@']['rel'] == 'alternate') item.link = el['@']['href'];
+              if (el['@']['rel'] == 'self' && !item.link) item.link = el['@']['href'];
               if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
               if (el['@']['rel'] == 'enclosure') {
                 enclosure.url = el['@']['href'];
@@ -956,6 +966,11 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
     if (item.categories.length) {
       item.categories = utils.unique(item.categories);
     }
+    if (!item.link) {
+      if (item.guid && /^https?:/.test(item.guid)) {
+        item.link = item.guid;
+      }
+    }
     item.title = item.title && resanitize.stripHtml(item.title);
   }
   return item;
@@ -965,13 +980,13 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 FeedParser.prototype.write = function (data) {
   this.stream.write(data);
   return true;
-}
+};
 
 FeedParser.prototype.end = function (chunk) {
   if (chunk && chunk.length) this.stream.write(chunk);
   this.stream.end();
   return true;
-}
+};
 
 function feedparser (options, callback) {
   if ('function' === typeof options) {

@@ -41,8 +41,8 @@ describe('feedparser', function(){
       it('the first article should have the link "http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp"', function(){
         assert.equal('http://liftoff.msfc.nasa.gov/news/2003/news-starcity.asp', articles[0].link);
       });
-      it('the second article should have no link', function (){
-        assert.strictEqual(null, articles[1].link);
+      it('the second article should infer from the guid the link "http://liftoff.msfc.nasa.gov/2003/05/30.html#item572"', function (){
+        assert.strictEqual('http://liftoff.msfc.nasa.gov/2003/05/30.html#item572', articles[1].link);
       });
       it('the third article should have the link "http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp"', function(){
         assert.equal('http://liftoff.msfc.nasa.gov/news/2003/news-VASIMR.asp', articles[2].link);
