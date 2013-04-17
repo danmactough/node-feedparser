@@ -1,4 +1,9 @@
 
+v0.15.2 / 2013-04-16
+==================
+
+  * Be more forgiving of poorly-formatted feeds. Closes #58
+
 v0.15.1 / 2013-04-15
 ==================
 
