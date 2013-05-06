@@ -1,4 +1,11 @@
 
+v0.15.3 / 2013-05-05
+==================
+
+  * Update README to point to contributors graph
+  * Merge pull request #59 from AndreasMadsen/rss-category
+  * do not seperate rss catgories by comma
+
 v0.15.2 / 2013-04-16
 ==================
 
