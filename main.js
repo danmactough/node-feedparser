@@ -18,10 +18,14 @@ var sax = require('sax')
   , URL = require('url')
   , util = require('util')
   , EventEmitter = require('events').EventEmitter
-  , Stream = require('stream').Stream
+  , TransformStream = require('stream').Transform
   , STATUS_CODES = require('http').STATUS_CODES
   , utils = require('./utils')
   ;
+
+if (TransformStream === undefined) {
+  TransformStream = require('readable-stream').Transform;
+}
 
 /**
  * FeedParser constructor. Most apps will only use one instance.
@@ -31,6 +35,10 @@ var sax = require('sax')
  */
 function FeedParser (options) {
   if (!(this instanceof FeedParser)) return new FeedParser(options);
+  TransformStream.call(this, {
+    objectMode: true
+  });
+
   this.init();
   this.parseOpts(options);
   // See https://github.com/isaacs/sax-js for more info
@@ -42,11 +50,8 @@ function FeedParser (options) {
   this.stream.on('text', this.handleText.bind(this));
   this.stream.on('cdata', this.handleText.bind(this));
   this.stream.on('end', this.handleEnd.bind(this));
-  Stream.call(this);
-  this.writable = true;
-  this.readable = true;
 }
-util.inherits(FeedParser, Stream);
+util.inherits(FeedParser, TransformStream);
 
 /*
  * Initializes the SAX stream
@@ -110,7 +115,7 @@ FeedParser.prototype.handleEnd = function (){
     }
   }
   if (!this.errors.length) { this.emit('complete', this.meta, this.articles); }
-  this.emit('end');
+  this.push(null);
   if (this.stream) {
     this.stream.removeAllListeners('end');
     this.stream.removeAllListeners('error');
@@ -302,6 +307,7 @@ FeedParser.prototype.handleCloseTag = function (el){
       item.meta = this.meta;
     }
     if (this.meta.author && !item.author) item.author = this.meta.author;
+    this.push(item);
     this.emit('article', item);
     this.articles.push(item);
   } else if (!this.meta.title && // We haven't yet parsed all the metadata
@@ -973,15 +979,14 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 };
 
 // Naive Stream API
-FeedParser.prototype.write = function (data) {
+FeedParser.prototype._transform = function (data, encoding, done) {
   this.stream.write(data);
-  return true;
+  done();
 };
 
-FeedParser.prototype.end = function (chunk) {
-  if (chunk && chunk.length) this.stream.write(chunk);
+FeedParser.prototype._flush = function (done) {
   this.stream.end();
-  return true;
+  done();
 };
 
 function feedparser (options, callback) {
