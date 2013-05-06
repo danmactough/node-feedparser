@@ -47,9 +47,8 @@ describe('Event API', function () {
             assert.ok(articles.length);
             events.push('complete');
           })
-          .on('end', function () {
-            done();
-          });
+          .on('end', done)
+          .resume();
       });
     });
 
@@ -73,7 +72,8 @@ describe('Event API', function () {
             assert.ok(articles.length);
             events.push('complete');
           })
-          .on('end', done);
+          .on('end', done)
+          .resume();
       });
     });
 
@@ -97,8 +97,8 @@ describe('Event API', function () {
             assert.ok(articles.length);
             events.push('complete');
           })
-          .on('end', done);
-
+          .on('end', done)
+          .resume();
       });
     });
 
@@ -110,7 +110,8 @@ describe('Event API', function () {
         .on('error', function (err) {
           assert.ok(err instanceof Error);
         })
-        .on('end', done);
+        .on('end', done)
+        .resume();
     });
   });
 });

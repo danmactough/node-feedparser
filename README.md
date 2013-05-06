@@ -32,7 +32,8 @@ as I'm sure the stream API is stable and compatible with Node v0.10.x.
 
 ## Usage
 
-The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream).
+The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream). 
+It will then return a readable object stream containing `article` objects.
 
 ```js
 
@@ -47,7 +48,7 @@ request('http://somefeedurl.xml')
   .on('meta', function (meta) {
     // do something
   })
-  .on('article', function (article) {
+  .on('data', function (article) {
     // do something else
   })
   .on('end', function () {
@@ -108,7 +109,7 @@ See the `examples` directory.
 
 * `error` - called with `error` whenever there is a an error of any kind (SAXError, Feedparser error, request error, etc.)
 * `meta` - called with `meta` when it has been parsed
-* `article` - called with a single `article` when each article has been parsed
+* `data` and `article` - called with a single `article` when each article has been parsed
 * `complete` - called with `meta` and `articles` when parsing is complete
 * `end` - called with no parameters when parsing is complete or aborted (e.g., due to error)
 * `response` - called with the HTTP `response` only when a url has been fetched via parseUrl or parseFile
