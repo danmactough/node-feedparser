@@ -198,10 +198,7 @@ e.g., `meta['atom:subtitle']['#']`.
 
 ## Contributors
 
-The following are the major contributors of `node-feedparser` (in no specific
-order).
-
-* Dan MacTough ([danmactough](http://github.com/danmactough))
+View all the [contributors](https://github.com/danmactough/node-feedparser/graphs/contributors).
 
 Although `node-feedparser` no longer shares any code with `node-easyrss`, it was
 the original inspiration and a starting point.
