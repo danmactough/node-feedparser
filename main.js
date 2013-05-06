@@ -570,8 +570,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
             if ('category' == name && 'atom' == type) {
               if (category['@'] && utils.get(category['@'], 'term')) meta.categories.push(utils.get(category['@'], 'term'));
             } else if ('category' == name && utils.get(category) && 'rss' == type) {
-              _categories = utils.get(category).split(',').map(function (cat){ return cat.trim(); });
-              if (_categories.length) meta.categories = meta.categories.concat(_categories);
+              meta.categories.push(utils.get(category).trim());
             } else if ('dc:subject' == name && utils.get(category)) {
               _categories = utils.get(category).split(' ').map(function (cat){ return cat.trim(); });
               if (_categories.length) meta.categories = meta.categories.concat(_categories);
@@ -597,8 +596,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           if ('category' == name && 'atom' == type) {
             if (utils.get(el['@'], 'term')) meta.categories.push(utils.get(el['@'], 'term'));
           } else if ('category' == name && utils.get(el) && 'rss' == type) {
-            _categories = utils.get(el).split(',').map(function (cat){ return cat.trim(); });
-            if (_categories.length) meta.categories = meta.categories.concat(_categories);
+            meta.categories.push(utils.get(el).trim());
           } else if ('dc:subject' == name && utils.get(el)) {
             _categories = utils.get(el).split(' ').map(function (cat){ return cat.trim(); });
             if (_categories.length) meta.categories = meta.categories.concat(_categories);
@@ -875,8 +873,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
             if ('category' == name && 'atom' == type) {
               if (category['@'] && utils.get(category['@'], 'term')) item.categories.push(utils.get(category['@'], 'term'));
             } else if ('category' == name && utils.get(category) && 'rss' == type) {
-              _categories = utils.get(category).split(',').map(function (cat){ return cat.trim(); });
-              if (_categories.length) item.categories = item.categories.concat(_categories);
+              item.categories.push(utils.get(category).trim());
             } else if ('dc:subject' == name && utils.get(category)) {
               _categories = utils.get(category).split(' ').map(function (cat){ return cat.trim(); });
               if (_categories.length) item.categories = item.categories.concat(_categories);
@@ -902,8 +899,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           if ('category' == name && 'atom' == type) {
             if (utils.get(el['@'], 'term')) item.categories.push(utils.get(el['@'], 'term'));
           } else if ('category' == name && utils.get(el) && 'rss' == type) {
-            _categories = utils.get(el).split(',').map(function (cat){ return cat.trim(); });
-            if (_categories.length) item.categories = item.categories.concat(_categories);
+            item.categories.push(utils.get(el).trim());
           } else if ('dc:subject' == name && utils.get(el)) {
             _categories = utils.get(el).split(' ').map(function (cat){ return cat.trim(); });
             if (_categories.length) item.categories = item.categories.concat(_categories);
