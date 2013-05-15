@@ -731,7 +731,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(el['#']) : null;
+        var date, _ref, _ref2, _ref3, _ref4;
+        date = (_ref = (_ref2 = (_ref3 = utils.get(el)) != null ? _ref3 : new Date((_ref4 = el[0]) != null ? _ref4['#'] : void 0)) != null ? _ref2 : new Date(el['#'])) != null ? _ref : null;
         if (!date) break;
         if (item.pubdate === null || name == 'pubdate' || name == 'published' || name == 'issued')
           item.pubdate = item.pubDate = date;
