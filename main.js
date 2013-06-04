@@ -434,7 +434,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(el['#']) : null;
+        var date = utils.get(el) ? new Date(utils.get(el)) : null;
         if (!date) break;
         if (meta.pubdate === null || name == 'pubdate' || name == 'published')
           meta.pubdate = meta.pubDate = date;
@@ -731,7 +731,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(el['#']) : null;
+        var date = utils.get(el) ? new Date(utils.get(el)) : null;
         if (!date) break;
         if (item.pubdate === null || name == 'pubdate' || name == 'published' || name == 'issued')
           item.pubdate = item.pubDate = date;
