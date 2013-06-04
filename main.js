@@ -466,6 +466,10 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
             } else if (Object.keys(link['@']).length === 0) { // RSS
               if (!meta.link) meta.link = utils.get(link);
             }
+            if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
+              this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
+              this.stack[0] = utils.reresolve(this.stack[0], meta.link);
+            }
           }, this);
         } else {
           if (el['@']['href']) { // Atom
@@ -487,6 +491,10 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
             }
           } else if (Object.keys(el['@']).length === 0) { // RSS
             if (!meta.link) meta.link = utils.get(el);
+          }
+          if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
+            this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
+            this.stack[0] = utils.reresolve(this.stack[0], meta.link);
           }
         }
         break;
