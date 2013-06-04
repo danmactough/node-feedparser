@@ -1,4 +1,14 @@
 
+v0.15.4 / 2013-06-04
+==================
+
+  * Fix processing instruction handler to avoid interpretting extraneouso whitespace as attribute names.
+  * Use item source for xmlurl, if absent. Closes #63
+  * Add more xml:base fallbacks. Resolves #64
+  * Merge branch 'unexpected-arrays'
+  * Fix date parsing. Don't trust that the dates are not arrays.
+  * Make tests run on v0.10. Closes #61.
+
 v0.15.3 / 2013-05-05
 ==================
 
