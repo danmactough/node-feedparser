@@ -821,6 +821,13 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           if (el.link && utils.get(el.link['@'], 'href'))
           item.source['url'] = utils.get(el.link['@'], 'href');
         }
+        if (item.source['url'] && !this.meta.xmlurl) {
+          this.meta.xmlurl = this.meta.xmlUrl = item.source['url'];
+          if (this.xmlbase && this.xmlbase.length === 0) {
+            this.xmlbase.unshift({ '#name': 'xml', '#': item.source['url']});
+            this.stack[0] = utils.reresolve(this.stack[0], item.source['url']);
+          }
+        }
         break;
       case('enclosure'):
         if (Array.isArray(el)) {
@@ -943,7 +950,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       if (~name.indexOf(':')) item[name] = el;
       else item[type + ':' + name] = el;
     }
-  }); // forEach end
+  }, this); // forEach end
 
   if (normalize) {
     if (!item.description) {
