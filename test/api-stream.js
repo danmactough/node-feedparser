@@ -1,5 +1,4 @@
 var fs = require('fs');
-var endpoint = require('endpoint');
 
 describe('Writeable Stream Input API', function () {
 
@@ -42,11 +41,15 @@ describe('Writeable Stream Input API', function () {
     it('works', function (done) {
       fs.createReadStream(feedPath)
         .pipe(FeedParser())
-        .pipe(endpoint({objectMode: true}, function (err, articles) {
-          assert.equal(err, null);
-          assert.ok(articles.length);
-          done();
-        }));
+        .on('readable', function () {
+          var stream = this, items = [], item;
+          while (item = stream.read()) {
+            items.push(item);
+          }
+          assert.ok(items.length);
+        })
+        .on('end', done)
+        .on('error', done);
     });
   });
 
