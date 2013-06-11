@@ -10,16 +10,12 @@
  * Module dependencies.
  */
 var sax = require('sax')
-  , request = require('request')
   , addressparser = require('addressparser')
   , indexOfObject = require('array-indexofobject')
   , resanitize = require('resanitize')
-  , fs = require('fs')
   , URL = require('url')
   , util = require('util')
-  , EventEmitter = require('events').EventEmitter
   , TransformStream = require('stream').Transform
-  , STATUS_CODES = require('http').STATUS_CODES
   , utils = require('./utils')
   ;
 
@@ -29,6 +25,42 @@ if (TransformStream === undefined) {
 
 /**
  * FeedParser constructor. Most apps will only use one instance.
+ *
+ * Exposes a duplex (transform) stream to parse a feed.
+ *
+ * Each article/post in the feed will have the following keys:
+ *   - title {String}
+ *   - description {String}
+ *   - summary {String}
+ *   - date {Date} (or null)
+ *   - pubdate {Date} (or null)
+ *   - link {String}
+ *   - origlink {String}
+ *   - author {String}
+ *   - guid {String}
+ *   - comments {String}
+ *   - image {Object}
+ *   - categories {Array}
+ *   - source {Object}
+ *   - enclosures {Array}
+ *   - meta {Object}
+ *   - Object.keys(meta):
+ *     - #ns {Array} key,value pairs of each namespace declared for the feed
+ *     - #type {String} one of 'atom', 'rss', 'rdf'
+ *     - #version {String}
+ *     - title {String}
+ *     - description {String}
+ *     - date {Date} (or null)
+ *     - pubdate {Date} (or null)
+ *     - link {String} i.e., to the website, not the feed
+ *     - xmlurl {String} the canonical URL of the feed, as declared by the feed
+ *     - author {String}
+ *     - language {String}
+ *     - image {Object}
+ *     - favicon {String}
+ *     - copyright {String}
+ *     - generator {String}
+ *     - categories {Array}
  *
  * @param {Object} options
  * @api public
@@ -64,7 +96,6 @@ FeedParser.prototype.init = function (){
   , '@': []
   , '#xml': {}
   };
-  this.articles = [];
   this.stack = [];
   this.nodes = {};
   this.xmlbase = [];
@@ -73,7 +104,6 @@ FeedParser.prototype.init = function (){
                       array with keys: '#' (containing the text)
                       and '#name' (containing the XML element name) */
   this.errors = [];
-  this.silenceErrors = false;
 };
 
 /*
@@ -96,33 +126,11 @@ FeedParser.prototype.parseOpts = function (options) {
 FeedParser.prototype.handleEnd = function (){
   // We made it to the end without throwing, but let's make sure we were actually
   // parsing a feed
-  if (!this.errors.length && this.meta && !this.meta['#type']) {
-    this.meta['#type'] = 'INVALID'; // Set a value so we don't cause an infinite loop
+  if (this.meta && !this.meta['#type']) {
     var e = new Error('Not a feed');
-    if (this.response && this.response.request && this.response.request.href) {
-      e.url = this.response.request.href;
-    }
     return this.handleError(e);
   }
-  if ('function' === typeof this.callback) {
-    if (this.errors.length) {
-      var error = this.errors.pop();
-      if (this.errors.length) {
-        error.errors = this.errors;
-      }
-      this.callback(error);
-    } else {
-      this.callback(null, this.meta, this.articles);
-    }
-  }
-  if (!this.errors.length) { this.emit('complete', this.meta, this.articles); }
   this.push(null);
-  if (this.stream) {
-    this.stream.removeAllListeners('end');
-    this.stream.removeAllListeners('error');
-  }
-  this.stream.on('error', function() {});
-  this.stream._parser.close();
 };
 
 FeedParser.prototype.handleSaxError = function (e) {
@@ -140,20 +148,7 @@ FeedParser.prototype.resumeSaxError = function () {
 };
 
 FeedParser.prototype.handleError = function (e){
-  // Only emit the error event if we are not using CPS or
-  // if we have a listener on 'error' even if we are using CPS
-  if (!this.silenceErrors && (!this.callback || this.listeners('error').length)) {
-    this.emit('error', e);
-  }
-  this.errors.push(e);
-  if (typeof next === 'function') {
-    next();
-  } else {
-    ['processinginstruction', 'opentag', 'closetag', 'text', 'cdata', 'end'].forEach(function(ev){
-      this.stream && this.stream.removeAllListeners(ev);
-    }, this);
-    this.handleEnd();
-  }
+  this.emit('error', e);
 };
 
 FeedParser.prototype.handleProcessingInstruction = function (node) {
@@ -310,8 +305,6 @@ FeedParser.prototype.handleCloseTag = function (el){
     }
     if (this.meta.author && !item.author) item.author = this.meta.author;
     this.push(item);
-    this.emit('article', item);
-    this.articles.push(item);
   } else if (!this.meta.title && // We haven't yet parsed all the metadata
               (node['#name'] === 'channel' ||
                node['#name'] === 'feed' ||
@@ -1004,242 +997,6 @@ FeedParser.prototype._transform = function (data, encoding, done) {
 FeedParser.prototype._flush = function (done) {
   this.stream.end();
   done();
-};
-
-function feedparser (options, callback) {
-  if ('function' === typeof options) {
-    callback = options;
-    options = {};
-  }
-  var fp = new FeedParser(options);
-  fp.callback = callback;
-  return fp;
-}
-
-/**
- * Parses a feed contained in a string.
- *
- * For each article/post in a feed, emits an 'article' event
- * with an object with the following keys:
- *   title {String}
- *   description {String}
- *   summary {String}
- *   date {Date} (or null)
- *   pubdate {Date} (or null)
- *   link {String}
- *   origlink {String}
- *   author {String}
- *   guid {String}
- *   comments {String}
- *   image {Object}
- *   categories {Array}
- *   source {Object}
- *   enclosures {Array}
- *   meta {Object}
- *   Object.keys(meta):
- *     #ns {Array} key,value pairs of each namespace declared for the feed
- *     #type {String} one of 'atom', 'rss', 'rdf'
- *     #version {String}
- *     title {String}
- *     description {String}
- *     date {Date} (or null)
- *     pubdate {Date} (or null)
- *     link {String} i.e., to the website, not the feed
- *     xmlurl {String} the canonical URL of the feed, as declared by the feed
- *     author {String}
- *     language {String}
- *     image {Object}
- *     favicon {String}
- *     copyright {String}
- *     generator {String}
- *     categories {Array}
- *
- * Emits a 'warning' event on each XML parser warning
- *
- * Emits an 'error' event on each XML parser error
- *
- * @param {String} string of XML representing the feed
- * @param {Object} options
- * @param {Function} callback
- * @api public
- */
-FeedParser.parseString = function (string, options, callback) {
-  var fp = feedparser(options, callback);
-  // Must delay to give caller a change to attach event handlers
-  process.nextTick(function(){
-    fp.stream
-      .on('error', fp.handleError.bind(fp))
-      .end(string, Buffer.isBuffer(string) ? null : 'utf8'); // Accomodate a Buffer in addition to a String
-  });
-  return fp;
-};
-
-/**
- * Parses a feed from a file or (for compatability with libxml) a url.
- * See parseString for more info.
- *
- * @param {String} path to the feed file or a fully qualified uri or parsed url object from url.parse()
- * @param {Object} options
- * @param {Function} callback
- * @api public
- */
-FeedParser.parseFile = function (file, options, callback) {
-  if (/^https?:/.test(file) || (typeof file === 'object' && ('href' in file || 'uri' in file || 'url' in file))) {
-    return FeedParser.parseUrl(file, options, callback);
-  }
-  var fp = feedparser(options, callback);
-  fs.createReadStream(file)
-    .on('error', fp.handleError.bind(fp))
-    .pipe(fp.stream);
-  return fp;
-};
-
-/**
- * Parses a feed from a Stream.
- *
- * Example:
- *    fp = new FeedParser();
- *    fp.on('article', function (article){ // do something });
- *    fp.parseStream(fs.createReadStream('file.xml')[, callback]);
- *
- *
- * See parseString for more info.
- *
- * @param {Readable Stream}
- * @param {Object} options
- * @param {Function} callback
- * @api public
- */
-FeedParser.parseStream = function (stream, options, callback) {
-  var fp = feedparser(options, callback);
-  stream && stream
-    .on('error', fp.handleError.bind(fp))
-    .pipe(fp.stream);
-  return fp;
-};
-
-/**
- * Parses a feed from a url.
- *
- * Please consider whether it would be better to perform conditional GETs
- * and pass in the results instead.
- *
- * See parseString for more info.
- *
- * @param {String|Object} fully qualified uri, parsed url object from url.parse(),
- *                        or a Request object with uri|url and headers
- * @param {Object} options
- * @param {Function} callback
- * @api public
- */
-FeedParser.parseUrl = function (url, options, callback) {
-  var fp = feedparser(options, callback);
-
-  var handleResponse = function (response) {
-    fp.response = response;
-    fp.emit('response', response);
-    var code = response.statusCode;
-    var codeReason = STATUS_CODES[code] || 'Unknown Failure';
-    var contentType = response.headers && response.headers['content-type'] || '';
-    var e = new Error();
-    if (code !== 200) {
-      if (code === 304) {
-        fp.emit('304');
-        fp.meta = fp.articles = null;
-        fp.silenceErrors = true;
-        fp.removeAllListeners('complete');
-        fp.removeAllListeners('meta');
-        fp.removeAllListeners('article');
-        fp.handleEnd();
-      }
-      else {
-        e.message = 'Remote server responded: ' + codeReason;
-        e.code = code;
-        e.url = url;
-        fp.handleError(e);
-        response.request && response.request.abort();
-      }
-      return;
-    }
-    (function () {
-      var parts = contentType.split(/; ?/);
-      var mediatype = parts[0]
-        , mediatype_parts = mediatype.split('/')
-        , parameters = parts.length ? parts.slice(1) : [];
-      fp.meta['#content-type'] = parameters.reduce(function (map, param) {
-        var pair = param.split('=');
-        map['@'][pair[0]] = pair[1];
-        return map;
-      },{
-        '#': contentType,
-        '@': {
-          'media-type': mediatype,
-          'type': mediatype_parts[0],
-          'subtype': mediatype_parts[1],
-        }
-      });
-    })();
-    return;
-  };
-
-  // Make sure we have a url and normalize the request object
-  var invalid = 'Invalid URL: must be a string or valid request object - %s';
-
-  if (/^https?:/.test(url)) {
-    url = {
-      uri: url
-    };
-  } else if (url && typeof url === 'object') {
-    if ('href' in url) { // parsed url
-      if (!/^https?:/.test(URL.format(url))) {
-        throw (new Error(util.format(invalid, url)));
-      }
-      url = {
-        url: url
-      };
-    } else {
-      if (url.url && url.uri) delete url.uri; // wtf?!
-      if (! (url.url || url.uri) ) throw (new Error(util.format(invalid, url)));
-      if (url.url) {
-        if (/^https?:/.test(url.url)) {
-          url.uri = url.url;
-          delete url.url;
-        } else if ( !(typeof url.url === 'object' && 'href' in url.url && /^https?:/.test(URL.format(url.url))) ) {
-          // not a string, not a parsed url
-          throw (new Error(util.format(invalid, url.url)));
-        }
-      }
-      if (url.uri) {
-        if ( typeof url.uri === 'object' && 'href' in url.uri && /^https?:/.test(URL.format(url.uri)) ) {
-          url.url = url.uri;
-          delete url.uri;
-        } else if (!/^https?:/.test(url.uri)) {
-          // not a string, not a parsed url
-          throw (new Error(util.format(invalid, url.uri)));
-        }
-      }
-    }
-  } else {
-    throw (new Error(util.format(invalid, url)));
-  }
-
-  url.headers = url.headers || {};
-  url.headers['Accept-Encoding'] = 'identity';
-
-  if (!fp.xmlbase.length) {
-    if (url.uri) {
-      fp.xmlbase.unshift({ '#name': 'xml', '#': url.uri });
-    } else if (url.url) {
-      fp.xmlbase.unshift({ '#name': 'xml', '#': URL.format(url.url) });
-    }
-  }
-
-  request(url)
-    .on('error', fp.handleError.bind(fp))
-    .on('response', handleResponse)
-    .pipe(fp.stream)
-    ;
-  return fp;
 };
 
 exports = module.exports = FeedParser;
