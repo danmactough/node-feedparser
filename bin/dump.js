@@ -2,18 +2,18 @@
 /*
  * Parse a feed and dump the result to the console
  *
- * Usage: node dump.js <feed url or filename>
+ * Usage: curl <feed url> | bin/dump.js
+ *        cat <feed file> | bin/dump.js
  *
  */
 var util = require('util')
-  , feedparser = require('../')
-  , file = process.argv[2];
+  , FeedParser = require('../');
 
-if (!file) {
-  process.exit(2);
-}
-feedparser.parseFile(file)
+process.stdin.pipe(new FeedParser())
   .on('error', console.error)
-  .on('complete', function(){
-    console.log(util.inspect(arguments, null, 10, true));
+  .on('readable', function() {
+    var stream = this, item;
+    while (item = stream.read()) {
+      console.log(util.inspect(item, null, 10, true));
+    }
   });
