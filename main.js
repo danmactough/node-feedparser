@@ -43,7 +43,7 @@ function FeedParser (options) {
   this.parseOpts(options);
   // See https://github.com/isaacs/sax-js for more info
   this.stream = sax.createStream(this.options.strict /* strict mode - no by default */, {lowercase: true, xmlns: true });
-  this.stream.on('error', this.handleError.bind(this, this.handleSaxError.bind(this)));
+  this.stream.on('error', this.handleSaxError.bind(this));
   this.stream.on('processinginstruction', this.handleProcessingInstruction.bind(this));
   this.stream.on('opentag', this.handleOpenTag.bind(this));
   this.stream.on('closetag',this.handleCloseTag.bind(this));
@@ -84,6 +84,7 @@ FeedParser.prototype.parseOpts = function (options) {
   if (!('strict' in this.options)) this.options.strict = false;
   if (!('normalize' in this.options)) this.options.normalize = true;
   if (!('addmeta' in this.options)) this.options.addmeta = true;
+  if (!('resume_saxerror' in this.options)) this.options.resume_saxerror = true;
   if ('MAX_BUFFER_LENGTH' in this.options) {
     sax.MAX_BUFFER_LENGTH = this.options.MAX_BUFFER_LENGTH; // set to Infinity to have unlimited buffers
   } else {
@@ -124,20 +125,21 @@ FeedParser.prototype.handleEnd = function (){
   this.stream._parser.close();
 };
 
-FeedParser.prototype.handleSaxError = function (){
+FeedParser.prototype.handleSaxError = function (e) {
+  this.emit('error', e);
+  if (this.options.resume_saxerror) {
+    this.resumeSaxError();
+  }
+};
+
+FeedParser.prototype.resumeSaxError = function () {
   if (this.stream._parser) {
     this.stream._parser.error = null;
     this.stream._parser.resume();
   }
 };
 
-FeedParser.prototype.handleError = function (next, e){
-  // A SaxError will prepend an error-handling callback,
-  // but other calls to #handleError will not
-  if (next && !e) {
-    e = next;
-    next = null;
-  }
+FeedParser.prototype.handleError = function (e){
   // Only emit the error event if we are not using CPS or
   // if we have a listener on 'error' even if we are using CPS
   if (!this.silenceErrors && (!this.callback || this.listeners('error').length)) {
