@@ -1,4 +1,18 @@
 
+v0.16.0 / 2013-06-11
+==================
+
+  * Update README
+  * Remove legacy libxml-like helpers
+  * Update dump script
+  * Update examples
+  * Update tests
+  * Emit SAXErrors and allow consumer to handle or bail on SAXErrors
+  * Update copyright notices
+  * Merge branch 'AndreasMadsen-transform-stream'
+  * Change stream test to not require additional dependency
+  * make feedparser a transform stream
+
 v0.15.4 / 2013-06-04
 ==================
 
