@@ -13,10 +13,10 @@ that define a non-default namespace for the main feed elements).
 ## Requirements
 
 - [sax](https://github.com/isaacs/sax-js)
-- [request](https://github.com/mikeal/request)
 - [addressparser](https://github.com/andris9/addressparser)
 - [resanitize](https://github.com/danmactough/node-resanitize)
 - [array-indexofobject](https://github.com/danmactough/node-array-indexofobject)
+- [readable-stream](https://github.com/isaacs/readable-stream) (only if using Node <= v0.8.x)
 
 ## Installation
 
@@ -24,16 +24,30 @@ that define a non-default namespace for the main feed elements).
 npm install feedparser
 ```
 
-## Changes since v0.13.x
+## Changes since v0.15.x
 
-- The ability to handle `.pipe()` is back. The libxml-like helper methods will
-probably be going away in the next minor (or major) version release -- as soon
-as I'm sure the stream API is stable and compatible with Node v0.10.x.
+- The libxml-like helper methods have been removed. There is now just one input
+interface: the stream interface.
+
+- Events:
+
+    - `304`, `response` - removed, as Feedparser no longer fetches urls
+    - `article`, `complete` - removed; use the stream interface
+    - `data` - all readable streams will emit a `data` event, but this puts the
+      stream into "old" v0.8-style push streams
+    - `end` - stream behavior dictates that the `end` event will never fire if
+      you don't read any data from the stream; you can kick the Feedparser stream
+      to work like an "old" v0.8-style push stream (and get the old `end` event
+      behavior) by calling `.resume()`.
+
+- `SAXErrors` are emitted as `error` events. By default, they are automatically
+resumed. Pass `{ resume_saxerrors: false }` as an option if you want to manually
+handle `SAXErrors` (abort parsing, perhaps).
 
 ## Usage
 
 The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream). 
-It will then return a readable object stream containing `article` objects.
+It will then return a readable object stream.
 
 ```js
 
@@ -48,12 +62,21 @@ request('http://somefeedurl.xml')
   .on('meta', function (meta) {
     // do something
   })
-  .on('data', function (article) {
-    // do something else
+  .on('readable', function () {
+    // do something else, then do the next thing
   })
-  .on('end', function () {
-   // do the next thing
-  });
+```
+
+Or:
+
+```js
+
+var FeedParser = require('feedparser')
+  , request = require('request');
+
+request('http://somefeedurl.xml')
+  .pipe(new FeedParser([options]))
+  .pipe([some other stream])
 ```
 
 ### options
@@ -64,7 +87,7 @@ request('http://somefeedurl.xml')
   of the feed's format.
 
 - `addmeta` - Set to `false` to override Feedparser's default behavior, which
-  is to add the feed's `meta` information to each `article`.
+  is to add the feed's `meta` information to each article.
 
 - `feedurl` - The url (string) of the feed. FeedParser is very good at
   resolving relative urls in feeds. But some feeds use relative urls without
@@ -76,28 +99,11 @@ request('http://somefeedurl.xml')
   relative urls (or if FeedParser is failing to properly resolve relative urls),
   you should set the `feedurl` option. Otherwise, feel free to ignore this option.
 
-## libxml-like Helper Methods (deprecated)
-
-### parser.parseString(string, [options], [callback])
-
-- `string` - the contents of the feed
-
-### parser.parseFile(filename, [options], [callback])
-
-- `filename` - a local filename or remote url
-
-### parser.parseUrl(url, [options], [callback])
-
-The first argument can be either a url or a `request` options object. The only
-required option is uri, all others are optional. See
-[request](https://github.com/mikeal/request#requestoptions-callback) for details
-about what that `request` options object might look like.
-
-- `url` - fully qualified uri or a parsed url object from url.parse()
-
-### parser.parseStream(readableStream, [options], [callback])
-
-- `readableStream` - a [Readable Stream](http://nodejs.org/api/stream.html#stream_readable_stream)
+- `resume_saxerror` - Set to `false` to override Feedparser's default behavior, which
+  is to emit any `SAXError` on `error` and then automatically resume parsing. In
+  my experience, `SAXErrors` are not usually fatal, so this is usually helpful
+  behavior. If you want total control over handling these errors and optionally
+  aborting parsing the feed, use this option.
 
 ## Examples
 
@@ -105,26 +111,21 @@ See the `examples` directory.
 
 ## API
 
+### Transform Stream
+
+Feedparser is a [transform stream](http://nodejs.org/api/stream.html#stream_class_stream_transform) operating in "object mode": XML in -> Javascript objects out.
+Each readable chunk is an object representing an article in the feed.
+
 ### Events Emitted
 
-* `error` - called with `error` whenever there is a an error of any kind (SAXError, Feedparser error, request error, etc.)
-* `meta` - called with `meta` when it has been parsed
-* `data` and `article` - called with a single `article` when each article has been parsed
-* `complete` - called with `meta` and `articles` when parsing is complete
-* `end` - called with no parameters when parsing is complete or aborted (e.g., due to error)
-* `response` - called with the HTTP `response` only when a url has been fetched via parseUrl or parseFile
-* `304` - called with no parameters when when a url has been fetched with a conditional GET via parseUrl or parseFile and the remote server responds with '304 Not Modified'
-
-### callback(error, meta, articles)
-
-You can provide a callback (i.e., via the libxml-like helper methods) to be
-called when the feed is finished being parsed. Because the helper methods are
-deprecated, you should consider the ability to provide a callback deprecated,
-as well. Use events instead.
+* `meta` - called with feed `meta` when it has been parsed
+* `error` - called with `error` whenever there is a Feedparser error of any kind (SAXError, Feedparser error, etc.)
 
 ## What is the parsed output produced by feedparser?
 
-Feedparser parses each feed into a `meta` portion and one or more `articles`.
+Feedparser parses each feed into a `meta` (emitted on the `meta` event) portion
+and one or more `articles` (emited on the `data` event or readable after the `readable`
+is emitted).
 
 Regardless of the format of the feed, the `meta` and each `article` contain a
 uniform set of generic properties patterned after (although not identical to)
