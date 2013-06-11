@@ -6,7 +6,7 @@
 
 var FeedParser = require(__dirname+'/..')
   , fs = require('fs')
-  , feed = '../test/feeds/rss2sample.xml';
+  , feed = __dirname+'/../test/feeds/rss2sample.xml';
 
 fs.createReadStream(feed)
   .pipe(new FeedParser())
@@ -16,6 +16,9 @@ fs.createReadStream(feed)
   .on('meta', function (meta) {
     console.log('===== %s =====', meta.title);
   })
-  .on('article', function(article){
-    console.log('Got article: %s', article.title || article.description);
+  .on('readable', function() {
+    var stream = this, item;
+    while (item = stream.read()) {
+      console.log('Got article: %s', item.title || item.description);
+    }
   });
