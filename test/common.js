@@ -2,11 +2,11 @@
 var URL = require('url');
 
 assert = require('assert');
-var fs = require('fs')
-  , path = require('path')
+var path = require('path')
   , zlib = require('zlib')
   , gzip = zlib.createGzip();
 
+fs = require('fs');
 FeedParser = require('../');
 server = function (done) {
   var app = require('http').createServer();

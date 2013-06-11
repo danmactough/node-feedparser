@@ -1,26 +1,21 @@
-describe('feedparser', function(){
+describe('categories', function(){
 
-  var feed = __dirname + '/feeds/category-feed.xml'
-    , meta = {}
-    , articles = {}
-    ;
+  var feed = __dirname + '/feeds/category-feed.xml';
 
-  describe('categories with comma in them', function(){
-    before(function(done){
-      FeedParser.parseFile(feed, function (error, _meta, _articles) {
-        assert.ifError(error);
-        meta = _meta;
-        articles = _articles;
-        done();
-      });
-    });
-    describe('article', function(){
-      it('should should not seperate by comma', function() {
-        assert.deepEqual(articles[0].categories, [
+  it('should not seperate by comma', function (done) {
+    fs.createReadStream(feed).pipe(new FeedParser())
+      .once('readable', function () {
+        var stream = this;
+        assert.deepEqual(stream.read().categories, [
           'Water Pollution',
           'Gowanus Canal (Brooklyn, NY)'
         ]);
+        done();
+      })
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
       });
-    });
   });
+
 });
