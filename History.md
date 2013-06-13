@@ -1,4 +1,21 @@
 
+v0.16.1 / 2013-06-13
+==================
+
+  * Update travis config
+  * Only emit meta once. title is a required channel element, so a feed without it is broken, but emitting more than once is still a no-no. Closes #69
+  * Bump version: v0.16.0
+  * Update README
+  * Remove legacy libxml-like helpers
+  * Update dump script
+  * Update examples
+  * Update tests
+  * Emit SAXErrors and allow consumer to handle or bail on SAXErrors
+  * Update copyright notices
+  * Merge branch 'AndreasMadsen-transform-stream'
+  * Change stream test to not require additional dependency
+  * make feedparser a transform stream
+
 v0.16.0 / 2013-06-11
 ==================
 
