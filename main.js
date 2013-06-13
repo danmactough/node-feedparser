@@ -59,6 +59,7 @@ FeedParser.prototype.init = function (){
   , '@': []
   , '#xml': {}
   };
+  this._emitted_meta = false;
   this.articles = [];
   this.stack = [];
   this.nodes = {};
@@ -292,7 +293,10 @@ FeedParser.prototype.handleCloseTag = function (el){
 
     if (!this.meta.title) { // We haven't yet parsed all the metadata
       utils.merge(this.meta, this.handleMeta(this.stack[0], this.meta['#type'], this.options));
-      this.emit('meta', this.meta);
+      if (!this._emitted_meta) {
+        this.emit('meta', this.meta);
+        this._emitted_meta = true;
+      }
     }
     if (!baseurl && this.xmlbase && this.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
       n = utils.reresolve(n, this.xmlbase[0]['#']);
@@ -310,7 +314,10 @@ FeedParser.prototype.handleCloseTag = function (el){
                (node['#local'] === 'channel' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
                (node['#local'] === 'feed' && (node['#prefix'] === '' || node['#type'] === 'atom')) ) ) {
     utils.merge(this.meta, this.handleMeta(n, this.meta['#type'], this.options));
-    this.emit('meta', this.meta);
+    if (!this._emitted_meta) {
+      this.emit('meta', this.meta);
+      this._emitted_meta = true;
+    }
   }
 
   if (this.stack.length > 0) {
