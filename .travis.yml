@@ -4,4 +4,5 @@ node_js:
   - "0.10"
 branches:
   only:
-    - master
+    - "master"
+    - "v0.15"
