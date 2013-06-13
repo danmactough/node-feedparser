@@ -1,4 +1,10 @@
 
+v0.15.5 / 2013-06-13
+==================
+
+  * Only emit meta once. title is a required channel element, so a feed without it is broken, but emitting more than once is still a no-no. Closes #69
+  * Update copyright notices
+
 v0.15.4 / 2013-06-04
 ==================
 
