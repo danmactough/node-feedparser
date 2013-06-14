@@ -9,6 +9,9 @@ var FeedParser = require(__dirname+'/..')
   , feed = __dirname+'/../test/feeds/rss2sample.xml';
 
 fs.createReadStream(feed)
+  .on('error', function (error) {
+    console.error(error);
+  })
   .pipe(new FeedParser())
   .on('error', function (error) {
     console.error(error);
