@@ -41,7 +41,7 @@ interface: the stream interface.
       behavior) by calling `.resume()`.
 
 - `SAXErrors` are emitted as `error` events. By default, they are automatically
-resumed. Pass `{ resume_saxerrors: false }` as an option if you want to manually
+resumed. Pass `{ resume_saxerror: false }` as an option if you want to manually
 handle `SAXErrors` (abort parsing, perhaps).
 
 ## Usage
