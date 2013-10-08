@@ -1,4 +1,13 @@
 
+v0.16.2 / 2013-10-08 
+==================
+
+ * Bump dependencies
+ * Merge pull request #75 from jcrugzz/request-depend
+ * [fix] remove unneeded dependency `request`
+ * Update README.md
+ * Update example code
+
 v0.16.1 / 2013-06-13
 ==================
 
@@ -29,6 +38,28 @@ v0.16.0 / 2013-06-11
   * Merge branch 'AndreasMadsen-transform-stream'
   * Change stream test to not require additional dependency
   * make feedparser a transform stream
+
+v0.15.8 / 2013-10-08 
+==================
+
+ * Fix package.json
+
+v0.15.7 / 2013-09-26 
+==================
+
+ * Bump dependencies
+
+v0.15.6 / 2013-09-24 
+==================
+
+ * Bump dependencies
+ * Update travis config
+
+v0.15.5 / 2013-06-13
+==================
+
+  * Only emit meta once. title is a required channel element, so a feed without it is broken, but emitting more than once is still a no-no. Closes #69
+  * Update copyright notices
 
 v0.15.4 / 2013-06-04
 ==================
