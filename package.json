@@ -35,6 +35,9 @@
   "devDependencies": {
     "mocha": "1.x"
   },
+  "publishConfig": {
+    "tag": "0.15"
+  },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha"
   }
