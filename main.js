@@ -67,9 +67,9 @@ if (TransformStream === undefined) {
  */
 function FeedParser (options) {
   if (!(this instanceof FeedParser)) return new FeedParser(options);
-  TransformStream.call(this, {
-    objectMode: true
-  });
+  TransformStream.call(this);
+  this._readableState.objectMode = true;
+  this._readableState.highWaterMark = 16; // max. # of output nodes buffered
 
   this.init();
   this.parseOpts(options);
