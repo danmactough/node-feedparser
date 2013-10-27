@@ -1,5 +1,13 @@
 
-v0.16.2 / 2013-10-08 
+v0.16.3 / 2013-10-27
+==================
+
+ * Merge remote-tracking branch 'PaulMougel/master'
+ * Updated readable side highWaterMark to be forward-compatible with node.
+ * Improved stream watermark and buffering.
+ * Reduced memory consumption.
+
+v0.16.2 / 2013-10-08
 ==================
 
  * Bump dependencies
