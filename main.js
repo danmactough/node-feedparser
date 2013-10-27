@@ -98,7 +98,6 @@ FeedParser.prototype.init = function (){
   };
   this._emitted_meta = false;
   this.stack = [];
-  this.nodes = {};
   this.xmlbase = [];
   this.in_xhtml = false;
   this.xhtml = {}; /* Where to store xhtml elements as associative
@@ -336,8 +335,6 @@ FeedParser.prototype.handleCloseTag = function (el){
     } else {
       this.stack[0][stdEl] = [this.stack[0][stdEl], n];
     }
-  } else {
-    this.nodes = n;
   }
 };
 
