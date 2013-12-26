@@ -155,7 +155,9 @@ function reresolve (node, baseurl) {
       } else {
         if (level[el].constructor.name === 'Object') {
           if (el == 'logo' || el == 'icon') {
-            level[el]['#'] = URL.resolve(baseurl, level[el]['#']);
+            if ('#' in level[el]) {
+              level[el]['#'] = URL.resolve(baseurl, level[el]['#']);
+            }
           } else {
             var attrs = Object.keys(level[el]);
             attrs.forEach(function(name){
