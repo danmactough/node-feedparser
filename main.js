@@ -551,7 +551,8 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           meta.image.url = utils.get(el.url);
         if (el.title)
           meta.image.title = utils.get(el.title);
-        else meta.image.url = utils.get(el);
+        if (!meta.image.url && utils.get(el))
+          meta.image.url = utils.get(el);
         break;
       case('icon'):
         meta.favicon = utils.get(el);
