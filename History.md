@@ -1,4 +1,10 @@
 
+v0.15.9 / 2013-12-26
+==================
+
+ * Fix bad logic setting meta.image properties.
+ * Fix TypeError in utils.reresolve failing to check for existence of parameter. Resolves #92.
+
 v0.15.8 / 2013-10-08 
 ==================
 
