@@ -1,4 +1,9 @@
 
+v0.15.10 / 2013-12-29
+==================
+
+ * Workaround addressparser failing to parse strings ending with a colon. Closes #94.
+
 v0.15.9 / 2013-12-26
 ==================
 
