@@ -512,10 +512,12 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         }
         else if (utils.get(el)) {
           author = addressparser(utils.get(el))[0];
-          el['name'] = author.name;
-          el['email'] = author.address;
+          if (author) {
+            el['name'] = author.name;
+            el['email'] = author.address;
+          }
           if (meta.author === null || name == 'managingeditor') {
-            meta.author = author.name || author.address;
+            meta.author = author.name || author.address || utils.get(el);
           }
         }
         break;
@@ -804,9 +806,15 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         var author = {};
         if (utils.get(el)) { // RSS
           author = addressparser(utils.get(el))[0];
-          el['name'] = author.name;
-          el['email'] = author.address;
-          item.author = author.name || author.address;
+          if (author) {
+            el['name'] = author.name;
+            el['email'] = author.address;
+            item.author = author.name || author.address;
+          }
+          // addressparser failed
+          else {
+            item.author = utils.get(el);
+          }
         } else {
           item.author = utils.get(el.name) || utils.get(el.email) || utils.get(el.uri);
         }
