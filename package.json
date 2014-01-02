@@ -33,7 +33,10 @@
     "resanitize": "~0.3.0"
   },
   "devDependencies": {
-    "mocha": "1.x"
+    "mocha": "1.x",
+    "event-stream": "3.0.x",
+    "request": "2.27.x",
+    "iconv": "2.0.x"
   },
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha"

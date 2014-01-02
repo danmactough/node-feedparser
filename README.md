@@ -46,7 +46,7 @@ handle `SAXErrors` (abort parsing, perhaps).
 
 ## Usage
 
-The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream). 
+The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream).
 It will then return a readable object stream.
 
 ```js
@@ -192,6 +192,11 @@ e.g., `meta['atom:subtitle']['#']`.
 * source (an Object containing `url` and `title` properties pointing to the original source for an article; see the [RSS Spec](http://cyber.law.harvard.edu/rss/rss.html#ltsourcegtSubelementOfLtitemgt) for an explanation of this element)
 * enclosures (an Array of Objects, each representing a podcast or other enclosure and having a `url` property and possibly `type` and `length` properties)
 * meta (an Object containing all the feed meta properties; especially handy when using the EventEmitter interface to listen to `article` emissions)
+
+## Tips
+
+* Set `user-agent` and `accept` headers when sending requests. Some services will not respond as expected without them.
+* Set `pool` to false if you send lots of requests using "request" library.
 
 ## Help
 
