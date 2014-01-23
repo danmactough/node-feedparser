@@ -60,21 +60,13 @@ function fetch(feed) {
 }
 
 function getParams(str) {
-  var parts = str.split(/ *; */)
-    , params = {}
-    , i
-    , pms;
-
-  for (i = 1; i < parts.length; ++i) {
-    pms = parts[i].split(/ *= */);
-    if ('q' != pms[0] && pms[1]) {
-      params[pms[0]] = pms[1]
-        .replace(/-/g, '__dash__')
-        .replace(/\W/g, '')
-        .replace(/__dash__/g, '-');
-    }
-  }
-
+  var params = str.split(';').reduce(function (params, param) {
+        var parts = param.split('=').map(function (part) { return part.trim(); });
+        if (parts.length === 2) {
+          params[parts[0]] = parts[1];
+        }
+        return params;
+      }, {});
   return params;
 }
 
