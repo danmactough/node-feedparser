@@ -11,52 +11,61 @@ var es = require('event-stream')
   , Iconv = require('iconv').Iconv;
 
 function fetch(feed) {
-  var req = request(feed, {timeout: 10000, pool: false})
-    , iconv;
+  var iconv;
 
+  // Define our streams
+  var req = request(feed, {timeout: 10000, pool: false});
   req.setMaxListeners(50);
+  // Some feeds do not response without user-agent and accept headers.
+  req.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
+     .setHeader('accept', 'text/html,application/xhtml+xml');
 
-  req
-    // Some feeds do not response without user-agent and accept headers.
-    .setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36')
-    .setHeader('accept', 'text/html,application/xhtml+xml')
-    .on('error', done)
-    .on('response', function(res) {
-        var charset;
-
-        if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-
-        charset = getParams(res.headers['content-type'] || '').charset;
-
-        // Use iconv if its not utf8 already.
-        if (!iconv && charset && !/utf-*8/i.test(charset)) {
-          try {
-            iconv = new Iconv(charset, 'utf-8');
-          } catch(err) {
-            this.emit('error', err);
-          }
-        }
-    })
-    .pipe(es.through(function(data) {
-      if (iconv) {
-        try {
-          data = iconv.convert(data);
-        } catch(err) {
-          this.emit('error', err);
-        }
+  var iconvStreamTransform = es.through(function(data) {
+    if (iconv) {
+      try {
+        data = iconv.convert(data);
+      } catch(err) {
+        this.emit('error', err);
       }
-      this.emit('data', data);
-    }))
-    .on('error', done)
-    .pipe(new FeedParser())
-      .on('error', done)
-      .on('readable', function() {
-        var post;
-        while (post = this.read()) {
-          console.log(post);
-        }
-      })
-      .on('end', done);
+    }
+    this.emit('data', data);
+    return this;
+  });
+
+  var feedparser = new FeedParser();
+
+  // Define our handlers
+  req.on('error', done)
+  req.on('response', function(res) {
+    var charset;
+
+    if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+
+    charset = getParams(res.headers['content-type'] || '').charset;
+
+    // Use iconv if its not utf8 already.
+    if (!iconv && charset && !/utf-*8/i.test(charset)) {
+      try {
+        iconv = new Iconv(charset, 'utf-8');
+      } catch(err) {
+        this.emit('error', err);
+      }
+    }
+  });
+
+  iconvStreamTransform.on('error', done);
+
+  feedparser.on('error', done);
+  feedparser.on('end', done);
+  feedparser.on('readable', function() {
+    var post;
+    while (post = this.read()) {
+      console.log(post);
+    }
+  });
+
+  // And boom goes the dynamite
+  req.pipe(iconvStreamTransform).pipe(feedparser);
 }
 
 function getParams(str) {
