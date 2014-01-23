@@ -1,3 +1,10 @@
+/**
+ * Tips
+ * ====
+ * - Set `user-agent` and `accept` headers when sending requests. Some services will not respond as expected without them.
+ * - Set `pool` to false if you send lots of requests using "request" library.
+ */
+
 var es = require('event-stream')
   , request = require('request')
   , FeedParser = require(__dirname+'/..')

@@ -193,11 +193,6 @@ e.g., `meta['atom:subtitle']['#']`.
 * enclosures (an Array of Objects, each representing a podcast or other enclosure and having a `url` property and possibly `type` and `length` properties)
 * meta (an Object containing all the feed meta properties; especially handy when using the EventEmitter interface to listen to `article` emissions)
 
-## Tips
-
-* Set `user-agent` and `accept` headers when sending requests. Some services will not respond as expected without them.
-* Set `pool` to false if you send lots of requests using "request" library.
-
 ## Help
 
 - Don't be afraid to report an [issue](https://github.com/danmactough/node-feedparser/issues).
