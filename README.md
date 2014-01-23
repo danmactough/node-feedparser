@@ -46,7 +46,7 @@ handle `SAXErrors` (abort parsing, perhaps).
 
 ## Usage
 
-The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream). 
+The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream).
 It will then return a readable object stream.
 
 ```js
