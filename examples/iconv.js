@@ -75,8 +75,17 @@ function done(err) {
     console.log(err, err.stack);
     return process.exit(1);
   }
-
+  server.close();
   process.exit();
 }
 
-fetch('http://www.oren.ru/rss/');
+// Don't worry about this. It's just a localhost file server so you can be
+// certain the "remote" feed is available when you run this example.
+var server = require('http').createServer(function (req, res) {
+  var stream = require('fs').createReadStream('../test/feeds' + req.url);
+  res.setHeader('Content-Type', 'text/xml; charset=Windows-1251');
+  stream.pipe(res);
+});
+server.listen(function () {
+  fetch('http://localhost:' + this.address().port + '/iconv.xml');
+});
