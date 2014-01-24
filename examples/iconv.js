@@ -35,7 +35,7 @@ function fetch(feed) {
   var feedparser = new FeedParser();
 
   // Define our handlers
-  req.on('error', done)
+  req.on('error', done);
   req.on('response', function(res) {
     var charset;
 
@@ -70,12 +70,12 @@ function fetch(feed) {
 
 function getParams(str) {
   var params = str.split(';').reduce(function (params, param) {
-        var parts = param.split('=').map(function (part) { return part.trim(); });
-        if (parts.length === 2) {
-          params[parts[0]] = parts[1];
-        }
-        return params;
-      }, {});
+    var parts = param.split('=').map(function (part) { return part.trim(); });
+    if (parts.length === 2) {
+      params[parts[0]] = parts[1];
+    }
+    return params;
+  }, {});
   return params;
 }
 
@@ -91,10 +91,10 @@ function done(err) {
 // Don't worry about this. It's just a localhost file server so you can be
 // certain the "remote" feed is available when you run this example.
 var server = require('http').createServer(function (req, res) {
-  var stream = require('fs').createReadStream('../test/feeds' + req.url);
+  var stream = require('fs').createReadStream(require('path').resolve(__dirname, '../test/feeds' + req.url));
   res.setHeader('Content-Type', 'text/xml; charset=Windows-1251');
   stream.pipe(res);
 });
-server.listen(function () {
+server.listen(0, function () {
   fetch('http://localhost:' + this.address().port + '/iconv.xml');
 });
