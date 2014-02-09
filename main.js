@@ -13,7 +13,6 @@ var sax = require('sax')
   , addressparser = require('addressparser')
   , indexOfObject = require('array-indexofobject')
   , resanitize = require('resanitize')
-  , URL = require('url')
   , util = require('util')
   , TransformStream = require('stream').Transform
   , utils = require('./utils')
