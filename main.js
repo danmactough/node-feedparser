@@ -125,7 +125,7 @@ FeedParser.prototype.parseOpts = function (options) {
 FeedParser.prototype.handleEnd = function (){
   // We made it to the end without throwing, but let's make sure we were actually
   // parsing a feed
-  if (this.meta && !this.meta['#type']) {
+  if (!(this.meta && this.meta['#type'])) {
     var e = new Error('Not a feed');
     return this.handleError(e);
   }
