@@ -1,4 +1,22 @@
 
+v0.16.6 / 2014-02-12
+==================
+
+ * Update README to improve example code.
+ * Fix error check in handleEnd method.
+ * Remove unused dependency.
+ * Add to namespaces and prettify.
+ * Update iconv example to remove event-stream dependency.
+ * Cleanup iconv example
+ * Add gitignore
+ * Merge branch 'kof-iconv'
+ * Refactor iconv example to be more explicit.
+ * Create a localhost server for example.
+ * Refactor getParams method.
+ * Move tips for url fetching to example script
+ * Remove gitignore
+ * complicated example using iconv and request
+
 v0.16.5 / 2013-12-29
 ==================
 
