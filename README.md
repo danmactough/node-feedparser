@@ -54,30 +54,39 @@ It will then return a readable object stream.
 var FeedParser = require('feedparser')
   , request = require('request');
 
-request('http://somefeedurl.xml')
-  .pipe(new FeedParser([options]))
-  .on('error', function(error) {
-    // always handle errors
-  })
-  .on('meta', function (meta) {
-    // do something
-  })
-  .on('readable', function () {
-    // do something else, then do the next thing
-  })
+var req = request('http://somefeedurl.xml')
+  , feedparser = new FeedParser([options]);
+
+req.on('error', function (error) {
+  // handle any request errors
+});
+req.on('response', function (res) {
+  var stream = this;
+
+  if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
+
+  stream.pipe(feedparser);
+});
+
+
+feedparser.on('error', function(error) {
+  // always handle errors
+});
+feedparser.on('readable', function() {
+  // This is where the action is!
+  var stream = this
+    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
+    , item;
+
+  while (item = stream.read()) {
+    console.log(item);
+  }
+});
+
 ```
 
-Or:
-
-```js
-
-var FeedParser = require('feedparser')
-  , request = require('request');
-
-request('http://somefeedurl.xml')
-  .pipe(new FeedParser([options]))
-  .pipe([some other stream])
-```
+I *strongly* encourage you to take a look at the [iconv example](examples/iconv.js)
+for a very thorough working example.
 
 ### options
 
@@ -107,7 +116,7 @@ request('http://somefeedurl.xml')
 
 ## Examples
 
-See the `examples` directory.
+See the [`examples`](examples/) directory.
 
 ## API
 
@@ -209,7 +218,7 @@ the original inspiration and a starting point.
 
 (The MIT License)
 
-Copyright (c) 2011, 2012, 2013 Dan MacTough and contributors
+Copyright (c) 2011-2014 Dan MacTough and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
