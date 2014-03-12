@@ -6,7 +6,8 @@
  *        cat <feed file> | bin/dump.js
  *
  */
-var util = require('util')
+var isatty = require('tty').isatty
+  , util = require('util')
   , FeedParser = require('../');
 
 process.stdin.pipe(new FeedParser())
@@ -14,6 +15,6 @@ process.stdin.pipe(new FeedParser())
   .on('readable', function() {
     var stream = this, item;
     while (item = stream.read()) {
-      console.log(util.inspect(item, null, 10, true));
+      console.log(util.inspect(item, null, 10, isatty(1) && isatty(2)));
     }
   });
