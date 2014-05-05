@@ -1,4 +1,4 @@
 --require test/common.js
---globals server,assert,fs,FeedParser
+--globals assert,fs,FeedParser
 --reporter spec
 --timeout 5s
