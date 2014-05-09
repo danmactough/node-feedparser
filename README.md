@@ -1,4 +1,6 @@
 [![Build Status](https://secure.travis-ci.org/danmactough/node-feedparser.png?branch=master)](https://travis-ci.org/danmactough/node-feedparser)
+
+[![NPM](https://nodei.co/npm/feedparser.png?downloads=true&stars=true)](https://nodei.co/npm/feedparser/)
 #  Feedparser - Robust RSS, Atom, and RDF feed parsing in Node.js
 
 This module adds methods for RSS, Atom, and RDF feed parsing in node.js using
