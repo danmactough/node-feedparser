@@ -193,6 +193,7 @@ e.g., `meta['atom:subtitle']['#']`.
 * summary (frequently, an excerpt of the article content)
 * link
 * origlink (when FeedBurner or Pheedo puts a special tracking url in the `link` property, `origlink` contains the original link)
+* permalink (when an RSS feed has a `guid` field and the `isPermalink` attribute is not set to `false`, `permalink` contains the value of `guid`)
 * date (most recent update)
 * pubdate (original published date)
 * author
