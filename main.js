@@ -14,13 +14,9 @@ var sax = require('sax')
   , indexOfObject = require('array-indexofobject')
   , resanitize = require('resanitize')
   , util = require('util')
-  , TransformStream = require('stream').Transform
+  , TransformStream = require('readable-stream').Transform
   , utils = require('./utils')
   ;
-
-if (TransformStream === undefined) {
-  TransformStream = require('readable-stream').Transform;
-}
 
 /**
  * FeedParser constructor. Most apps will only use one instance.
