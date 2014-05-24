@@ -725,6 +725,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
   Object.keys(node).forEach(function(name){
     var el = node[name]
+      , attrs = el['@']
       , enclosure = {};
     if (normalize) {
       switch(name){
@@ -800,6 +801,17 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('guid'):
       case('id'):
         item.guid = utils.get(el);
+        // http://cyber.law.harvard.edu/rss/rss.html#ltguidgtSubelementOfLtitemgt
+        // If the guid element has an attribute named "isPermaLink" with a value
+        // of true, the reader may assume that it is a permalink to the item,
+        // that is, a url that can be opened in a Web browser, that points to
+        // the full item described by the <item> element.
+        // isPermaLink is optional, its default value is true. If its value is
+        // false, the guid may not be assumed to be a url, or a url to anything
+        // in particular.
+        if (item.guid && type == 'rss' && name == 'guid' && attrs.ispermalink !== 'false') {
+          item.permalink = item.guid;
+        }
         break;
       case('author'):
         var author = {};
