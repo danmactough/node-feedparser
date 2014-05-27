@@ -1,4 +1,16 @@
 
+v0.17.0 / 2014-05-27
+==================
+
+ * Improve tests
+ * Use readable-stream instead of core stream; update dependencies.
+ * Update README
+ * Add permalink property for RSS feeds
+ * Add nodeico badge
+ * Remove unnecessary test server
+ * Only colorize dump output if outputing to a terminal.
+ * Fix small typo.
+
 v0.16.6 / 2014-02-12
 ==================
 
