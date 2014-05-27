@@ -3,49 +3,52 @@ describe('api', function () {
   var feed = __dirname + '/feeds/rss2sample.xml';
 
   it('should read a stream via .pipe()', function (done) {
-    var events = [];
+    var meta
+      , items = [];
 
     fs.createReadStream(feed).pipe(FeedParser())
       .on('error', function (err) {
         assert.ifError(err);
-        events.push('error');
+        done(err);
       })
-      .on('meta', function (meta) {
-        assert.notEqual(meta, null);
-        events.push('meta');
+      .on('meta', function (_meta) {
+        meta = _meta;
       })
       .on('readable', function () {
-        var stream = this, items = [], item;
-        while (item = stream.read()) {
+        var item;
+        while (item = this.read()) {
           items.push(item);
         }
         assert.ok(items.length);
-        events.push('article');
       })
       .on('end', function () {
-        assert.equal(events.indexOf('error'), -1);
-        assert.ok(~events.indexOf('meta'));
-        assert.ok(~events.indexOf('article'));
+        assert(meta);
+        assert.strictEqual(items.length, 4);
         done();
       });
   });
 
   it('should parse and set options', function (done) {
-    var options = { normalize: false, addmeta: false };
+    var meta
+      , item
+      , options = { normalize: false, addmeta: false };
 
     fs.createReadStream(feed).pipe(FeedParser(options))
       .on('error', function (err) {
         assert.ifError(err);
         done(err);
       })
-      .on('meta', function (meta) {
-        assert.notEqual(meta, null);
+      .on('meta', function (_meta) {
+        meta = _meta;
+      })
+      .on('readable', function () {
+        var _item = this.read();
+        item || (item = _item);
+      })
+      .on('end', function () {
+        assert(meta);
         assert.equal(meta.title, null);
         assert.equal(meta['rss:title']['#'], 'Liftoff News');
-      })
-      .once('readable', function () {
-        var stream = this;
-        var item = stream.read();
         assert.equal(item.meta, null);
         done();
       });
