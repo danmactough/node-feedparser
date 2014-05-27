@@ -26,11 +26,12 @@
     "node": ">= 0.8.0"
   },
   "dependencies": {
-    "sax": "~0.6.0",
     "addressparser": "~0.1.3",
     "array-indexofobject": "~0.0.1",
+    "commander": "~2.2.0",
     "readable-stream": "~1.0.17",
-    "resanitize": "~0.3.0"
+    "resanitize": "~0.3.0",
+    "sax": "~0.6.0"
   },
   "devDependencies": {
     "mocha": "1.x",
