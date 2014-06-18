@@ -1,4 +1,14 @@
 
+v0.18.0 / 2014-06-18
+==================
+
+ * Enforce de-duping on atom enclosures
+ * Fix modification by reference defeating indexOf checking
+ * Fix inverted index checking
+ * Update test and fixture with tougher test case suggested by #111
+ * Revert "test for different enclosure type"
+ * test for different enclosure type
+
 v0.17.0 / 2014-05-27
 ==================
 
