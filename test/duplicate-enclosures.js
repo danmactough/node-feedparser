@@ -6,7 +6,7 @@ describe('duplicate enclosures', function(){
     fs.createReadStream(feed).pipe(new FeedParser())
       .once('readable', function () {
         var stream = this;
-        assert.ok(stream.read().enclosures.length === 1);
+        assert.strictEqual(stream.read().enclosures.length, 2);
         done();
       })
       .on('error', function (err) {
