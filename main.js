@@ -764,7 +764,9 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
                   enclosure.url = link['@']['href'];
                   enclosure.type = utils.get(link['@'], 'type');
                   enclosure.length = utils.get(link['@'], 'length');
-                  item.enclosures.push(enclosure);
+                  if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+                    item.enclosures.push(enclosure);
+                  }
                 }
               } else {
                 item.link = link['@']['href'];
@@ -785,7 +787,9 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
                 enclosure.url = el['@']['href'];
                 enclosure.type = utils.get(el['@'], 'type');
                 enclosure.length = utils.get(el['@'], 'length');
-                item.enclosures.push(enclosure);
+                if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+                  item.enclosures.push(enclosure);
+                }
               }
             } else {
               item.link = el['@']['href'];
