@@ -856,7 +856,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
             enclosure.url = utils.get(enc['@'], 'url');
             enclosure.type = utils.get(enc['@'], 'type');
             enclosure.length = utils.get(enc['@'], 'length');
-            if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+            if (~indexOfObject(item.enclosures, enclosure, ['url', 'type'])) {
               item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
             } else {
               item.enclosures.push(enclosure);
@@ -866,7 +866,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           enclosure.url = utils.get(el['@'], 'url');
           enclosure.type = utils.get(el['@'], 'type');
           enclosure.length = utils.get(el['@'], 'length');
-          if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
+          if (~indexOfObject(item.enclosures, enclosure, ['url', 'type'])) {
             item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
           } else {
             item.enclosures.push(enclosure);
