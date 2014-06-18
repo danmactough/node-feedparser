@@ -722,7 +722,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
   Object.keys(node).forEach(function(name){
     var el = node[name]
       , attrs = el['@']
-      , enclosure = {};
+      , enclosure;
     if (normalize) {
       switch(name){
       case('title'):
@@ -760,6 +760,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
                 if (link['@']['rel'] == 'self' && !item.link) item.link = link['@']['href'];
                 if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
                 if (link['@']['rel'] == 'enclosure') {
+                  enclosure = {};
                   enclosure.url = link['@']['href'];
                   enclosure.type = utils.get(link['@'], 'type');
                   enclosure.length = utils.get(link['@'], 'length');
@@ -780,6 +781,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
               if (el['@']['rel'] == 'self' && !item.link) item.link = el['@']['href'];
               if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
               if (el['@']['rel'] == 'enclosure') {
+                enclosure = {};
                 enclosure.url = el['@']['href'];
                 enclosure.type = utils.get(el['@'], 'type');
                 enclosure.length = utils.get(el['@'], 'length');
@@ -853,6 +855,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('enclosure'):
         if (Array.isArray(el)) {
           el.forEach(function (enc){
+            enclosure = {};
             enclosure.url = utils.get(enc['@'], 'url');
             enclosure.type = utils.get(enc['@'], 'type');
             enclosure.length = utils.get(enc['@'], 'length');
@@ -863,6 +866,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
             }
           });
         } else {
+          enclosure = {};
           enclosure.url = utils.get(el['@'], 'url');
           enclosure.type = utils.get(el['@'], 'type');
           enclosure.length = utils.get(el['@'], 'length');
@@ -876,6 +880,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('media:content'):
         if (Array.isArray(el)) {
           el.forEach(function (enc){
+            enclosure = {};
             enclosure.url = utils.get(enc['@'], 'url');
             enclosure.type = utils.get(enc['@'], 'type') || utils.get(enc['@'], 'medium');
             enclosure.length = utils.get(enc['@'], 'filesize');
@@ -884,6 +889,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
             }
           });
         } else {
+          enclosure = {};
           enclosure.url = utils.get(el['@'], 'url');
           enclosure.type = utils.get(el['@'], 'type') || utils.get(el['@'], 'medium');
           enclosure.length = utils.get(el['@'], 'filesize');
