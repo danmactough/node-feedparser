@@ -1,4 +1,10 @@
 
+v0.18.1 / 2014-06-20
+==================
+
+ * Don't assume el is not an array when defining attrs hash. Resolves #113
+ * Add failing test for #113
+
 v0.18.0 / 2014-06-18
 ==================
 
