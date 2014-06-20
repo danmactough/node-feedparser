@@ -721,7 +721,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
   Object.keys(node).forEach(function(name){
     var el = node[name]
-      , attrs = el['@']
+      , attrs = utils.get(el, '@')
       , enclosure;
     if (normalize) {
       switch(name){
