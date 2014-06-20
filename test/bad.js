@@ -21,4 +21,25 @@ describe('bad feeds', function(){
     });
 
   });
+
+  describe('duplicate guids', function () {
+    var feed = __dirname + '/feeds/guid-dupes.xml';
+
+    it('should just use the first', function (done) {
+      fs.createReadStream(feed).pipe(new FeedParser())
+        .once('readable', function () {
+          var stream = this;
+          var item = stream.read();
+          assert.equal(item.guid, 'http://www.braingle.com/50366.html');
+          assert.equal(item.permalink, 'http://www.braingle.com/50366.html');
+          done();
+        })
+        .on('error', function (err) {
+          assert.ifError(err);
+          done(err);
+        });
+
+    });
+
+  });
 });
