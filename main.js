@@ -110,6 +110,7 @@ FeedParser.prototype.parseOpts = function (options) {
   if (!('normalize' in this.options)) this.options.normalize = true;
   if (!('addmeta' in this.options)) this.options.addmeta = true;
   if (!('resume_saxerror' in this.options)) this.options.resume_saxerror = true;
+  if (!('emit_meta_once' in this.options)) this.options.emit_meta_once = true;
   if ('MAX_BUFFER_LENGTH' in this.options) {
     sax.MAX_BUFFER_LENGTH = this.options.MAX_BUFFER_LENGTH; // set to Infinity to have unlimited buffers
   } else {
@@ -1020,6 +1021,10 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
 // Naive Stream API
 FeedParser.prototype._transform = function (data, encoding, done) {
+  if (!this.options.emit_meta_once) {
+    this._emitted_meta = false;
+  }
+
   this.stream.write(data);
   done();
 };
