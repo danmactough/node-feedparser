@@ -31,14 +31,18 @@ describe('api', function () {
   it('should parse and set options', function (done) {
     var meta
       , item
-      , options = { normalize: false, addmeta: false };
+      , options = { normalize: false, addmeta: false, emit_meta_once: false }
+      , parser = FeedParser(options);
 
-    fs.createReadStream(feed).pipe(FeedParser(options))
-      .on('error', function (err) {
+    parser.on('error', function (err) {
         assert.ifError(err);
         done(err);
       })
       .on('meta', function (_meta) {
+        if (meta) {
+          // second pass through, test is now finished
+          done();
+        }
         meta = _meta;
       })
       .on('readable', function () {
@@ -50,8 +54,11 @@ describe('api', function () {
         assert.equal(meta.title, null);
         assert.equal(meta['rss:title']['#'], 'Liftoff News');
         assert.equal(item.meta, null);
-        done();
       });
+
+    fs.createReadStream(feed).pipe(parser);
+    fs.createReadStream(feed).pipe(parser);
+
   });
 
 });
