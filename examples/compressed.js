@@ -42,7 +42,6 @@ function maybeDecompress (res, encoding) {
   } else if (encoding.match(/\bgzip\b/)) {
     decompress = zlib.createGunzip();
   }
-      decompress.on('data', console.log);
   return decompress ? res.pipe(decompress) : res;
 }
 
