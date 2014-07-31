@@ -1025,7 +1025,6 @@ FeedParser.prototype._transform = function (data, encoding, done) {
     done();
   }
   catch (e) {
-    this.stream._parser.onerror.call(this.stream, e);
     done(e);
     this.push(null); // Manually trigger and end, since we can't reliably do any more parsing
   }
