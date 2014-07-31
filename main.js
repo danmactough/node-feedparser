@@ -1020,31 +1020,24 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
 // Naive Stream API
 FeedParser.prototype._transform = function (data, encoding, done) {
-  var ex = tryCatch(function () {
+  try {
     this.stream.write(data);
-  }, this);
-  if (ex) {
-    this.stream._parser.onerror.call(this.stream, ex);
+    done();
   }
-  done(ex);
+  catch (e) {
+    this.stream._parser.onerror.call(this.stream, e);
+    done(e);
+  }
 };
 
 FeedParser.prototype._flush = function (done) {
-  var ex = tryCatch(function () {
+  try {
     this.stream.end();
-  }, this);
-  done(ex);
+    done();
+  }
+  catch (e) {
+    done(e);
+  }
 };
 
 exports = module.exports = FeedParser;
-
-function tryCatch (func, ctx) {
-  try {
-    if (ctx) func.call(ctx);
-    else func();
-    return;
-  }
-  catch (ex) {
-    return ex;
-  }
-}
