@@ -23,6 +23,7 @@ describe('bad feeds', function(){
   });
 
   describe('duplicate guids', function () {
+
     var feed = __dirname + '/feeds/guid-dupes.xml';
 
     it('should just use the first', function (done) {
@@ -38,7 +39,28 @@ describe('bad feeds', function(){
           assert.ifError(err);
           done(err);
         });
+    });
 
+  });
+
+  describe('gzipped feed', function () {
+
+    var feed = __dirname + '/feeds/invalid-characters-gzipped.xml';
+
+    it('should gracefully emit an error and not throw', function (done) {
+      var error;
+      fs.createReadStream(feed).pipe(new FeedParser())
+        .once('readable', function () {
+          done(new Error('Shouldn\'t happen'));
+        })
+        .on('error', function (err) {
+          error = err;
+        })
+        .on('end', function () {
+          assert.ok(error instanceof Error);
+          assert.ok(error.message.match(/^Invalid code point/));
+          done();
+        });
     });
 
   });
