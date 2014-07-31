@@ -22,30 +22,11 @@ function fetch(feed) {
   // Define our handlers
   req.on('error', done);
   req.on('response', function(res) {
-    var stream = this
-      , iconv
-      , charset;
-
     if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-
-    charset = getParams(res.headers['content-type'] || '').charset;
-
-    // Use iconv if its not utf8 already.
-    if (!iconv && charset && !/utf-*8/i.test(charset)) {
-      try {
-        iconv = new Iconv(charset, 'utf-8');
-        console.log('Converting from charset %s to utf-8', charset);
-        iconv.on('error', done);
-        // If we're using iconv, stream will be the output of iconv
-        // otherwise it will remain the output of request
-        stream = this.pipe(iconv);
-      } catch(err) {
-        this.emit('error', err);
-      }
-    }
-
+    var charset = getParams(res.headers['content-type'] || '').charset;
+    res = maybeTranslate(res, charset);
     // And boom goes the dynamite
-    stream.pipe(feedparser);
+    res.pipe(feedparser);
   });
 
   feedparser.on('error', done);
@@ -56,6 +37,24 @@ function fetch(feed) {
       console.log(post);
     }
   });
+}
+
+function maybeTranslate (res, charset) {
+  var iconv;
+  // Use iconv if its not utf8 already.
+  if (!iconv && charset && !/utf-*8/i.test(charset)) {
+    try {
+      iconv = new Iconv(charset, 'utf-8');
+      console.log('Converting from charset %s to utf-8', charset);
+      iconv.on('error', done);
+      // If we're using iconv, stream will be the output of iconv
+      // otherwise it will remain the output of request
+      res = res.pipe(iconv);
+    } catch(err) {
+      res.emit('error', err);
+    }
+  }
+  return res;
 }
 
 function getParams(str) {
