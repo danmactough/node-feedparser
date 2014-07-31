@@ -1,4 +1,13 @@
 
+v0.19.0 / 2014-07-30
+==================
+
+ * Remove unnecessary code to trigger saxparser error. Apparently, calling the callback with an error will trigger an error anyway. Totally undocumented. So, this was actually calling double error emitting.
+ * Manually trigger end when an exception is caught. We can't continue parsing after an exception is thrown. Also update test.
+ * Use native try/catch. Other method is not a performance enhancement.
+ * Wrap sax write and end methods in try/catch. Resolves #112 sax >= v0.6.0 can throw if a gzipped data stream containing certain characters gets written to the parser. This is a user error (to pipe gzipped data), but sometimes servers send gzipped data even when you've told them not to. So, we try to let the user handle this more gracefully.
+ * Add failing test case for sax throwing
+
 v0.18.1 / 2014-06-20
 ==================
 
