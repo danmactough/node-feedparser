@@ -1,4 +1,10 @@
 
+v0.19.1 / 2014-07-31
+==================
+
+ * Add compressed example
+ * Refactor iconv example
+
 v0.19.0 / 2014-07-30
 ==================
 
