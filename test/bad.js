@@ -55,7 +55,6 @@ describe('bad feeds', function(){
         })
         .on('error', function (err) {
           error = err;
-          this.push(null); // this is needed to trigger end
         })
         .on('end', function () {
           assert.ok(error instanceof Error);
