@@ -1,4 +1,10 @@
 
+v0.19.2 / 2014-09-02
+==================
+
+ * Change ispermalink value check to be case-insensitive. Closes #123.
+ * Whoops. Remove debugging from example
+
 v0.19.1 / 2014-07-31
 ==================
 
