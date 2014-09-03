@@ -811,7 +811,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         // isPermaLink is optional, its default value is true. If its value is
         // false, the guid may not be assumed to be a url, or a url to anything
         // in particular.
-        if (item.guid && type == 'rss' && name == 'guid' && attrs.ispermalink !== 'false') {
+        if (item.guid && type == 'rss' && name == 'guid' && !(attrs.ispermalink && attrs.ispermalink.match(/false/i))) {
           item.permalink = item.guid;
         }
         break;
