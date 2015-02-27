@@ -12,11 +12,9 @@
 var sax = require('sax')
   , addressparser = require('addressparser')
   , indexOfObject = require('array-indexofobject')
-  , resanitize = require('resanitize')
   , util = require('util')
   , TransformStream = require('readable-stream').Transform
-  , utils = require('./utils')
-  ;
+  , utils = require('./utils');
 
 /**
  * FeedParser constructor. Most apps will only use one instance.
@@ -695,8 +693,8 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     if (!meta.xmlurl && this.options.feedurl) {
       meta.xmlurl = meta.xmlUrl = this.options.feedurl;
     }
-    meta.title = meta.title && resanitize.stripHtml(meta.title);
-    meta.description = meta.description && resanitize.stripHtml(meta.description);
+    meta.title = meta.title && utils.stripHtml(meta.title);
+    meta.description = meta.description && utils.stripHtml(meta.description);
   }
 
   return meta;
@@ -1013,7 +1011,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         item.link = item.guid;
       }
     }
-    item.title = item.title && resanitize.stripHtml(item.title);
+    item.title = item.title && utils.stripHtml(item.title);
   }
   return item;
 };
