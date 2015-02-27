@@ -21,7 +21,7 @@
   "bugs": {
     "url": "http://github.com/danmactough/node-feedparser/issues"
   },
-  "main": "./main.js",
+  "main": "main.js",
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -37,6 +37,6 @@
     "iconv": "2.1.x"
   },
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
+    "test": "mocha"
   }
 }
