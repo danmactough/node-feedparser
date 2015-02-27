@@ -17,7 +17,7 @@ that define a non-default namespace for the main feed elements).
 - [sax](https://github.com/isaacs/sax-js)
 - [addressparser](https://github.com/andris9/addressparser)
 - [array-indexofobject](https://github.com/danmactough/node-array-indexofobject)
-- [readable-stream](https://github.com/isaacs/readable-stream) (only if using Node <= v0.8.x)
+- [readable-stream](https://github.com/isaacs/readable-stream)
 
 ## Installation
 
@@ -35,7 +35,8 @@ interface: the stream interface.
     - `304`, `response` - removed, as Feedparser no longer fetches urls
     - `article`, `complete` - removed; use the stream interface
     - `data` - all readable streams will emit a `data` event, but this puts the
-      stream into "old" v0.8-style push streams
+      stream into "old" v0.8-style push streams (if you're using v0.10, but not
+      v0.12)
     - `end` - stream behavior dictates that the `end` event will never fire if
       you don't read any data from the stream; you can kick the Feedparser stream
       to work like an "old" v0.8-style push stream (and get the old `end` event

@@ -23,7 +23,7 @@
   },
   "main": "./main.js",
   "engines": {
-    "node": ">= 0.8.0"
+    "node": ">= 0.10.0"
   },
   "dependencies": {
     "sax": "~0.6.0",
