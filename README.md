@@ -16,7 +16,6 @@ that define a non-default namespace for the main feed elements).
 
 - [sax](https://github.com/isaacs/sax-js)
 - [addressparser](https://github.com/andris9/addressparser)
-- [resanitize](https://github.com/danmactough/node-resanitize)
 - [array-indexofobject](https://github.com/danmactough/node-array-indexofobject)
 - [readable-stream](https://github.com/isaacs/readable-stream) (only if using Node <= v0.8.x)
 

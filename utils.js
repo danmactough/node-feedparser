@@ -180,3 +180,17 @@ function reresolve (node, baseurl) {
   return resolveLevel(node);
 }
 exports.reresolve = reresolve;
+
+/*
+* Aggressivly strip HTML tags
+* Pulled out of node-resanitize because it was all that was being used
+* and it's way lighter...
+*
+* @param {String} str
+*/
+
+function stripHtml (str) {
+    return str.replace(/<.*?>/g, '');
+}
+
+exports.stripHtml = stripHtml;
