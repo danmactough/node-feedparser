@@ -1,4 +1,15 @@
 
+1.0.0 / 2015-02-26 
+==================
+
+ * Bump mocha devDependency to v2.1.x
+ * Cleanup package.json
+ * Update copyright year in README
+ * Remove node v0.8 support
+ * Merge pull request #134 from designfrontier/master
+ * added a testing environment for node v0.12
+ * removed resanitize as a dependency since the only thing in use was a 4 line function. Moved the function to utils
+
 v0.19.2 / 2014-09-02
 ==================
 
