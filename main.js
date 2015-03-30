@@ -694,6 +694,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       meta.xmlurl = meta.xmlUrl = this.options.feedurl;
     }
     meta.title = meta.title && utils.stripHtml(meta.title);
+    meta.summary = meta.summary && utils.stripHtml(meta.summary);
     meta.description = meta.description && utils.stripHtml(meta.description);
   }
 
