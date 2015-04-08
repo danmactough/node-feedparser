@@ -104,6 +104,17 @@ function get(obj, subkey) {
 }
 exports.get = get;
 
+/**
+ * Safely trim a value if it's a String
+ */
+function safeTrim (val) {
+  if (typeof val === 'string') {
+    return val.trim();
+  }
+  return val;
+}
+exports.safeTrim = safeTrim;
+
 /*
  * Expose require('url').resolve
  */
