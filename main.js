@@ -576,54 +576,83 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           ;
         if (Array.isArray(el)) {
           el.forEach(function (category){
+            var _categoryValue;
             if ('category' == name && 'atom' == type) {
-              if (category['@'] && utils.get(category['@'], 'term')) meta.categories.push(utils.get(category['@'], 'term'));
-            } else if ('category' == name && utils.get(category) && 'rss' == type) {
-              meta.categories.push(utils.get(category).trim());
-            } else if ('dc:subject' == name && utils.get(category)) {
-              _categories = utils.get(category).split(' ').map(function (cat){ return cat.trim(); });
-              if (_categories.length) meta.categories = meta.categories.concat(_categories);
-            } else if ('itunes:category' == name) {
-              if (category['@'] && utils.get(category['@'], 'text')) _category = utils.get(category['@'], 'text');
+              if (category['@'] && (_categoryValue = utils.safeTrim(utils.get(category['@'], 'term')))) {
+                meta.categories.push(_categoryValue);
+              }
+            }
+            else if ('category' == name && 'rss' == type){
+              if ((_categoryValue = utils.safeTrim(utils.get(category)))) {
+                meta.categories.push(_categoryValue);
+              }
+            }
+            else if ('dc:subject' == name && (_categoryValue = utils.safeTrim(utils.get(category)))) {
+              _categories = _categoryValue.split(' ').map(function (cat){ return cat.trim(); });
+              if (_categories.length) {
+                meta.categories = meta.categories.concat(_categories);
+              }
+            }
+            else if ('itunes:category' == name) {
+              if (category['@'] && utils.safeTrim(utils.get(category['@'], 'text'))) _category = utils.safeTrim(utils.get(category['@'], 'text'));
               if (category[name]) {
                 if (Array.isArray(category[name])) {
                   category[name].forEach(function (subcategory){
-                    if (subcategory['@'] && utils.get(subcategory['@'], 'text')) meta.categories.push(_category + '/' + utils.get(subcategory['@'], 'text'));
+                    var _subcategoryValue;
+                    if (subcategory['@'] && (_subcategoryValue = utils.safeTrim(utils.get(subcategory['@'], 'text')))) {
+                      meta.categories.push(_category + '/' + _subcategoryValue);
+                    }
                   });
-                } else {
-                  if (category[name]['@'] && utils.get(category[name]['@'], 'text'))
-                    meta.categories.push(_category + '/' + utils.get(category[name]['@'], 'text'));
                 }
-              } else {
+                else if (category[name]['@'] && (_categoryValue = utils.safeTrim(utils.get(category[name]['@'], 'text')))) {
+                    meta.categories.push(_category + '/' + _categoryValue);
+                }
+              }
+              else if (_category) {
                 meta.categories.push(_category);
               }
-            } else if ('media:category' == name) {
-              meta.categories.push(utils.get(category));
+            }
+            else if ('media:category' == name && (_categoryValue = utils.safeTrim(utils.get(category)))) {
+              meta.categories.push(_categoryValue);
             }
           });
         } else {
           if ('category' == name && 'atom' == type) {
-            if (utils.get(el['@'], 'term')) meta.categories.push(utils.get(el['@'], 'term'));
-          } else if ('category' == name && utils.get(el) && 'rss' == type) {
-            meta.categories.push(utils.get(el).trim());
-          } else if ('dc:subject' == name && utils.get(el)) {
-            _categories = utils.get(el).split(' ').map(function (cat){ return cat.trim(); });
-            if (_categories.length) meta.categories = meta.categories.concat(_categories);
-          } else if ('itunes:category' == name) {
-            if (el['@'] && utils.get(el['@'], 'text')) _category = utils.get(el['@'], 'text');
+            if ((_category = utils.safeTrim(utils.get(el['@'], 'term')))) {
+              meta.categories.push(_category);
+            }
+          }
+          else if ('category' == name && 'rss' == type) {
+            if ((_category = utils.safeTrim(utils.get(el)))) {
+              meta.categories.push(_category);
+            }
+          }
+          else if ('dc:subject' == name && (_category = utils.safeTrim(utils.get(el)))) {
+            _categories = _category.split(' ').map(function (cat){ return cat.trim(); });
+            if (_categories.length) {
+              meta.categories = meta.categories.concat(_categories);
+            }
+          }
+          else if ('itunes:category' == name) {
+            if (el['@'] && utils.safeTrim(utils.get(el['@'], 'text'))) _category = utils.safeTrim(utils.get(el['@'], 'text'));
             if (el[name]) {
               if (Array.isArray(el[name])) {
                 el[name].forEach(function (subcategory){
-                  if (subcategory['@'] && utils.get(subcategory['@'], 'text')) meta.categories.push(_category + '/' + utils.get(subcategory['@'], 'text'));
+                  var _subcategoryValue;
+                  if (subcategory['@'] && (_subcategoryValue = utils.safeTrim(utils.get(subcategory['@'], 'text')))) {
+                    meta.categories.push(_category + '/' + _subcategoryValue);
+                  }
                 });
-              } else {
-                if (el[name]['@'] && utils.get(el[name]['@'], 'text'))
-                  meta.categories.push(_category + '/' + utils.get(el[name]['@'], 'text'));
               }
-            } else {
+              else if (el[name]['@'] && (_category = utils.safeTrim(utils.get(el[name]['@'], 'text')))) {
+                meta.categories.push(_category + '/' + _category);
+              }
+            }
+            else if (_category) {
               meta.categories.push(_category);
             }
-          } else if ('media:category' == name) {
+          }
+          else if ('media:category' == name && (_category = utils.safeTrim(utils.get(el)))) {
             meta.categories.push(utils.get(el));
           }
         }
