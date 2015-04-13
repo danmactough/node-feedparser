@@ -1013,6 +1013,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       }
     }
     item.title = item.title && utils.stripHtml(item.title);
+    item.summary = item.summary && utils.stripHtml(item.summary);
+    item.description = item.description && utils.stripHtml(item.description);
   }
   return item;
 };
