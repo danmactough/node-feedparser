@@ -1,4 +1,9 @@
 
+1.1.0 / 2015-05-21
+==================
+
+  * Fix channel link selection when there is a mixture of rss and atom. Closes #142
+
 1.0.1 / 2015-04-07 
 ==================
 
