@@ -446,7 +446,9 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           el.forEach(function (link){
             if (link['@']['href']) { // Atom
               if (utils.get(link['@'], 'rel')) {
-                if (link['@']['rel'] == 'alternate') meta.link = link['@']['href'];
+                if (link['@']['rel'] == 'alternate') {
+                  if (!meta.link) meta.link = link['@']['href'];
+                }
                 else if (link['@']['rel'] == 'self') {
                   meta.xmlurl = meta.xmlUrl = link['@']['href'];
                   if (this.xmlbase && this.xmlbase.length === 0) {
@@ -459,10 +461,10 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                   meta.cloud.href = link['@']['href'];
                 }
               } else {
-                meta.link = link['@']['href'];
+                if (!meta.link) meta.link = link['@']['href'];
               }
             } else if (Object.keys(link['@']).length === 0) { // RSS
-              if (!meta.link) meta.link = utils.get(link);
+              meta.link = utils.get(link);
             }
             if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
               this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
@@ -472,7 +474,9 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         } else {
           if (el['@']['href']) { // Atom
             if (utils.get(el['@'], 'rel')) {
-              if (el['@']['rel'] == 'alternate') meta.link = el['@']['href'];
+              if (el['@']['rel'] == 'alternate') {
+                if (!meta.link) meta.link = el['@']['href'];
+              }
               else if (el['@']['rel'] == 'self') {
                 meta.xmlurl = meta.xmlUrl = el['@']['href'];
                 if (this.xmlbase && this.xmlbase.length === 0) {
