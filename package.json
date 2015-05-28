@@ -13,6 +13,7 @@
     "rsscloud",
     "pubsubhubbub"
   ],
+  "license": "MIT",
   "homepage": "http://github.com/danmactough/node-feedparser",
   "repository": {
     "type": "git",
