@@ -1,4 +1,9 @@
 
+1.1.2 / 2015-06-02
+==================
+
+  * Be more careful about assigning item.link from atom:link elements
+
 1.1.1 / 2015-05-28
 ==================
 
