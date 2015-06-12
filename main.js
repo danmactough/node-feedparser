@@ -787,8 +787,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
             if (link['@']['href']) { // Atom
               if (utils.get(link['@'], 'rel')) {
                 if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
-                if (link['@']['rel'] == 'alternate' && !item.link) item.link = link['@']['href'];
-                if (link['@']['rel'] == 'self' && !item.link) item.link = link['@']['href'];
+                if (link['@']['rel'] == 'alternate' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
+                if (link['@']['rel'] == 'self' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
                 if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
                 if (link['@']['rel'] == 'enclosure') {
                   enclosure = {};
@@ -810,8 +810,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           if (el['@']['href']) { // Atom
             if (utils.get(el['@'], 'rel')) {
               if (el['@']['rel'] == 'canonical') item.origlink = el['@']['href'];
-              if (el['@']['rel'] == 'alternate' && !item.link) item.link = el['@']['href'];
-              if (el['@']['rel'] == 'self' && !item.link) item.link = el['@']['href'];
+              if (el['@']['rel'] == 'alternate' && (!el['@']['type'] || el['@']['type'] == 'text/html') && !item.link) item.link = el['@']['href'];
+              if (el['@']['rel'] == 'self' && (!el['@']['type'] || el['@']['type'] == 'text/html') && !item.link) item.link = el['@']['href'];
               if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
               if (el['@']['rel'] == 'enclosure') {
                 enclosure = {};
