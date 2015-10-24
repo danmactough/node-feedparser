@@ -34,7 +34,7 @@ function fetch(feed) {
   feedparser.on('readable', function() {
     var post;
     while (post = this.read()) {
-      console.log(post);
+      console.log(JSON.stringify(post, ' ', 4));
     }
   });
 }
