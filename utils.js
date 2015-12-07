@@ -38,7 +38,7 @@ function merge (a, b, noforce) {
     for (var key in b) {
       if (has(b, key)) {
         if (noforce) {
-          if (!a.hasOwnProperty(key)) a[key] = b[key];
+          if (!has(a, key)) a[key] = b[key];
         } else {
           a[key] = b[key];
         }
