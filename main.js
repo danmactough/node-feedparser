@@ -9,12 +9,21 @@
 /**
  * Module dependencies.
  */
-var sax = require('sax')
-  , addressparser = require('addressparser')
-  , indexOfObject = require('array-indexofobject')
-  , util = require('util')
-  , TransformStream = require('readable-stream').Transform
-  , utils = require('./utils');
+var sax = require('sax'),
+    addressparser = require('addressparser'),
+    indexOfObject = require('array-indexofobject'),
+    util = require('util'),
+    TransformStream = require('readable-stream').Transform,
+    has = require('./utils').has,
+    merge = require('./utils').merge,
+    unique = require('./utils').unique,
+    get = require('./utils').get,
+    trim = require('./utils').safeTrim,
+    resolve = require('./utils').resolve,
+    nslookup = require('./utils').nslookup,
+    nsprefix = require('./utils').nsprefix,
+    reresolve = require('./utils').reresolve,
+    stripHtml = require('./utils').stripHtml;
 
 /**
  * FeedParser constructor. Most apps will only use one instance.
@@ -175,8 +184,8 @@ FeedParser.prototype.handleOpenTag = function (node){
     this.xhtml['#'] += '>';
   } else if ( this.stack.length === 0 &&
               (n['#name'] === 'rss' ||
-              (n['#local'] === 'rdf' && utils.nslookup([n['#uri']], 'rdf')) ||
-              (n['#local'] === 'feed'&& utils.nslookup([n['#uri']], 'atom')) ) ) {
+              (n['#local'] === 'rdf' && nslookup([n['#uri']], 'rdf')) ||
+              (n['#local'] === 'feed'&& nslookup([n['#uri']], 'atom')) ) ) {
     Object.keys(n['@']).forEach(function(name) {
       var o = {};
       if (name != 'version') {
@@ -214,21 +223,21 @@ FeedParser.prototype.handleCloseTag = function (el){
   el = el.split(':');
 
   if (el.length > 1 && el[0] === n['#prefix']) {
-    if (utils.nslookup(n['#uri'], 'atom')) {
+    if (nslookup(n['#uri'], 'atom')) {
       node['#prefix'] = el[0];
       node['#local'] = el.slice(1).join(':');
       node['#type'] = 'atom';
-    } else if (utils.nslookup(n['#uri'], 'rdf')) {
+    } else if (nslookup(n['#uri'], 'rdf')) {
       node['#prefix'] = el[0];
       node['#local'] = el.slice(1).join(':');
       node['#type'] = 'rdf';
     } else {
-      node['#prefix'] = utils.nsprefix(n['#uri']) || n['#prefix'];
+      node['#prefix'] = nsprefix(n['#uri']) || n['#prefix'];
       node['#local'] = el.slice(1).join(':');
     }
   } else {
     node['#local'] = node['#name'];
-    node['#type'] = utils.nsprefix(n['#uri']) || n['#prefix'];
+    node['#type'] = nsprefix(n['#uri']) || n['#prefix'];
   }
   delete n['#name'];
   delete n['#local'];
@@ -242,7 +251,7 @@ FeedParser.prototype.handleCloseTag = function (el){
   if (baseurl && (node['#local'] === 'logo' || node['#local'] === 'icon') && node['#type'] === 'atom') {
     // Apply xml:base to these elements as they appear
     // rather than leaving it to the ultimate parser
-    n['#'] = utils.resolve(baseurl, n['#']);
+    n['#'] = resolve(baseurl, n['#']);
   }
 
   if (this.xmlbase.length && (el == this.xmlbase[0]['#name'])) {
@@ -286,14 +295,14 @@ FeedParser.prototype.handleCloseTag = function (el){
       (node['#local'] == 'entry' && (node['#prefix'] === '' || node['#type'] === 'atom'))) { // We have an article!
 
     if (!this.meta.title) { // We haven't yet parsed all the metadata
-      utils.merge(this.meta, this.handleMeta(this.stack[0], this.meta['#type'], this.options));
+      merge(this.meta, this.handleMeta(this.stack[0], this.meta['#type'], this.options));
       if (!this._emitted_meta) {
         this.emit('meta', this.meta);
         this._emitted_meta = true;
       }
     }
     if (!baseurl && this.xmlbase && this.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
-      n = utils.reresolve(n, this.xmlbase[0]['#']);
+      n = reresolve(n, this.xmlbase[0]['#']);
     }
     item = this.handleItem(n, this.meta['#type'], this.options);
     if (this.options.addmeta) {
@@ -306,7 +315,7 @@ FeedParser.prototype.handleCloseTag = function (el){
                node['#name'] === 'feed' ||
                (node['#local'] === 'channel' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
                (node['#local'] === 'feed' && (node['#prefix'] === '' || node['#type'] === 'atom')) ) ) {
-    utils.merge(this.meta, this.handleMeta(n, this.meta['#type'], this.options));
+    merge(this.meta, this.handleMeta(n, this.meta['#type'], this.options));
     if (!this._emitted_meta) {
       this.emit('meta', this.meta);
       this._emitted_meta = true;
@@ -376,17 +385,17 @@ FeedParser.prototype.handleAttributes = function handleAttributes (attrs, el) {
     }
     // If the feed is using a non-default prefix, we'll use it, too
     // But we force the use of the 'xml' prefix
-    if (attr.uri && attr.prefix && !utils.nslookup(attr.uri, attr.prefix) || utils.nslookup(attr.uri, 'xml')) {
-      prefix = ( utils.nsprefix(attr.uri) || attr.prefix ) + ( attr.local ? ':' : '' );
+    if (attr.uri && attr.prefix && !nslookup(attr.uri, attr.prefix) || nslookup(attr.uri, 'xml')) {
+      prefix = ( nsprefix(attr.uri) || attr.prefix ) + ( attr.local ? ':' : '' );
     }
     if (basepath && (attr.local == 'href' || attr.local == 'src' || attr.local == 'uri')) {
       // Apply xml:base to these elements as they appear
       // rather than leaving it to the ultimate parser
-      attr.value = utils.resolve(basepath, attr.value);
-    } else if (attr.local === 'base' && utils.nslookup(attr.uri, 'xml')) {
+      attr.value = resolve(basepath, attr.value);
+    } else if (attr.local === 'base' && nslookup(attr.uri, 'xml')) {
       // Keep track of the xml:base for the current node
       if (basepath) {
-        attr.value = utils.resolve(basepath, attr.value);
+        attr.value = resolve(basepath, attr.value);
       }
       this.xmlbase.unshift({ '#name': el, '#': attr.value});
     } else if (attr.name === 'type' && attr.value === 'xhtml') {
@@ -420,11 +429,11 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     if (normalize) {
       switch(name){
       case('title'):
-        meta.title = utils.get(el);
+        meta.title = get(el);
         break;
       case('description'):
       case('subtitle'):
-        meta.description = utils.get(el);
+        meta.description = get(el);
         break;
       case('pubdate'):
       case('lastbuilddate'):
@@ -432,7 +441,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(utils.get(el)) : null;
+        var date = get(el) ? new Date(get(el)) : null;
         if (!date) break;
         if (meta.pubdate === null || name == 'pubdate' || name == 'published')
           meta.pubdate = meta.pubDate = date;
@@ -445,7 +454,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         if (Array.isArray(el)) {
           el.forEach(function (link){
             if (link['@']['href']) { // Atom
-              if (utils.get(link['@'], 'rel')) {
+              if (get(link['@'], 'rel')) {
                 if (link['@']['rel'] == 'alternate') {
                   if (!meta.link) meta.link = link['@']['href'];
                 }
@@ -453,7 +462,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                   meta.xmlurl = meta.xmlUrl = link['@']['href'];
                   if (this.xmlbase && this.xmlbase.length === 0) {
                     this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
-                    this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
+                    this.stack[0] = reresolve(this.stack[0], meta.xmlurl);
                   }
                 }
                 else if (link['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
@@ -464,16 +473,16 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                 if (!meta.link) meta.link = link['@']['href'];
               }
             } else if (Object.keys(link['@']).length === 0) { // RSS
-              meta.link = utils.get(link);
+              meta.link = get(link);
             }
             if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
               this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
-              this.stack[0] = utils.reresolve(this.stack[0], meta.link);
+              this.stack[0] = reresolve(this.stack[0], meta.link);
             }
           }, this);
         } else {
           if (el['@']['href']) { // Atom
-            if (utils.get(el['@'], 'rel')) {
+            if (get(el['@'], 'rel')) {
               if (el['@']['rel'] == 'alternate') {
                 if (!meta.link) meta.link = el['@']['href'];
               }
@@ -481,7 +490,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                 meta.xmlurl = meta.xmlUrl = el['@']['href'];
                 if (this.xmlbase && this.xmlbase.length === 0) {
                   this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
-                  this.stack[0] = utils.reresolve(this.stack[0], meta.xmlurl);
+                  this.stack[0] = reresolve(this.stack[0], meta.xmlurl);
                 }
               }
               else if (el['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
@@ -492,11 +501,11 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
               meta.link = el['@']['href'];
             }
           } else if (Object.keys(el['@']).length === 0) { // RSS
-            if (!meta.link) meta.link = utils.get(el);
+            if (!meta.link) meta.link = get(el);
           }
           if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
             this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
-            this.stack[0] = utils.reresolve(this.stack[0], meta.link);
+            this.stack[0] = reresolve(this.stack[0], meta.link);
           }
         }
         break;
@@ -505,16 +514,16 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('author'):
         var author = {};
         if (name == 'author') {
-          meta.author = utils.get(el.name) || utils.get(el.email) || utils.get(el.uri);
+          meta.author = get(el.name) || get(el.email) || get(el.uri);
         }
-        else if (utils.get(el)) {
-          author = addressparser(utils.get(el))[0];
+        else if (get(el)) {
+          author = addressparser(get(el))[0];
           if (author) {
             el['name'] = author.name;
             el['email'] = author.address;
           }
           if (meta.author === null || name == 'managingeditor') {
-            meta.author = author.name || author.address || utils.get(el);
+            meta.author = author.name || author.address || get(el);
           }
         }
         break;
@@ -527,14 +536,14 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                          // in the link elements
         if (Array.isArray(el)) {
           Object.keys(el[0]['@']).forEach(function (attr) {
-            if (utils.has(el[0]['@'], attr)) {
+            if (has(el[0]['@'], attr)) {
               meta.cloud[attr] = el[0]['@'][attr];
             }
           });
         }
         else {
           Object.keys(el['@']).forEach(function (attr) {
-            if (utils.has(el['@'], attr)) {
+            if (has(el['@'], attr)) {
               meta.cloud[attr] = el['@'][attr];
             }
           });
@@ -542,30 +551,30 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         meta.cloud.type = 'rsscloud';
         break;
       case('language'):
-        meta.language = utils.get(el);
+        meta.language = get(el);
         break;
       case('image'):
       case('logo'):
         if (el.url)
-          meta.image.url = utils.get(el.url);
+          meta.image.url = get(el.url);
         if (el.title)
-          meta.image.title = utils.get(el.title);
-        if (!meta.image.url && utils.get(el))
-          meta.image.url = utils.get(el);
+          meta.image.title = get(el.title);
+        if (!meta.image.url && get(el))
+          meta.image.url = get(el);
         break;
       case('icon'):
-        meta.favicon = utils.get(el);
+        meta.favicon = get(el);
         break;
       case('copyright'):
       case('rights'):
       case('dc:rights'):
-        meta.copyright = utils.get(el);
+        meta.copyright = get(el);
         break;
       case('generator'):
-        meta.generator = utils.get(el);
-        if (utils.get(el['@'], 'version'))
+        meta.generator = get(el);
+        if (get(el['@'], 'version'))
           meta.generator += (meta.generator ? ' ' : '') + 'v' + el['@'].version;
-        if (utils.get(el['@'], 'uri'))
+        if (get(el['@'], 'uri'))
           meta.generator += meta.generator ? ' (' + el['@'].uri + ')' : el['@'].uri;
         break;
       case('category'):
@@ -582,33 +591,33 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           el.forEach(function (category){
             var _categoryValue;
             if ('category' == name && 'atom' == type) {
-              if (category['@'] && (_categoryValue = utils.safeTrim(utils.get(category['@'], 'term')))) {
+              if (category['@'] && (_categoryValue = trim(get(category['@'], 'term')))) {
                 meta.categories.push(_categoryValue);
               }
             }
             else if ('category' == name && 'rss' == type){
-              if ((_categoryValue = utils.safeTrim(utils.get(category)))) {
+              if ((_categoryValue = trim(get(category)))) {
                 meta.categories.push(_categoryValue);
               }
             }
-            else if ('dc:subject' == name && (_categoryValue = utils.safeTrim(utils.get(category)))) {
+            else if ('dc:subject' == name && (_categoryValue = trim(get(category)))) {
               _categories = _categoryValue.split(' ').map(function (cat){ return cat.trim(); });
               if (_categories.length) {
                 meta.categories = meta.categories.concat(_categories);
               }
             }
             else if ('itunes:category' == name) {
-              if (category['@'] && utils.safeTrim(utils.get(category['@'], 'text'))) _category = utils.safeTrim(utils.get(category['@'], 'text'));
+              if (category['@'] && trim(get(category['@'], 'text'))) _category = trim(get(category['@'], 'text'));
               if (category[name]) {
                 if (Array.isArray(category[name])) {
                   category[name].forEach(function (subcategory){
                     var _subcategoryValue;
-                    if (subcategory['@'] && (_subcategoryValue = utils.safeTrim(utils.get(subcategory['@'], 'text')))) {
+                    if (subcategory['@'] && (_subcategoryValue = trim(get(subcategory['@'], 'text')))) {
                       meta.categories.push(_category + '/' + _subcategoryValue);
                     }
                   });
                 }
-                else if (category[name]['@'] && (_categoryValue = utils.safeTrim(utils.get(category[name]['@'], 'text')))) {
+                else if (category[name]['@'] && (_categoryValue = trim(get(category[name]['@'], 'text')))) {
                     meta.categories.push(_category + '/' + _categoryValue);
                 }
               }
@@ -616,39 +625,39 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                 meta.categories.push(_category);
               }
             }
-            else if ('media:category' == name && (_categoryValue = utils.safeTrim(utils.get(category)))) {
+            else if ('media:category' == name && (_categoryValue = trim(get(category)))) {
               meta.categories.push(_categoryValue);
             }
           });
         } else {
           if ('category' == name && 'atom' == type) {
-            if ((_category = utils.safeTrim(utils.get(el['@'], 'term')))) {
+            if ((_category = trim(get(el['@'], 'term')))) {
               meta.categories.push(_category);
             }
           }
           else if ('category' == name && 'rss' == type) {
-            if ((_category = utils.safeTrim(utils.get(el)))) {
+            if ((_category = trim(get(el)))) {
               meta.categories.push(_category);
             }
           }
-          else if ('dc:subject' == name && (_category = utils.safeTrim(utils.get(el)))) {
+          else if ('dc:subject' == name && (_category = trim(get(el)))) {
             _categories = _category.split(' ').map(function (cat){ return cat.trim(); });
             if (_categories.length) {
               meta.categories = meta.categories.concat(_categories);
             }
           }
           else if ('itunes:category' == name) {
-            if (el['@'] && utils.safeTrim(utils.get(el['@'], 'text'))) _category = utils.safeTrim(utils.get(el['@'], 'text'));
+            if (el['@'] && trim(get(el['@'], 'text'))) _category = trim(get(el['@'], 'text'));
             if (el[name]) {
               if (Array.isArray(el[name])) {
                 el[name].forEach(function (subcategory){
                   var _subcategoryValue;
-                  if (subcategory['@'] && (_subcategoryValue = utils.safeTrim(utils.get(subcategory['@'], 'text')))) {
+                  if (subcategory['@'] && (_subcategoryValue = trim(get(subcategory['@'], 'text')))) {
                     meta.categories.push(_category + '/' + _subcategoryValue);
                   }
                 });
               }
-              else if (el[name]['@'] && (_category = utils.safeTrim(utils.get(el[name]['@'], 'text')))) {
+              else if (el[name]['@'] && (_category = trim(get(el[name]['@'], 'text')))) {
                 meta.categories.push(_category + '/' + _category);
               }
             }
@@ -656,8 +665,8 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
               meta.categories.push(_category);
             }
           }
-          else if ('media:category' == name && (_category = utils.safeTrim(utils.get(el)))) {
-            meta.categories.push(utils.get(el));
+          else if ('media:category' == name && (_category = trim(get(el)))) {
+            meta.categories.push(get(el));
           }
         }
         break;
@@ -672,62 +681,62 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
 
   if (normalize) {
     if (!meta.description) {
-      if (node['itunes:summary']) meta.description = utils.get(node['itunes:summary']);
-      else if (node['tagline']) meta.description = utils.get(node['tagline']);
+      if (node['itunes:summary']) meta.description = get(node['itunes:summary']);
+      else if (node['tagline']) meta.description = get(node['tagline']);
     }
     if (!meta.author) {
-      if (node['itunes:author']) meta.author = utils.get(node['itunes:author']);
-      else if (node['itunes:owner'] && node['itunes:owner']['itunes:name']) meta.author = utils.get(node['itunes:owner']['itunes:name']);
-      else if (node['dc:creator']) meta.author = utils.get(node['dc:creator']);
-      else if (node['dc:publisher']) meta.author = utils.get(node['dc:publisher']);
+      if (node['itunes:author']) meta.author = get(node['itunes:author']);
+      else if (node['itunes:owner'] && node['itunes:owner']['itunes:name']) meta.author = get(node['itunes:owner']['itunes:name']);
+      else if (node['dc:creator']) meta.author = get(node['dc:creator']);
+      else if (node['dc:publisher']) meta.author = get(node['dc:publisher']);
     }
     if (!meta.language) {
-      if (node['@'] && node['@']['xml:lang']) meta.language = utils.get(node['@'], 'xml:lang');
-      else if (node['dc:language']) meta.language = utils.get(node['dc:language']);
+      if (node['@'] && node['@']['xml:lang']) meta.language = get(node['@'], 'xml:lang');
+      else if (node['dc:language']) meta.language = get(node['dc:language']);
     }
     if (!meta.image.url) {
-      if (node['itunes:image']) meta.image.url = utils.get(node['itunes:image']['@'], 'href');
+      if (node['itunes:image']) meta.image.url = get(node['itunes:image']['@'], 'href');
       else if (node['media:thumbnail']) {
         if (Array.isArray(node['media:thumbnail'])) {
           node['media:thumbnail'] = node['media:thumbnail'][0];
         }
-        meta.image.url = utils.get(node['media:thumbnail']['@'], 'url');
+        meta.image.url = get(node['media:thumbnail']['@'], 'url');
       }
     }
     if (!meta.copyright) {
-      if (node['media:copyright']) meta.copyright = utils.get(node['media:copyright']);
-      else if (node['dc:rights']) meta.copyright = utils.get(node['dc:rights']);
-      else if (node['creativecommons:license']) meta.copyright = utils.get(node['creativecommons:license']);
+      if (node['media:copyright']) meta.copyright = get(node['media:copyright']);
+      else if (node['dc:rights']) meta.copyright = get(node['dc:rights']);
+      else if (node['creativecommons:license']) meta.copyright = get(node['creativecommons:license']);
       else if (node['cc:license']) {
         if (Array.isArray(node['cc:license']) && node['cc:license'][0]['@'] && node['cc:license'][0]['@']['rdf:resource']) {
-          meta.copyright = utils.get(node['cc:license'][0]['@'], 'rdf:resource');
+          meta.copyright = get(node['cc:license'][0]['@'], 'rdf:resource');
         } else if (node['cc:license']['@'] && node['cc:license']['@']['rdf:resource']) {
-          meta.copyright = utils.get(node['cc:license']['@'], 'rdf:resource');
+          meta.copyright = get(node['cc:license']['@'], 'rdf:resource');
         }
       }
     }
     if (!meta.generator) {
       if (node['admin:generatoragent']) {
         if (Array.isArray(node['admin:generatoragent']) && node['admin:generatoragent'][0]['@'] && node['admin:generatoragent'][0]['@']['rdf:resource']) {
-          meta.generator = utils.get(node['admin:generatoragent'][0]['@'], 'rdf:resource');
+          meta.generator = get(node['admin:generatoragent'][0]['@'], 'rdf:resource');
         } else if (node['admin:generatoragent']['@'] && node['admin:generatoragent']['@']['rdf:resource']) {
-          meta.generator = utils.get(node['admin:generatoragent']['@'], 'rdf:resource');
+          meta.generator = get(node['admin:generatoragent']['@'], 'rdf:resource');
         }
       }
     }
     if (meta.categories.length) {
-      meta.categories = utils.unique(meta.categories);
+      meta.categories = unique(meta.categories);
     }
     if (!meta.link) {
-      if (meta['atom:id'] && utils.get(meta['atom:id']) && /^https?:/.test(utils.get(meta['atom:id']))) {
-        meta.link = utils.get(meta['atom:id']);
+      if (meta['atom:id'] && get(meta['atom:id']) && /^https?:/.test(get(meta['atom:id']))) {
+        meta.link = get(meta['atom:id']);
       }
     }
     if (!meta.xmlurl && this.options.feedurl) {
       meta.xmlurl = meta.xmlUrl = this.options.feedurl;
     }
-    meta.title = meta.title && utils.stripHtml(meta.title);
-    meta.description = meta.description && utils.stripHtml(meta.description);
+    meta.title = meta.title && stripHtml(meta.title);
+    meta.description = meta.description && stripHtml(meta.description);
   }
 
   return meta;
@@ -752,21 +761,21 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
   Object.keys(node).forEach(function(name){
     var el = node[name]
-      , attrs = utils.get(el, '@')
+      , attrs = get(el, '@')
       , enclosure;
     if (normalize) {
       switch(name){
       case('title'):
-        item.title = utils.get(el);
+        item.title = get(el);
         break;
       case('description'):
       case('summary'):
-        item.summary = utils.get(el);
-        if (!item.description) item.description = utils.get(el);
+        item.summary = get(el);
+        if (!item.description) item.description = get(el);
         break;
       case('content'):
       case('content:encoded'):
-        item.description = utils.get(el);
+        item.description = get(el);
         break;
       case('pubdate'):
       case('published'):
@@ -774,7 +783,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('modified'):
       case('updated'):
       case('dc:date'):
-        var date = utils.get(el) ? new Date(utils.get(el)) : null;
+        var date = get(el) ? new Date(get(el)) : null;
         if (!date) break;
         if (item.pubdate === null || name == 'pubdate' || name == 'published' || name == 'issued')
           item.pubdate = item.pubDate = date;
@@ -785,7 +794,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         if (Array.isArray(el)) {
           el.forEach(function (link){
             if (link['@']['href']) { // Atom
-              if (utils.get(link['@'], 'rel')) {
+              if (get(link['@'], 'rel')) {
                 if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
                 if (link['@']['rel'] == 'alternate' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
                 if (link['@']['rel'] == 'self' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
@@ -793,8 +802,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
                 if (link['@']['rel'] == 'enclosure') {
                   enclosure = {};
                   enclosure.url = link['@']['href'];
-                  enclosure.type = utils.get(link['@'], 'type');
-                  enclosure.length = utils.get(link['@'], 'length');
+                  enclosure.type = get(link['@'], 'type');
+                  enclosure.length = get(link['@'], 'length');
                   if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
                     item.enclosures.push(enclosure);
                   }
@@ -803,12 +812,12 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
                 item.link = link['@']['href'];
               }
             } else if (Object.keys(link['@']).length === 0) { // RSS
-              if (!item.link) item.link = utils.get(link);
+              if (!item.link) item.link = get(link);
             }
           });
         } else {
           if (el['@']['href']) { // Atom
-            if (utils.get(el['@'], 'rel')) {
+            if (get(el['@'], 'rel')) {
               if (el['@']['rel'] == 'canonical') item.origlink = el['@']['href'];
               if (el['@']['rel'] == 'alternate' && (!el['@']['type'] || el['@']['type'] == 'text/html') && !item.link) item.link = el['@']['href'];
               if (el['@']['rel'] == 'self' && (!el['@']['type'] || el['@']['type'] == 'text/html') && !item.link) item.link = el['@']['href'];
@@ -816,8 +825,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
               if (el['@']['rel'] == 'enclosure') {
                 enclosure = {};
                 enclosure.url = el['@']['href'];
-                enclosure.type = utils.get(el['@'], 'type');
-                enclosure.length = utils.get(el['@'], 'length');
+                enclosure.type = get(el['@'], 'type');
+                enclosure.length = get(el['@'], 'length');
                 if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
                   item.enclosures.push(enclosure);
                 }
@@ -826,14 +835,14 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
               item.link = el['@']['href'];
             }
           } else if (Object.keys(el['@']).length === 0) { // RSS
-            if (!item.link) item.link = utils.get(el);
+            if (!item.link) item.link = get(el);
           }
         }
         if (!item.guid) item.guid = item.link;
         break;
       case('guid'):
       case('id'):
-        item.guid = utils.get(el);
+        item.guid = get(el);
         // http://cyber.law.harvard.edu/rss/rss.html#ltguidgtSubelementOfLtitemgt
         // If the guid element has an attribute named "isPermaLink" with a value
         // of true, the reader may assume that it is a permalink to the item,
@@ -848,8 +857,8 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         break;
       case('author'):
         var author = {};
-        if (utils.get(el)) { // RSS
-          author = addressparser(utils.get(el))[0];
+        if (get(el)) { // RSS
+          author = addressparser(get(el))[0];
           if (author) {
             el['name'] = author.name;
             el['email'] = author.address;
@@ -857,33 +866,33 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           }
           // addressparser failed
           else {
-            item.author = utils.get(el);
+            item.author = get(el);
           }
         } else {
-          item.author = utils.get(el.name) || utils.get(el.email) || utils.get(el.uri);
+          item.author = get(el.name) || get(el.email) || get(el.uri);
         }
         break;
       case('dc:creator'):
-        item.author = utils.get(el);
+        item.author = get(el);
         break;
       case('comments'):
-        item.comments = utils.get(el);
+        item.comments = get(el);
         break;
       case('source'):
         if ('rss' == type) {
-          item.source['title'] = utils.get(el);
-          item.source['url'] = utils.get(el['@'], 'url');
+          item.source['title'] = get(el);
+          item.source['url'] = get(el['@'], 'url');
         } else if ('atom' == type) {
-          if (el.title && utils.get(el.title))
-            item.source['title'] = utils.get(el.title);
-          if (el.link && utils.get(el.link['@'], 'href'))
-          item.source['url'] = utils.get(el.link['@'], 'href');
+          if (el.title && get(el.title))
+            item.source['title'] = get(el.title);
+          if (el.link && get(el.link['@'], 'href'))
+          item.source['url'] = get(el.link['@'], 'href');
         }
         if (item.source['url'] && !this.meta.xmlurl) {
           this.meta.xmlurl = this.meta.xmlUrl = item.source['url'];
           if (this.xmlbase && this.xmlbase.length === 0) {
             this.xmlbase.unshift({ '#name': 'xml', '#': item.source['url']});
-            this.stack[0] = utils.reresolve(this.stack[0], item.source['url']);
+            this.stack[0] = reresolve(this.stack[0], item.source['url']);
           }
         }
         break;
@@ -891,9 +900,9 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         if (Array.isArray(el)) {
           el.forEach(function (enc){
             enclosure = {};
-            enclosure.url = utils.get(enc['@'], 'url');
-            enclosure.type = utils.get(enc['@'], 'type');
-            enclosure.length = utils.get(enc['@'], 'length');
+            enclosure.url = get(enc['@'], 'url');
+            enclosure.type = get(enc['@'], 'type');
+            enclosure.length = get(enc['@'], 'length');
             if (~indexOfObject(item.enclosures, enclosure, ['url', 'type'])) {
               item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
             } else {
@@ -902,9 +911,9 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           });
         } else {
           enclosure = {};
-          enclosure.url = utils.get(el['@'], 'url');
-          enclosure.type = utils.get(el['@'], 'type');
-          enclosure.length = utils.get(el['@'], 'length');
+          enclosure.url = get(el['@'], 'url');
+          enclosure.type = get(el['@'], 'type');
+          enclosure.length = get(el['@'], 'length');
           if (~indexOfObject(item.enclosures, enclosure, ['url', 'type'])) {
             item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
           } else {
@@ -916,18 +925,18 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         if (Array.isArray(el)) {
           el.forEach(function (enc){
             enclosure = {};
-            enclosure.url = utils.get(enc['@'], 'url');
-            enclosure.type = utils.get(enc['@'], 'type') || utils.get(enc['@'], 'medium');
-            enclosure.length = utils.get(enc['@'], 'filesize');
+            enclosure.url = get(enc['@'], 'url');
+            enclosure.type = get(enc['@'], 'type') || get(enc['@'], 'medium');
+            enclosure.length = get(enc['@'], 'filesize');
             if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
               item.enclosures.push(enclosure);
             }
           });
         } else {
           enclosure = {};
-          enclosure.url = utils.get(el['@'], 'url');
-          enclosure.type = utils.get(el['@'], 'type') || utils.get(el['@'], 'medium');
-          enclosure.length = utils.get(el['@'], 'filesize');
+          enclosure.url = get(el['@'], 'url');
+          enclosure.type = get(el['@'], 'type') || get(el['@'], 'medium');
+          enclosure.length = get(el['@'], 'filesize');
           if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
             item.enclosures.push(enclosure);
           }
@@ -948,61 +957,61 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         if (Array.isArray(el)) {
           el.forEach(function (category){
             if ('category' == name && 'atom' == type) {
-              if (category['@'] && utils.get(category['@'], 'term')) item.categories.push(utils.get(category['@'], 'term'));
-            } else if ('category' == name && utils.get(category) && 'rss' == type) {
-              item.categories.push(utils.get(category).trim());
-            } else if ('dc:subject' == name && utils.get(category)) {
-              _categories = utils.get(category).split(' ').map(function (cat){ return cat.trim(); });
+              if (category['@'] && get(category['@'], 'term')) item.categories.push(get(category['@'], 'term'));
+            } else if ('category' == name && get(category) && 'rss' == type) {
+              item.categories.push(get(category).trim());
+            } else if ('dc:subject' == name && get(category)) {
+              _categories = get(category).split(' ').map(function (cat){ return cat.trim(); });
               if (_categories.length) item.categories = item.categories.concat(_categories);
             } else if ('itunes:category' == name) {
-              if (category['@'] && utils.get(category['@'], 'text')) _category = utils.get(category['@'], 'text');
+              if (category['@'] && get(category['@'], 'text')) _category = get(category['@'], 'text');
               if (category[name]) {
                 if (Array.isArray(category[name])) {
                   category[name].forEach(function (subcategory){
-                    if (subcategory['@'] && utils.get(subcategory['@'], 'text')) item.categories.push(_category + '/' + utils.get(subcategory['@'], 'text'));
+                    if (subcategory['@'] && get(subcategory['@'], 'text')) item.categories.push(_category + '/' + get(subcategory['@'], 'text'));
                   });
                 } else {
-                  if (category[name]['@'] && utils.get(category[name]['@'], 'text'))
-                    item.categories.push(_category + '/' + utils.get(category[name]['@'], 'text'));
+                  if (category[name]['@'] && get(category[name]['@'], 'text'))
+                    item.categories.push(_category + '/' + get(category[name]['@'], 'text'));
                 }
               } else {
                 item.categories.push(_category);
               }
             } else if ('media:category' == name) {
-              item.categories.push(utils.get(category));
+              item.categories.push(get(category));
             }
           });
         } else {
           if ('category' == name && 'atom' == type) {
-            if (utils.get(el['@'], 'term')) item.categories.push(utils.get(el['@'], 'term'));
-          } else if ('category' == name && utils.get(el) && 'rss' == type) {
-            item.categories.push(utils.get(el).trim());
-          } else if ('dc:subject' == name && utils.get(el)) {
-            _categories = utils.get(el).split(' ').map(function (cat){ return cat.trim(); });
+            if (get(el['@'], 'term')) item.categories.push(get(el['@'], 'term'));
+          } else if ('category' == name && get(el) && 'rss' == type) {
+            item.categories.push(get(el).trim());
+          } else if ('dc:subject' == name && get(el)) {
+            _categories = get(el).split(' ').map(function (cat){ return cat.trim(); });
             if (_categories.length) item.categories = item.categories.concat(_categories);
           } else if ('itunes:category' == name) {
-            if (el['@'] && utils.get(el['@'], 'text')) _category = utils.get(el['@'], 'text');
+            if (el['@'] && get(el['@'], 'text')) _category = get(el['@'], 'text');
             if (el[name]) {
               if (Array.isArray(el[name])) {
                 el[name].forEach(function (subcategory){
-                  if (subcategory['@'] && utils.get(subcategory['@'], 'text')) item.categories.push(_category + '/' + utils.get(subcategory['@'], 'text'));
+                  if (subcategory['@'] && get(subcategory['@'], 'text')) item.categories.push(_category + '/' + get(subcategory['@'], 'text'));
                 });
               } else {
-                if (el[name]['@'] && utils.get(el[name]['@'], 'text'))
-                  item.categories.push(_category + '/' + utils.get(el[name]['@'], 'text'));
+                if (el[name]['@'] && get(el[name]['@'], 'text'))
+                  item.categories.push(_category + '/' + get(el[name]['@'], 'text'));
               }
             } else {
               item.categories.push(_category);
             }
           } else if ('media:category' == name) {
-            item.categories.push(utils.get(el));
+            item.categories.push(get(el));
           }
         }
         break;
       case('feedburner:origlink'):
       case('pheedo:origlink'):
         if (!item.origlink) {
-          item.origlink = utils.get(el);
+          item.origlink = get(el);
         }
         break;
       } // switch end
@@ -1016,35 +1025,35 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
 
   if (normalize) {
     if (!item.description) {
-      if (node['itunes:summary']) item.description = utils.get(node['itunes:summary']);
+      if (node['itunes:summary']) item.description = get(node['itunes:summary']);
     }
     if (!item.author) {
-      if (node['itunes:author']) item.author = utils.get(node['itunes:author']);
-      else if (node['itunes:owner'] && node['itunes:owner']['itunes:name']) item.author = utils.get(node['itunes:owner']['itunes:name']);
-      else if (node['dc:publisher']) item.author = utils.get(node['dc:publisher']);
+      if (node['itunes:author']) item.author = get(node['itunes:author']);
+      else if (node['itunes:owner'] && node['itunes:owner']['itunes:name']) item.author = get(node['itunes:owner']['itunes:name']);
+      else if (node['dc:publisher']) item.author = get(node['dc:publisher']);
     }
     if (!item.image.url) {
-      if (node['itunes:image']) item.image.url = utils.get(node['itunes:image']['@'], 'href');
+      if (node['itunes:image']) item.image.url = get(node['itunes:image']['@'], 'href');
       else if (node['media:thumbnail']) {
         if (Array.isArray(node['media:thumbnail'])) {
-          item.image.url = utils.get(node['media:thumbnail'][0]['@'], 'url');
+          item.image.url = get(node['media:thumbnail'][0]['@'], 'url');
         } else {
-          item.image.url = utils.get(node['media:thumbnail']['@'], 'url');
+          item.image.url = get(node['media:thumbnail']['@'], 'url');
         }
       }
-      else if (node['media:content'] && node['media:content']['media:thumbnail']) item.image.url = utils.get(node['media:content']['media:thumbnail']['@'], 'url');
-      else if (node['media:group'] && node['media:group']['media:thumbnail']) item.image.url = utils.get(node['media:group']['media:thumbnail']['@'], 'url');
-      else if (node['media:group'] && node['media:group']['media:content'] && node['media:group']['media:content']['media:thumbnail']) item.image.url = utils.get(node['media:group']['media:content']['media:thumbnail']['@'], 'url');
+      else if (node['media:content'] && node['media:content']['media:thumbnail']) item.image.url = get(node['media:content']['media:thumbnail']['@'], 'url');
+      else if (node['media:group'] && node['media:group']['media:thumbnail']) item.image.url = get(node['media:group']['media:thumbnail']['@'], 'url');
+      else if (node['media:group'] && node['media:group']['media:content'] && node['media:group']['media:content']['media:thumbnail']) item.image.url = get(node['media:group']['media:content']['media:thumbnail']['@'], 'url');
     }
     if (item.categories.length) {
-      item.categories = utils.unique(item.categories);
+      item.categories = unique(item.categories);
     }
     if (!item.link) {
       if (item.guid && /^https?:/.test(item.guid)) {
         item.link = item.guid;
       }
     }
-    item.title = item.title && utils.stripHtml(item.title);
+    item.title = item.title && stripHtml(item.title);
   }
   return item;
 };
