@@ -248,7 +248,15 @@ FeedParser.prototype.handleCloseTag = function (el){
     baseurl = this.xmlbase[0]['#'];
   }
 
-  if (baseurl && (node['#local'] === 'logo' || node['#local'] === 'icon') && node['#type'] === 'atom') {
+  var isResolveableNode = false;
+  if (node['#type'] === 'atom' && (node['#local'] === 'logo' || node['#local'] === 'icon')) {
+    isResolveableNode = true;
+  }
+  if (this.meta['#type'] === 'rss' && get(this.stack[0], '#local') === 'image' && (node['#local'] === 'url' || node['#local'] === 'link')) {
+    isResolveableNode = true;
+  }
+
+  if (baseurl && isResolveableNode) {
     // Apply xml:base to these elements as they appear
     // rather than leaving it to the ultimate parser
     n['#'] = resolve(baseurl, n['#']);

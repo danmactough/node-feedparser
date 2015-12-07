@@ -28,4 +28,20 @@ describe('xmlbase', function(){
       });
   });
 
+  it('should handle relative urls in image elements', function (done) {
+    var feed = __dirname + '/feeds/relative-image-url.xml';
+    var options = { feedurl: 'https://www.virtualbox.org/ticket/10860' };
+
+    fs.createReadStream(feed).pipe(new FeedParser(options))
+      .on('meta', function (meta) {
+        assert.equal('https://www.virtualbox.org/graphics/vbox_logo2_gradient.png', meta.image.url);
+        assert.equal('https://www.virtualbox.org/ticket/10860', meta.image.link);
+        done();
+      })
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
+      });
+  });
+
 });
