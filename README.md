@@ -3,6 +3,8 @@
 [![NPM](https://nodei.co/npm/feedparser.png?downloads=true&stars=true)](https://nodei.co/npm/feedparser/)
 #  Feedparser - Robust RSS, Atom, and RDF feed parsing in Node.js
 
+[![Join the chat at https://gitter.im/danmactough/node-feedparser](https://badges.gitter.im/danmactough/node-feedparser.svg)](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 This module adds methods for RSS, Atom, and RDF feed parsing in node.js using
 Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
 
