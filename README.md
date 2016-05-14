@@ -1,52 +1,24 @@
-[![Build Status](https://secure.travis-ci.org/danmactough/node-feedparser.png?branch=master)](https://travis-ci.org/danmactough/node-feedparser)
-
-[![NPM](https://nodei.co/npm/feedparser.png?downloads=true&stars=true)](https://nodei.co/npm/feedparser/)
 #  Feedparser - Robust RSS, Atom, and RDF feed parsing in Node.js
 
 [![Join the chat at https://gitter.im/danmactough/node-feedparser](https://badges.gitter.im/danmactough/node-feedparser.svg)](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This module adds methods for RSS, Atom, and RDF feed parsing in node.js using
-Isaac Schlueter's [sax](https://github.com/isaacs/sax-js) parser.
+[![Build Status](https://secure.travis-ci.org/danmactough/node-feedparser.png?branch=master)](https://travis-ci.org/danmactough/node-feedparser)
 
-Feedparser has a couple features you don't usually see:
+[![NPM](https://nodei.co/npm/feedparser.png?downloads=true&stars=true)](https://nodei.co/npm/feedparser/)
+
+Feedparser is for parsing RSS, Atom, and RDF feeds in node.js.
+
+It has a couple features you don't usually see:
 
 1. It resolves relative URLs (such as those seen in Tim Bray's "ongoing" [feed](http://www.tbray.org/ongoing/ongoing.atom)).
 2. It properly handles XML namespaces (including those in sadistic feeds
 that define a non-default namespace for the main feed elements).
-
-## Requirements
-
-- [sax](https://github.com/isaacs/sax-js)
-- [addressparser](https://github.com/andris9/addressparser)
-- [array-indexofobject](https://github.com/danmactough/node-array-indexofobject)
-- [readable-stream](https://github.com/isaacs/readable-stream)
 
 ## Installation
 
 ```bash
 npm install feedparser
 ```
-
-## Changes since v0.15.x
-
-- The libxml-like helper methods have been removed. There is now just one input
-interface: the stream interface.
-
-- Events:
-
-    - `304`, `response` - removed, as Feedparser no longer fetches urls
-    - `article`, `complete` - removed; use the stream interface
-    - `data` - all readable streams will emit a `data` event, but this puts the
-      stream into "old" v0.8-style push streams (if you're using v0.10, but not
-      v0.12)
-    - `end` - stream behavior dictates that the `end` event will never fire if
-      you don't read any data from the stream; you can kick the Feedparser stream
-      to work like an "old" v0.8-style push stream (and get the old `end` event
-      behavior) by calling `.resume()`.
-
-- `SAXErrors` are emitted as `error` events. By default, they are automatically
-resumed. Pass `{ resume_saxerror: false }` as an option if you want to manually
-handle `SAXErrors` (abort parsing, perhaps).
 
 ## Usage
 
@@ -210,7 +182,7 @@ e.g., `meta['atom:subtitle']['#']`.
 ## Help
 
 - Don't be afraid to report an [issue](https://github.com/danmactough/node-feedparser/issues).
-- You can drop by IRC, too: [#node-feedparser on freenode](http://webchat.freenode.net/?channels=node-feedparser&uio=d4).
+- You can drop by [Gitter](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), too.
 
 ## Contributors
 
@@ -223,7 +195,7 @@ the original inspiration and a starting point.
 
 (The MIT License)
 
-Copyright (c) 2011-2015 Dan MacTough and contributors
+Copyright (c) 2011-2016 Dan MacTough and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
