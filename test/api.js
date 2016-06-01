@@ -54,4 +54,31 @@ describe('api', function () {
       });
   });
 
+  it('should pass customData', function (done) {
+    var meta
+      , item
+      , options = { customData: { "hello": "world" }};  
+
+    fs.createReadStream(feed).pipe(FeedParser(options))
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
+      })
+      .on('meta', function (_meta) {
+        meta = _meta;
+      })
+      .on('readable', function () {
+        var _item = this.read();
+        item || (item = _item);
+      })
+      .on('end', function () {
+        assert(meta);
+        assert(meta.customData);
+        assert.equal(meta.customData.hello, "world");
+        assert(item.meta.customData);
+        assert.equal(item.meta.customData.hello, "world");
+        done();
+      });
+  })
+
 });
