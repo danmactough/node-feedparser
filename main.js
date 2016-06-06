@@ -14,7 +14,7 @@ var sax = require('sax')
   , indexOfObject = require('array-indexofobject')
   , util = require('util')
   , TransformStream = require('readable-stream').Transform
-  , utils = require('./utils');
+  , utils = require('./lib/utils');
 
 /**
  * FeedParser constructor.
