@@ -17,7 +17,7 @@ var sax = require('sax')
   , utils = require('./utils');
 
 /**
- * FeedParser constructor. Most apps will only use one instance.
+ * FeedParser constructor.
  *
  * Exposes a duplex (transform) stream to parse a feed.
  *
