@@ -201,7 +201,7 @@ exports.reresolve = reresolve;
 */
 
 function stripHtml (str) {
-    return str.replace(/<.*?>/g, '');
+  return str.replace(/<.*?>/g, '');
 }
 
 exports.stripHtml = stripHtml;

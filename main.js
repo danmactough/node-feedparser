@@ -5,7 +5,7 @@
  http://yabfog.com
 
 **********************************************************************/
-/*jshint sub:true, laxcomma:true */
+
 /**
  * Module dependencies.
  */
@@ -254,12 +254,12 @@ FeedParser.prototype.handleCloseTag = function (el){
 
       // Add xhtml data to the container element
       n['#'] += this.xhtml['#'].trim();
-        // Clear xhtml nodes from the tree
-        for (var key in n) {
-          if (key != '@' && key != '#') {
-            delete n[key];
-          }
+      // Clear xhtml nodes from the tree
+      for (var key in n) {
+        if (key != '@' && key != '#') {
+          delete n[key];
         }
+      }
       this.xhtml = {};
       this.in_xhtml = false;
     } else { // Somewhere in the middle of the XHTML
@@ -609,7 +609,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
                   });
                 }
                 else if (category[name]['@'] && (_categoryValue = utils.safeTrim(utils.get(category[name]['@'], 'text')))) {
-                    meta.categories.push(_category + '/' + _categoryValue);
+                  meta.categories.push(_category + '/' + _categoryValue);
                 }
               }
               else if (_category) {
@@ -877,7 +877,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           if (el.title && utils.get(el.title))
             item.source['title'] = utils.get(el.title);
           if (el.link && utils.get(el.link['@'], 'href'))
-          item.source['url'] = utils.get(el.link['@'], 'href');
+            item.source['url'] = utils.get(el.link['@'], 'href');
         }
         if (item.source['url'] && !this.meta.xmlurl) {
           this.meta.xmlurl = this.meta.xmlUrl = item.source['url'];

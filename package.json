@@ -33,6 +33,7 @@
     "readable-stream": "~1.0.17"
   },
   "devDependencies": {
+    "eslint": "^2.11.1",
     "iconv": "2.1.x",
     "mocha": "~2.1.0",
     "request": "2.27.x"
