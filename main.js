@@ -1,8 +1,8 @@
 /**********************************************************************
  node-feedparser - A robust RSS, Atom, RDF parser for node.
  http://github.com/danmactough/node-feedparser
- Copyright (c) 2011, 2012, 2013 Dan MacTough and contributors
- http://yabfog.com
+ Copyright (c) 2011-2016 Dan MacTough and contributors
+ http://mact.me
 
 **********************************************************************/
 
