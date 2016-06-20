@@ -103,7 +103,7 @@ FeedParser.prototype.init = function (){
  * Parse options
  */
 FeedParser.prototype.parseOpts = function (options) {
-  this.options = options || {};
+  this.options = options ? util._extend({}, options) : {};
   if (!('strict' in this.options)) this.options.strict = false;
   if (!('normalize' in this.options)) this.options.normalize = true;
   if (!('addmeta' in this.options)) this.options.addmeta = true;
