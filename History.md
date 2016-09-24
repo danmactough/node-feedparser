@@ -1,4 +1,12 @@
 
+1.1.5 / 2016-09-24
+==================
+
+  * Handles line breaks in xml declaration.
+  * Update README to remove suggestion to use IRC
+  * Add Gitter badge
+  * Update examples to work with current versions of request module
+
 1.1.4 / 2015-10-24
 ==================
 
