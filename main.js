@@ -412,6 +412,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     meta.cloud = {};
     meta.image = {};
     meta.categories = [];
+    meta.customData = null;
   }
 
   Object.keys(node).forEach(function(name){
@@ -728,6 +729,10 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
     }
     meta.title = meta.title && utils.stripHtml(meta.title);
     meta.description = meta.description && utils.stripHtml(meta.description);
+    
+    if(this.options && this.options.customData) {
+      meta.customData = this.options.customData;
+    }
   }
 
   return meta;

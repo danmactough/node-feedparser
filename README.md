@@ -90,6 +90,10 @@ for a very thorough working example.
   behavior. If you want total control over handling these errors and optionally
   aborting parsing the feed, use this option.
 
+- `customData` - Set to any arbitrary custom object that you wish to pass. Unless
+  `normalize` or `addmeta` are set to false, this object will be available to each 
+  parsed article through the `meta` property.
+
 ## Examples
 
 See the [`examples`](examples/) directory.
