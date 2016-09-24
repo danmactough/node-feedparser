@@ -146,7 +146,7 @@ FeedParser.prototype.handleError = function (e){
 
 FeedParser.prototype.handleProcessingInstruction = function (node) {
   if (node.name !== 'xml') return;
-  this.meta['#xml'] = node.body.trim().split(' ').reduce(function (map, attr) {
+  this.meta['#xml'] = node.body.replace(/(\r\n|\n|\r)/gm," ").trim().split(' ').reduce(function (map, attr) {
     var parts = attr.split('=');
     map[parts[0]] = parts[1] && parts[1].length > 2 && parts[1].match(/^.(.*?).$/)[1];
     return map;
