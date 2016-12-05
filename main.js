@@ -210,7 +210,9 @@ FeedParser.prototype.handleCloseTag = function (el){
     , item
     , baseurl
     ;
+
   var n = this.stack.shift();
+
   el = el.split(':');
 
   if (el.length > 1 && el[0] === n['#prefix']) {
@@ -279,7 +281,7 @@ FeedParser.prototype.handleCloseTag = function (el){
       }
     }
   }
-
+    var pushed = false;
   if (node['#name'] === 'item' ||
       node['#name'] === 'entry' ||
       (node['#local'] === 'item' && (node['#prefix'] === '' || node['#type'] === 'rdf')) ||
@@ -292,15 +294,19 @@ FeedParser.prototype.handleCloseTag = function (el){
         this._emitted_meta = true;
       }
     }
+
     if (!baseurl && this.xmlbase && this.xmlbase.length) { // handleMeta was able to infer a baseurl without xml:base or options.feedurl
       n = utils.reresolve(n, this.xmlbase[0]['#']);
     }
+
     item = this.handleItem(n, this.meta['#type'], this.options);
     if (this.options.addmeta) {
       item.meta = this.meta;
     }
     if (this.meta.author && !item.author) item.author = this.meta.author;
     this.push(item);
+
+      pushed = true;
   } else if (!this.meta.title && // We haven't yet parsed all the metadata
               (node['#name'] === 'channel' ||
                node['#name'] === 'feed' ||
@@ -321,12 +327,14 @@ FeedParser.prototype.handleCloseTag = function (el){
     } else {
       stdEl = node['#local'] || node['#name'];
     }
+    if(pushed) return;
+
     if (!this.stack[0].hasOwnProperty(stdEl)) {
-      this.stack[0][stdEl] = n;
+        this.stack[0][stdEl] = n;
     } else if (this.stack[0][stdEl] instanceof Array) {
-      this.stack[0][stdEl].push(n);
+        this.stack[0][stdEl].push(n);
     } else {
-      this.stack[0][stdEl] = [this.stack[0][stdEl], n];
+        this.stack[0][stdEl] = [this.stack[0][stdEl], n];
     }
   }
 };
@@ -842,7 +850,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         // isPermaLink is optional, its default value is true. If its value is
         // false, the guid may not be assumed to be a url, or a url to anything
         // in particular.
-        if (item.guid && type == 'rss' && name == 'guid' && !(attrs.ispermalink && attrs.ispermalink.match(/false/i))) {
+        if (item.guid && type == 'rss' && name == 'guid' && attrs.ispermalink !== 'false') {
           item.permalink = item.guid;
         }
         break;
@@ -1046,6 +1054,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
     }
     item.title = item.title && utils.stripHtml(item.title);
   }
+
   return item;
 };
 
