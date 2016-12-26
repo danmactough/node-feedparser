@@ -37,6 +37,9 @@
     "mocha": "~2.1.0",
     "request": "2.27.x"
   },
+  "publishConfig": {
+    "tag": "1.x"
+  },
   "scripts": {
     "test": "mocha"
   }
