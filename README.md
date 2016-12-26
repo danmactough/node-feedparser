@@ -4,14 +4,14 @@
 
 [![Build Status](https://secure.travis-ci.org/danmactough/node-feedparser.png?branch=master)](https://travis-ci.org/danmactough/node-feedparser)
 
-[![NPM](https://nodei.co/npm/feedparser.png?downloads=true&stars=true)](https://nodei.co/npm/feedparser/)
+[![NPM](https://nodei.co/npm/feedparser.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/feedparser/)
 
 Feedparser is for parsing RSS, Atom, and RDF feeds in node.js.
 
-It has a couple features you don't usually see:
+It has a couple features you don't usually see in other feed parsers:
 
 1. It resolves relative URLs (such as those seen in Tim Bray's "ongoing" [feed](http://www.tbray.org/ongoing/ongoing.atom)).
-2. It properly handles XML namespaces (including those in sadistic feeds
+2. It properly handles XML namespaces (including those in unusual feeds
 that define a non-default namespace for the main feed elements).
 
 ## Installation
@@ -22,37 +22,43 @@ npm install feedparser
 
 ## Usage
 
-The easiest way to use feedparser is to just give it a [readable stream](http://nodejs.org/api/stream.html#stream_readable_stream).
-It will then return a readable object stream.
+This example is just to briefly demonstrate basic concepts.
+
+**Please** also review the [compressed example](examples/compressed.js) for a
+thorough working example that is a suitable starting point for your app.
 
 ```js
 
-var FeedParser = require('feedparser')
-  , request = require('request');
+var FeedParser = require('feedparser');
+var request = require('request'); // for fetching the feed
 
 var req = request('http://somefeedurl.xml')
-  , feedparser = new FeedParser([options]);
+var feedparser = new FeedParser([options]);
 
 req.on('error', function (error) {
   // handle any request errors
 });
+
 req.on('response', function (res) {
-  var stream = this;
+  var stream = this; // `this` is `req`, which is a stream
 
-  if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-
-  stream.pipe(feedparser);
+  if (res.statusCode !== 200) {
+    this.emit('error', new Error('Bad status code'));
+  }
+  else {
+    stream.pipe(feedparser);
+  }
 });
 
-
-feedparser.on('error', function(error) {
+feedparser.on('error', function (error) {
   // always handle errors
 });
-feedparser.on('readable', function() {
+
+feedparser.on('readable', function () {
   // This is where the action is!
-  var stream = this
-    , meta = this.meta // **NOTE** the "meta" is always available in the context of the feedparser instance
-    , item;
+  var stream = this; // `this` is `feedparser`, which is a stream
+  var meta = this.meta; // **NOTE** the "meta" is always available in the context of the feedparser instance
+  var item;
 
   while (item = stream.read()) {
     console.log(item);
@@ -60,9 +66,6 @@ feedparser.on('readable', function() {
 });
 
 ```
-
-I *strongly* encourage you to take a look at the [iconv example](examples/iconv.js)
-for a very thorough working example.
 
 ### options
 
