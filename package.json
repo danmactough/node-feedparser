@@ -43,6 +43,8 @@
     "request": "~2.79.0"
   },
   "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
     "test": "mocha"
   }
 }
