@@ -1,4 +1,25 @@
 
+2.0.0 / 2016-12-26
+==================
+
+  * Make bin script useful as command line tool and rename to "feedparser"
+  * Add lint script and run lint before tests
+  * Update README to clarify the importance of the compressed example
+  * Drop support for Node 0.10 and 0.12
+  * Fix xml declaration parsing to handle extra whitespace
+  * Fix assignment by reference in options parsing
+  * Remove unnecessary method
+  * Replace bespoke helpers with lodash equivalents where possible
+  * Move feedparser to lib
+  * Move helpers lib
+  * Remove weird comment
+  * Update copyright
+  * Update addressparser v1.0.1
+  * Update dependecy readable-stream v2.2.2 and update tests to conform to api change
+  * Update dev-dependency (iconv v2.2.1)
+  * Update dev-dependency (mocha v3.2.0)
+  * Add eslint/editorconfig and linting
+
 1.1.5 / 2016-09-24
 ==================
 
