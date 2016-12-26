@@ -33,7 +33,7 @@
     "readable-stream": "~1.0.17"
   },
   "devDependencies": {
-    "iconv": "2.1.x",
+    "iconv": "2.2.1",
     "mocha": "^3.2.0",
     "request": "2.27.x"
   },
