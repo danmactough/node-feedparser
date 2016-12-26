@@ -1,4 +1,13 @@
 
+1.1.6 / 2016-12-26
+==================
+
+  * Update dev-dependency (iconv v2.2.1)
+  * Update dev-dependency (mocha v3.2.0)
+  * Fix xml declaration parsing to handle extra whitespace
+  * Fix assignment by reference in options parsing
+  * Update publish config for multiple distributions
+
 1.1.5 / 2016-09-24
 ==================
 
