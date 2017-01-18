@@ -27,7 +27,8 @@
       <media:credit scheme="urn:ebu">© Bettmann/CORBIS</media:credit>
       <media:description type="html">Black Dahlia: A head shot of Elizabeth Short who had been an aspiring actress until her untimely murder</media:description>
       <media:thumbnail url="http://i.mol.im/i/pix/2013/02/03/article-2272640-174FCEE2000005DC-697_154x115.jpg" width="154" height="115" />
-      <media:content type="image/jpeg" url="http://i.mol.im/i/pix/2013/02/03/article-2272640-174FCEE2000005DC-697_154x115.jpg" />
+      <media:content type="image/jpeg" url="http://i.mol.im/i/pix/2013/02/03/article-2272640-174FCEE2000005DC-697_154x115.jpg" width="154" height="115"/>
+      <media:content type="video/mp4" url="http://i.mol.im/i/pix/2013/02/03/article-2272640-174FCEE2000005DC-697.mp4" width="154" height="115" bitrate="3000"/>
     </item>
   </channel>
 </rss>
