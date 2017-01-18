@@ -1,4 +1,9 @@
 
+2.1.0 / 2017-01-18
+==================
+
+  * Keep optional media:content attributes in the enclosures default property
+
 2.0.0 / 2016-12-26
 ==================
 
