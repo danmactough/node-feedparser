@@ -48,6 +48,7 @@
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "mocha"
+    "test": "mocha",
+    "version": "git changelog ; git add History.md"
   }
 }
