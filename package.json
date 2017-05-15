@@ -42,7 +42,7 @@
   "devDependencies": {
     "eslint": "^3.17.1",
     "iconv": "2.2.2",
-    "mocha": "^3.2.0",
+    "mocha": "^3.4.1",
     "request": "~2.81.0"
   },
   "scripts": {
