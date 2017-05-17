@@ -13,9 +13,6 @@ fs.createReadStream(feed)
     console.error(error);
   })
   .pipe(new FeedParser())
-  .on('error', function (error) {
-    console.error(error);
-  })
   .on('meta', function (meta) {
     console.log('===== %s =====', meta.title);
   })
