@@ -443,63 +443,37 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
       case('link'):
       case('atom:link'):
       case('atom10:link'):
-        if (Array.isArray(el)) {
-          el.forEach(function (link){
-            if (link['@']['href']) { // Atom
-              if (_.get(link['@'], 'rel')) {
-                if (link['@']['rel'] == 'alternate') {
-                  if (!meta.link) meta.link = link['@']['href'];
-                }
-                else if (link['@']['rel'] == 'self') {
-                  meta.xmlurl = meta.xmlUrl = link['@']['href'];
-                  if (this.xmlbase && this.xmlbase.length === 0) {
-                    this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
-                    this.stack[0] = _.reresolve(this.stack[0], meta.xmlurl);
-                  }
-                }
-                else if (link['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
-                  meta.cloud.type = 'hub';
-                  meta.cloud.href = link['@']['href'];
-                }
-              } else {
+      	if (!Array.isArray(el)) {
+          el = [el];
+      	}
+        el.forEach(function (link){
+          if (link['@']['href']) { // Atom
+            if (_.get(link['@'], 'rel')) {
+              if (link['@']['rel'] == 'alternate') {
                 if (!meta.link) meta.link = link['@']['href'];
               }
-            } else if (Object.keys(link['@']).length === 0) { // RSS
-              meta.link = _.get(link);
-            }
-            if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
-              this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
-              this.stack[0] = _.reresolve(this.stack[0], meta.link);
-            }
-          }, this);
-        } else {
-          if (el['@']['href']) { // Atom
-            if (_.get(el['@'], 'rel')) {
-              if (el['@']['rel'] == 'alternate') {
-                if (!meta.link) meta.link = el['@']['href'];
-              }
-              else if (el['@']['rel'] == 'self') {
-                meta.xmlurl = meta.xmlUrl = el['@']['href'];
+              else if (link['@']['rel'] == 'self') {
+                meta.xmlurl = meta.xmlUrl = link['@']['href'];
                 if (this.xmlbase && this.xmlbase.length === 0) {
                   this.xmlbase.unshift({ '#name': 'xml', '#': meta.xmlurl});
                   this.stack[0] = _.reresolve(this.stack[0], meta.xmlurl);
                 }
               }
-              else if (el['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
+              else if (link['@']['rel'] == 'hub' && !(meta.cloud.href || meta.cloud.domain)) {
                 meta.cloud.type = 'hub';
-                meta.cloud.href = el['@']['href'];
+                meta.cloud.href = link['@']['href'];
               }
             } else {
-              meta.link = el['@']['href'];
+              if (!meta.link) meta.link = link['@']['href'];
             }
-          } else if (Object.keys(el['@']).length === 0) { // RSS
-            if (!meta.link) meta.link = _.get(el);
+          } else if (Object.keys(link['@']).length === 0) { // RSS
+            meta.link = _.get(link);
           }
           if (meta.link && this.xmlbase && this.xmlbase.length === 0) {
             this.xmlbase.unshift({ '#name': 'xml', '#': meta.link});
             this.stack[0] = _.reresolve(this.stack[0], meta.link);
           }
-        }
+        }, this);
         break;
       case('managingeditor'):
       case('webmaster'):
@@ -579,88 +553,50 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         var _category = ''
           , _categories = []
           ;
-        if (Array.isArray(el)) {
-          el.forEach(function (category){
-            var _categoryValue;
-            if ('category' == name && 'atom' == type) {
-              if (category['@'] && (_categoryValue = _.safeTrim(_.get(category['@'], 'term')))) {
-                meta.categories.push(_categoryValue);
-              }
-            }
-            else if ('category' == name && 'rss' == type){
-              if ((_categoryValue = _.safeTrim(_.get(category)))) {
-                meta.categories.push(_categoryValue);
-              }
-            }
-            else if ('dc:subject' == name && (_categoryValue = _.safeTrim(_.get(category)))) {
-              _categories = _categoryValue.split(' ').map(function (cat){ return cat.trim(); });
-              if (_categories.length) {
-                meta.categories = meta.categories.concat(_categories);
-              }
-            }
-            else if ('itunes:category' == name) {
-              if (category['@'] && _.safeTrim(_.get(category['@'], 'text'))) _category = _.safeTrim(_.get(category['@'], 'text'));
-              if (category[name]) {
-                if (Array.isArray(category[name])) {
-                  category[name].forEach(function (subcategory){
-                    var _subcategoryValue;
-                    if (subcategory['@'] && (_subcategoryValue = _.safeTrim(_.get(subcategory['@'], 'text')))) {
-                      meta.categories.push(_category + '/' + _subcategoryValue);
-                    }
-                  });
-                }
-                else if (category[name]['@'] && (_categoryValue = _.safeTrim(_.get(category[name]['@'], 'text')))) {
-                  meta.categories.push(_category + '/' + _categoryValue);
-                }
-              }
-              else if (_category) {
-                meta.categories.push(_category);
-              }
-            }
-            else if ('media:category' == name && (_categoryValue = _.safeTrim(_.get(category)))) {
+        if (!Array.isArray(el)) {
+      		el = [el];
+      	}
+        el.forEach(function (category){
+          var _categoryValue;
+          if ('category' == name && 'atom' == type) {
+            if (category['@'] && (_categoryValue = _.safeTrim(_.get(category['@'], 'term')))) {
               meta.categories.push(_categoryValue);
             }
-          });
-        } else {
-          if ('category' == name && 'atom' == type) {
-            if ((_category = _.safeTrim(_.get(el['@'], 'term')))) {
-              meta.categories.push(_category);
+          }
+          else if ('category' == name && 'rss' == type){
+            if ((_categoryValue = _.safeTrim(_.get(category)))) {
+              meta.categories.push(_categoryValue);
             }
           }
-          else if ('category' == name && 'rss' == type) {
-            if ((_category = _.safeTrim(_.get(el)))) {
-              meta.categories.push(_category);
-            }
-          }
-          else if ('dc:subject' == name && (_category = _.safeTrim(_.get(el)))) {
-            _categories = _category.split(' ').map(function (cat){ return cat.trim(); });
+          else if ('dc:subject' == name && (_categoryValue = _.safeTrim(_.get(category)))) {
+            _categories = _categoryValue.split(' ').map(function (cat){ return cat.trim(); });
             if (_categories.length) {
               meta.categories = meta.categories.concat(_categories);
             }
           }
           else if ('itunes:category' == name) {
-            if (el['@'] && _.safeTrim(_.get(el['@'], 'text'))) _category = _.safeTrim(_.get(el['@'], 'text'));
-            if (el[name]) {
-              if (Array.isArray(el[name])) {
-                el[name].forEach(function (subcategory){
+            if (category['@'] && _.safeTrim(_.get(category['@'], 'text'))) _category = _.safeTrim(_.get(category['@'], 'text'));
+            if (category[name]) {
+              if (Array.isArray(category[name])) {
+                category[name].forEach(function (subcategory){
                   var _subcategoryValue;
                   if (subcategory['@'] && (_subcategoryValue = _.safeTrim(_.get(subcategory['@'], 'text')))) {
                     meta.categories.push(_category + '/' + _subcategoryValue);
                   }
                 });
               }
-              else if (el[name]['@'] && (_category = _.safeTrim(_.get(el[name]['@'], 'text')))) {
-                meta.categories.push(_category + '/' + _category);
+              else if (category[name]['@'] && (_categoryValue = _.safeTrim(_.get(category[name]['@'], 'text')))) {
+                meta.categories.push(_category + '/' + _categoryValue);
               }
             }
             else if (_category) {
               meta.categories.push(_category);
             }
           }
-          else if ('media:category' == name && (_category = _.safeTrim(_.get(el)))) {
-            meta.categories.push(_.get(el));
+          else if ('media:category' == name && (_categoryValue = _.safeTrim(_.get(category)))) {
+            meta.categories.push(_categoryValue);
           }
-        }
+        });
         break;
       } // switch end
     }
@@ -783,53 +719,31 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           item.date = date;
         break;
       case('link'):
-        if (Array.isArray(el)) {
-          el.forEach(function (link){
-            if (link['@']['href']) { // Atom
-              if (_.get(link['@'], 'rel')) {
-                if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
-                if (link['@']['rel'] == 'alternate' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
-                if (link['@']['rel'] == 'self' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
-                if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
-                if (link['@']['rel'] == 'enclosure') {
-                  enclosure = {};
-                  enclosure.url = link['@']['href'];
-                  enclosure.type = _.get(link['@'], 'type');
-                  enclosure.length = _.get(link['@'], 'length');
-                  if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
-                    item.enclosures.push(enclosure);
-                  }
-                }
-              } else {
-                item.link = link['@']['href'];
-              }
-            } else if (Object.keys(link['@']).length === 0) { // RSS
-              if (!item.link) item.link = _.get(link);
-            }
-          });
-        } else {
-          if (el['@']['href']) { // Atom
-            if (_.get(el['@'], 'rel')) {
-              if (el['@']['rel'] == 'canonical') item.origlink = el['@']['href'];
-              if (el['@']['rel'] == 'alternate' && (!el['@']['type'] || el['@']['type'] == 'text/html') && !item.link) item.link = el['@']['href'];
-              if (el['@']['rel'] == 'self' && (!el['@']['type'] || el['@']['type'] == 'text/html') && !item.link) item.link = el['@']['href'];
-              if (el['@']['rel'] == 'replies') item.comments = el['@']['href'];
-              if (el['@']['rel'] == 'enclosure') {
+        if (!Array.isArray(el)) {
+      		el = [el];
+      	}
+        el.forEach(function (link){
+          if (link['@']['href']) { // Atom
+            if (_.get(link['@'], 'rel')) {
+              if (link['@']['rel'] == 'canonical') item.origlink = link['@']['href'];
+              if (link['@']['rel'] == 'alternate' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
+              if (link['@']['rel'] == 'self' && (!link['@']['type'] || link['@']['type'] == 'text/html') && !item.link) item.link = link['@']['href'];
+              if (link['@']['rel'] == 'replies') item.comments = link['@']['href'];
+              if (link['@']['rel'] == 'enclosure') {
                 enclosure = {};
-                enclosure.url = el['@']['href'];
-                enclosure.type = _.get(el['@'], 'type');
-                enclosure.length = _.get(el['@'], 'length');
+                enclosure.url = link['@']['href'];
+                enclosure.type = _.get(link['@'], 'type');
+                enclosure.length = _.get(link['@'], 'length');
                 if (indexOfObject(item.enclosures, enclosure, ['url', 'type']) === -1) {
                   item.enclosures.push(enclosure);
                 }
               }
-            } else {
-              item.link = el['@']['href'];
             }
-          } else if (Object.keys(el['@']).length === 0) { // RSS
-            if (!item.link) item.link = _.get(el);
+            if (!item.link) item.link = link['@']['href'];
+          } else if (Object.keys(link['@']).length === 0) { // RSS
+            if (!item.link) item.link = _.get(link);
           }
-        }
+        });
         if (!item.guid) item.guid = item.link;
         break;
       case('guid'):
@@ -889,69 +803,44 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         }
         break;
       case('enclosure'):
-        if (Array.isArray(el)) {
-          el.forEach(function (enc){
-            enclosure = {};
-            enclosure.url = _.get(enc['@'], 'url');
-            enclosure.type = _.get(enc['@'], 'type');
-            enclosure.length = _.get(enc['@'], 'length');
-            if (~indexOfObject(item.enclosures, enclosure, ['url', 'type'])) {
-              item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
-            } else {
-              item.enclosures.push(enclosure);
-            }
-          });
-        } else {
+        if (!Array.isArray(el)) {
+      		el = [el];
+      	}
+        el.forEach(function (enc){
           enclosure = {};
-          enclosure.url = _.get(el['@'], 'url');
-          enclosure.type = _.get(el['@'], 'type');
-          enclosure.length = _.get(el['@'], 'length');
+          enclosure.url = _.get(enc['@'], 'url');
+          enclosure.type = _.get(enc['@'], 'type');
+          enclosure.length = _.get(enc['@'], 'length');
           if (~indexOfObject(item.enclosures, enclosure, ['url', 'type'])) {
             item.enclosures.splice(indexOfObject(item.enclosures, enclosure, ['url', 'type']), 1, enclosure);
           } else {
             item.enclosures.push(enclosure);
           }
-        }
+        });
         break;
       case('media:content'):
         var optionalAttributes = ['bitrate', 'framerate', 'samplingrate', 'duration', 'height', 'width'];
-        if (Array.isArray(el)) {
-          el.forEach(function (enc){
-            enclosure = {};
-            enclosure.url = _.get(enc['@'], 'url');
-            enclosure.type = _.get(enc['@'], 'type') || _.get(enc['@'], 'medium');
-            enclosure.length = _.get(enc['@'], 'filesize');
-            var index = indexOfObject(item.enclosures, enclosure, ['url', 'type']);
-            if (index !== -1) {
-              enclosure = item.enclosures[index];
-            }
-            optionalAttributes.forEach(function (attribute) {
-              if (!enclosure[attribute] && _.get(enc['@'], attribute)) {
-                enclosure[attribute] = _.get(enc['@'], attribute);
-              }
-            });
-            if (index === -1) {
-              item.enclosures.push(enclosure);
-            }
-          });
-        } else {
+        if (!Array.isArray(el)) {
+      		el = [el];
+      	}
+        el.forEach(function (enc){
           enclosure = {};
-          enclosure.url = _.get(el['@'], 'url');
-          enclosure.type = _.get(el['@'], 'type') || _.get(el['@'], 'medium');
-          enclosure.length = _.get(el['@'], 'filesize');
+          enclosure.url = _.get(enc['@'], 'url');
+          enclosure.type = _.get(enc['@'], 'type') || _.get(enc['@'], 'medium');
+          enclosure.length = _.get(enc['@'], 'filesize');
           var index = indexOfObject(item.enclosures, enclosure, ['url', 'type']);
           if (index !== -1) {
             enclosure = item.enclosures[index];
           }
           optionalAttributes.forEach(function (attribute) {
-            if (!enclosure[attribute] && _.get(el['@'], attribute)) {
-              enclosure[attribute] = _.get(el['@'], attribute);
+            if (!enclosure[attribute] && _.get(enc['@'], attribute)) {
+              enclosure[attribute] = _.get(enc['@'], attribute);
             }
           });
           if (index === -1) {
             item.enclosures.push(enclosure);
           }
-        }
+        });
         break;
       case('enc:enclosure'): // Can't find this in use for an example to debug. Only example found does not comply with the spec -- can't code THAT!
         break;
@@ -965,59 +854,35 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         var _category = ''
           , _categories = []
           ;
-        if (Array.isArray(el)) {
-          el.forEach(function (category){
-            if ('category' == name && 'atom' == type) {
-              if (category['@'] && _.get(category['@'], 'term')) item.categories.push(_.get(category['@'], 'term'));
-            } else if ('category' == name && _.get(category) && 'rss' == type) {
-              item.categories.push(_.get(category).trim());
-            } else if ('dc:subject' == name && _.get(category)) {
-              _categories = _.get(category).split(' ').map(function (cat){ return cat.trim(); });
-              if (_categories.length) item.categories = item.categories.concat(_categories);
-            } else if ('itunes:category' == name) {
-              if (category['@'] && _.get(category['@'], 'text')) _category = _.get(category['@'], 'text');
-              if (category[name]) {
-                if (Array.isArray(category[name])) {
-                  category[name].forEach(function (subcategory){
-                    if (subcategory['@'] && _.get(subcategory['@'], 'text')) item.categories.push(_category + '/' + _.get(subcategory['@'], 'text'));
-                  });
-                } else {
-                  if (category[name]['@'] && _.get(category[name]['@'], 'text'))
-                    item.categories.push(_category + '/' + _.get(category[name]['@'], 'text'));
-                }
-              } else {
-                item.categories.push(_category);
-              }
-            } else if ('media:category' == name) {
-              item.categories.push(_.get(category));
-            }
-          });
-        } else {
+        if (!Array.isArray(el)) {
+      		el = [el];
+      	}
+        el.forEach(function (category){
           if ('category' == name && 'atom' == type) {
-            if (_.get(el['@'], 'term')) item.categories.push(_.get(el['@'], 'term'));
-          } else if ('category' == name && _.get(el) && 'rss' == type) {
-            item.categories.push(_.get(el).trim());
-          } else if ('dc:subject' == name && _.get(el)) {
-            _categories = _.get(el).split(' ').map(function (cat){ return cat.trim(); });
+            if (category['@'] && _.get(category['@'], 'term')) item.categories.push(_.get(category['@'], 'term'));
+          } else if ('category' == name && _.get(category) && 'rss' == type) {
+            item.categories.push(_.get(category).trim());
+          } else if ('dc:subject' == name && _.get(category)) {
+            _categories = _.get(category).split(' ').map(function (cat){ return cat.trim(); });
             if (_categories.length) item.categories = item.categories.concat(_categories);
           } else if ('itunes:category' == name) {
-            if (el['@'] && _.get(el['@'], 'text')) _category = _.get(el['@'], 'text');
-            if (el[name]) {
-              if (Array.isArray(el[name])) {
-                el[name].forEach(function (subcategory){
+            if (category['@'] && _.get(category['@'], 'text')) _category = _.get(category['@'], 'text');
+            if (category[name]) {
+              if (Array.isArray(category[name])) {
+                category[name].forEach(function (subcategory){
                   if (subcategory['@'] && _.get(subcategory['@'], 'text')) item.categories.push(_category + '/' + _.get(subcategory['@'], 'text'));
                 });
               } else {
-                if (el[name]['@'] && _.get(el[name]['@'], 'text'))
-                  item.categories.push(_category + '/' + _.get(el[name]['@'], 'text'));
+                if (category[name]['@'] && _.get(category[name]['@'], 'text'))
+                  item.categories.push(_category + '/' + _.get(category[name]['@'], 'text'));
               }
             } else {
               item.categories.push(_category);
             }
           } else if ('media:category' == name) {
-            item.categories.push(_.get(el));
+            item.categories.push(_.get(category));
           }
-        }
+        });
         break;
       case('feedburner:origlink'):
       case('pheedo:origlink'):
