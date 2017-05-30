@@ -554,7 +554,7 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
           , _categories = []
           ;
         if (!Array.isArray(el)) {
-      		el = [el];
+          el = [el];
       	}
         el.forEach(function (category){
           var _categoryValue;
@@ -720,7 +720,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
         break;
       case('link'):
         if (!Array.isArray(el)) {
-      		el = [el];
+          el = [el];
       	}
         el.forEach(function (link){
           if (link['@']['href']) { // Atom
@@ -821,7 +821,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
       case('media:content'):
         var optionalAttributes = ['bitrate', 'framerate', 'samplingrate', 'duration', 'height', 'width'];
         if (!Array.isArray(el)) {
-      		el = [el];
+          el = [el];
       	}
         el.forEach(function (enc){
           enclosure = {};
@@ -855,7 +855,7 @@ FeedParser.prototype.handleItem = function handleItem (node, type, options){
           , _categories = []
           ;
         if (!Array.isArray(el)) {
-      		el = [el];
+          el = [el];
       	}
         el.forEach(function (category){
           if ('category' == name && 'atom' == type) {
