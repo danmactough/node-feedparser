@@ -37,7 +37,7 @@
     "lodash.has": "^4.5.2",
     "lodash.uniq": "^4.5.0",
     "readable-stream": "^2.2.2",
-    "sax": "^1.2.1"
+    "sax": "1.2.3"
   },
   "devDependencies": {
     "eslint": "^3.17.1",
