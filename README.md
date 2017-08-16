@@ -162,12 +162,16 @@ e.g., `meta['atom:subtitle']['#']`.
 * copyright
 * generator
 * categories (an Array of Strings)
+* type (could be either `episodic` or `serial`)
 
 ### List of article properties
 
 * title
 * description (frequently, the full article content)
 * summary (frequently, an excerpt of the article content)
+* season (non-zero integer)
+* episode (non-zero integer)
+* episodeType (either `full`, `trailer` or `bonus`)
 * link
 * origlink (when FeedBurner or Pheedo puts a special tracking url in the `link` property, `origlink` contains the original link)
 * permalink (when an RSS feed has a `guid` field and the `isPermalink` attribute is not set to `false`, `permalink` contains the value of `guid`)
