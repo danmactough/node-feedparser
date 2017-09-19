@@ -43,7 +43,7 @@
     "eslint": "^3.17.1",
     "iconv": "2.2.2",
     "mocha": "^3.4.1",
-    "request": "~2.81.0"
+    "request": "~2.82.0"
   },
   "scripts": {
     "lint": "eslint .",
