@@ -1,0 +1,20 @@
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+  <title>nLab</title>
+  <link rel="alternate" type="application/xhtml+xml" href="https://ncatlab.org/nlab/show/HomePage"/>
+  <link rel="self" href="https://ncatlab.org/nlab/atom_with_headlines"/>
+  <updated>2017-09-21T16:03:01Z</updated>
+  <id>tag:ncatlab.org,2008-11-28:nLab</id>
+  <subtitle>An Instiki Wiki</subtitle>
+  <generator uri="http://golem.ph.utexas.edu/instiki/show/HomePage" version="0.19.7(MML+)">Instiki</generator>
+  <entry>
+    <title type="html">(0,1)-category</title>
+    <link rel="alternate" type="application/xhtml+xml" href="https://ncatlab.org/nlab/show/%280%2C1%29-category"/>
+    <updated>2017-09-21T16:03:01Z</updated>
+    <published>2009-09-08T23:20:59Z</published>
+    <id>tag:ncatlab.org,2009-09-08:nLab,%280%2C1%29-category</id>
+    <author>
+      <name>Mike Shulman</name>
+    </author>
+    <summary type="text">Updated by Mike Shulman on 2017-09-21 at 16:03:01Z.</summary>
+  </entry>
+</feed>
