@@ -1,5 +1,7 @@
 #  Feedparser - Robust RSS, Atom, and RDF feed parsing in Node.js
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/danmactough/node-feedparser.svg)](https://greenkeeper.io/)
+
 [![Join the chat at https://gitter.im/danmactough/node-feedparser](https://badges.gitter.im/danmactough/node-feedparser.svg)](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 [![Build Status](https://secure.travis-ci.org/danmactough/node-feedparser.png?branch=master)](https://travis-ci.org/danmactough/node-feedparser)
