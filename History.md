@@ -1,4 +1,14 @@
 
+2.2.2 / 2017-10-12
+==================
+
+  * Update devDependencies
+  * Update sax v1.2.4
+  * Update travis - node 7->8
+  * Make sure that all links are parsed, not only text/html
+  * docs(readme): add Greenkeeper badge
+  * chore(package): update dependencies
+
 2.2.1 / 2017-06-22
 ==================
 
