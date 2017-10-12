@@ -500,14 +500,20 @@ FeedParser.prototype.handleMeta = function handleMeta (node, type, options) {
         meta.cloud = {}; // This will ensure that rssCloud "wins" here,
                          // If pubsubhubbub is also declared, it's still available
                          // in the link elements
-        if(!Array.isArray(el)) {
-          el = [el];
+        if (Array.isArray(el)) {
+          Object.keys(el[0]['@']).forEach(function (attr) {
+            if (_.has(el[0]['@'], attr)) {
+              meta.cloud[attr] = el[0]['@'][attr];
+            }
+          });
         }
-        Object.keys(el[0]['@']).forEach(function (attr) {
-          if (_.has(el[0]['@'], attr)) {
-            meta.cloud[attr] = el[0]['@'][attr];
-          }
-        });
+        else {
+          Object.keys(el['@']).forEach(function (attr) {
+            if (_.has(el['@'], attr)) {
+              meta.cloud[attr] = el['@'][attr];
+            }
+          });
+        }
         meta.cloud.type = 'rsscloud';
         break;
       case('language'):
