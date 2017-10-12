@@ -61,7 +61,7 @@ describe('bad feeds', function(){
       })
       .on('end', function () {
         assert.ok(error instanceof Error);
-        assert.ok(error.message.match(/^Invalid code point/));
+        assert.equal(error.message, 'Not a feed');
         done();
       });
     });

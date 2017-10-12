@@ -37,13 +37,13 @@
     "lodash.has": "^4.5.2",
     "lodash.uniq": "^4.5.0",
     "readable-stream": "^2.2.2",
-    "sax": "1.2.3"
+    "sax": "^1.2.4"
   },
   "devDependencies": {
-    "eslint": "^3.17.1",
-    "iconv": "2.2.3",
-    "mocha": "^3.4.1",
-    "request": "~2.81.0"
+    "eslint": "^4.8.0",
+    "iconv": "^2.3.0",
+    "mocha": "^4.0.1",
+    "request": "^2.83.0"
   },
   "scripts": {
     "lint": "eslint .",
