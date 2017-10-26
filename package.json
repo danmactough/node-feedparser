@@ -26,6 +26,11 @@
     "url": "http://github.com/danmactough/node-feedparser/issues"
   },
   "main": "index.js",
+  "files": [
+    "index.js",
+    "bin/*.js",
+    "lib"
+  ],
   "engines": {
     "node": ">= 4.2.0"
   },
