@@ -6,6 +6,7 @@ describe('xmlbase', function(){
     fs.createReadStream(feed).pipe(new FeedParser())
       .on('meta', function (meta) {
         assert.equal('http://intertwingly.net/blog/', meta.link);
+        assert.equal('http://intertwingly.net/favicon.ico', meta.favicon);
         done();
       })
       .on('error', function (err) {
@@ -20,6 +21,7 @@ describe('xmlbase', function(){
     fs.createReadStream(feed).pipe(new FeedParser(options))
       .on('meta', function (meta) {
         assert.equal('http://intertwingly.net/blog/', meta.link);
+        assert.equal('http://intertwingly.net/favicon.ico', meta.favicon);
         done();
       })
       .on('error', function (err) {
