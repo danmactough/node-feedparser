@@ -1,8 +1,8 @@
 describe('xmlbase', function(){
 
-  var feed = __dirname + '/feeds/intertwingly.atom';
+  it('should resolve relative URIs in meta elements with no root xml:base', function (done) {
+    var feed = __dirname + '/feeds/intertwingly.atom';
 
-  it('should handle relative URIs with no root xml:base', function (done) {
     fs.createReadStream(feed).pipe(new FeedParser())
       .on('meta', function (meta) {
         assert.equal('http://intertwingly.net/blog/', meta.link);
@@ -16,6 +16,7 @@ describe('xmlbase', function(){
   });
 
   it('should parse feedurl option and handle relative URIs with no root xml:base', function (done) {
+    var feed = __dirname + '/feeds/intertwingly.atom';
     var options = { feedurl: 'http://intertwingly.net/blog/index.atom' };
 
     fs.createReadStream(feed).pipe(new FeedParser(options))
@@ -28,6 +29,29 @@ describe('xmlbase', function(){
         assert.ifError(err);
         done(err);
       });
+  });
+
+  it('should resolve relative URI item links with no root xml:base', function (done) {
+    var feed = __dirname + '/feeds/tpm.atom';
+    var links = [];
+
+    fs.createReadStream(feed).pipe(new FeedParser())
+    .on('readable', function () {
+      var item;
+      while ((item = this.read())) {
+        links.push(item.link);
+      }
+    })
+    .on('error', function (err) {
+      assert.ifError(err);
+      done(err);
+    })
+    .on('end', function () {
+      assert.equal(links[0], 'http://talkingpointsmemo.com/livewire/hannity-announces-fox-hired-sebastian-gorka-national-security-strategist');
+      assert.equal(links[1], 'http://talkingpointsmemo.com/edblog/were-hiring-senior-editor');
+      assert.equal(links.length, 20);
+      done();
+    });
   });
 
 });
