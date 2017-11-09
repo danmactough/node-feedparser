@@ -1,4 +1,11 @@
 
+2.2.4 / 2017-11-08
+==================
+
+  * Fix reresolve logic
+  * Add failing test - no reresolving first link in feed
+  * Add a test assertion for xml base resolution
+
 2.2.3 / 2017-10-25
 ==================
 
