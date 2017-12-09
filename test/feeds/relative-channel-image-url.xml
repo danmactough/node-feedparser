@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Oracle VM VirtualBox: Ticket #10860: Full resolution not exposed to Linux guest</title>
+    <link>https://www.virtualbox.org/ticket/10860</link>
+    <description>&lt;p&gt;
+When using &lt;a class="wiki" href="https://www.virtualbox.org/wiki/VirtualBox"&gt;VirtualBox&lt;/a&gt; on a MacBook Pro Retina, only half the resolution is exposed to, at least, Linux guests. This causes the fonts to be blurry in the guest OS.
+&lt;/p&gt;
+&lt;p&gt;
+To verify this, install Linux, and go to fullscreen, type xrandr and notice the resolution is set to 1440x900.
+&lt;/p&gt;
+&lt;p&gt;
+To compare with VMWare, full Retina mode is supported: &lt;a class="ext-link" href="http://www.vmware.com/products/fusion/features.html#approved"&gt;&lt;span class="icon"&gt; &lt;/span&gt;http://www.vmware.com/products/fusion/features.html#approved&lt;/a&gt;
+&lt;/p&gt;
+&lt;p&gt;
+This exposes the current full resolution to the guest, which in the default host retina mode would mean the guest sees 2880x1800 resolution and has to deal with it on its own accordingly.
+&lt;/p&gt;
+</description>
+    <language>en-us</language>
+    <image>
+      <title>Oracle VM VirtualBox</title>
+      <url>/graphics/vbox_logo2_gradient.png</url>
+      <link>https://www.virtualbox.org/ticket/10860</link>
+    </image>
+    <generator>Trac 0.12</generator>
+    <item>
+      
+        <dc:creator>dsvensson</dc:creator>
+
+      <pubDate>Fri, 24 Aug 2012 08:54:14 GMT</pubDate>
+      <title></title>
+      <link>https://www.virtualbox.org/ticket/10860#comment:1</link>
+      <guid isPermaLink="false">https://www.virtualbox.org/ticket/10860#comment:1</guid>
+      <description>
+        &lt;p&gt;
+The &lt;a class="wiki" href="https://www.virtualbox.org/wiki/VirtualBox"&gt;VirtualBox&lt;/a&gt; version is actually the 4.2 beta but it couldn't be selected.
+&lt;/p&gt;
+      </description>
+      <category>Ticket</category>
+    </item>
+ </channel>
+</rss>
