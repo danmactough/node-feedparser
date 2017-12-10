@@ -69,6 +69,8 @@ feedparser.on('readable', function () {
 
 ```
 
+You can also check out this nice [working demo](https://github.com/scripting/feedParserDemo).
+
 ### options
 
 - `normalize` - Set to `false` to override Feedparser's default behavior,
