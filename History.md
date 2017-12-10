@@ -1,4 +1,9 @@
 
+2.2.5 / 2017-12-09
+==================
+
+  * Fix reresolve helper to correctly resolve relative URLs in RSS channel image
+
 2.2.4 / 2017-11-08
 ==================
 
