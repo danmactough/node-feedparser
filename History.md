@@ -1,4 +1,12 @@
 
+2.2.7 / 2017-12-11
+==================
+
+  * Enhance cli to take feedparser options as cli parameters
+  * Improve relative url resolution in RSS feeds
+  * Add issue template
+  * Add link to Dave Winer's demo to README
+
 2.2.6 / 2017-12-10
 ==================
 
