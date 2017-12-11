@@ -12,16 +12,53 @@ var isatty = require('tty').isatty
 
 var usingConsole = isatty(1) && isatty(2);
 
-process.stdin.pipe(new FeedParser())
+var argv = require('mri')(process.argv.slice(2), {
+  alias: {
+    u: 'feedurl',
+    g: 'group',
+    j: 'json'
+  },
+  boolean: [
+    'normalize',
+    'addmeta',
+    'resume_sax_error',
+    'json'
+  ],
+  default: {
+    normalize: true,
+    addmeta: true,
+    resume_saxerror: true,
+    json: !usingConsole
+  }
+});
+
+var items = [];
+
+process.stdin.pipe(new FeedParser(argv))
   .on('error', console.error)
   .on('readable', function() {
     var stream = this, item;
     while (item = stream.read()) {
-      if (usingConsole) {
-        console.log(util.inspect(item, null, 10, true));
+      if (argv.group) {
+        items.push(item);
       }
       else {
-        console.log(JSON.stringify(item));
+        if (argv.json) {
+          console.log(JSON.stringify(item));
+        }
+        else {
+          console.log(util.inspect(item, null, 10, true));
+        }
+      }
+    }
+  })
+  .on('end', function () {
+    if (argv.group) {
+      if (argv.json) {
+        console.log(JSON.stringify(items));
+      }
+      else {
+        console.log(util.inspect(items, null, 10, true));
       }
     }
   });
