@@ -67,4 +67,58 @@ describe('xmlbase', function(){
     });
   });
 
+  it('should resolve relative URI item links in RSS with feedurl option', function (done) {
+    var feed = __dirname + '/feeds/rss-with-relative-urls.xml';
+    var links = [];
+
+    fs.createReadStream(feed).pipe(new FeedParser({ feedurl: 'http://www.arcgames.com' }))
+      .on('readable', function () {
+        var item;
+        while ((item = this.read())) {
+          links.push(item.link);
+        }
+      })
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
+      })
+      .on('meta', function (meta) {
+        assert.equal('http://www.arcgames.com/en/games/neverwinter/news', meta.link);
+        assert.equal('http://www.arcgames.com/en/games/neverwinter/news/rss', meta.xmlurl);
+      })
+      .on('end', function () {
+        assert.equal(links[0], 'http://www.arcgames.com/en/games/neverwinter/news/detail/10743874-neverwinter-%26-jingle-jam-humble-bundle%21');
+        assert.equal(links[1], 'http://www.arcgames.com/en/games/neverwinter/news/detail/10738994-2x-underdark-currency-%26-15%25-off-bags%21');
+        assert.equal(links.length, 2);
+        done();
+      });
+  });
+
+  it('should resolve relative URI item links in RSS if absolute xmlurl is present', function (done) {
+    var feed = __dirname + '/feeds/rss-with-relative-urls-with-absolute-xmlurl.xml';
+    var links = [];
+
+    fs.createReadStream(feed).pipe(new FeedParser())
+      .on('readable', function () {
+        var item;
+        while ((item = this.read())) {
+          links.push(item.link);
+        }
+      })
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
+      })
+      .on('meta', function (meta) {
+        assert.equal('http://www.arcgames.com/en/games/neverwinter/news', meta.link);
+        assert.equal('http://www.arcgames.com/en/games/neverwinter/news/rss', meta.xmlurl);
+      })
+      .on('end', function () {
+        assert.equal(links[0], 'http://www.arcgames.com/en/games/neverwinter/news/detail/10743874-neverwinter-%26-jingle-jam-humble-bundle%21');
+        assert.equal(links[1], 'http://www.arcgames.com/en/games/neverwinter/news/detail/10738994-2x-underdark-currency-%26-15%25-off-bags%21');
+        assert.equal(links.length, 2);
+        done();
+      });
+  });
+
 });

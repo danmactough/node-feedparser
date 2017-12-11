@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/nolsol.xsl"?>
+<rss xmlns:media="http://search.yahoo.com/mrss/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">  
+  <channel> 
+    <title><![CDATA[Neverwinter]]></title>
+    <link>/en/games/neverwinter/news</link>  
+    <description><![CDATA[]]></description>  
+    <language>en_US</language>  
+    <lastBuildDate>Sun, 10 Dec 17 13:01:36 -0800</lastBuildDate>  
+    <copyright><![CDATA[
+	Copyright © 2017. Perfect World Entertainment Inc, All Rights Reserved.	]]></copyright>  
+    <image> 
+      <url>http://images-cdn.perfectworld.com/arc/0e/22/0e221ffcf7ab4eae547c72deecfc7be61501001169.png</url>
+      <title><![CDATA[Neverwinter]]></title>  
+      <link>/en/games/neverwinter/news</link>  
+    </image>  
+    <ttl>60</ttl>
+    <atom:link href="/en/games/neverwinter/news/rss" rel="self" type="application/rss+xml"/>
+        <item> 
+      <title><![CDATA[Neverwinter & Jingle Jam Humble Bundle!]]></title>  
+      <description><![CDATA[
+
+Greetings Adventurers!
+
+Neverwinter is proud to partner once again with Humble Bundle’s December Bundle – YogsCast Jingle Jam 2017! We are offering the Feywild Starter Pack (PC Only) as part of the latest bundle, starting on December 7 at 9am PT. This pack contains the Portal Hound Companion, Embroidered Elven Silk Bag, Feywild Hunter’s Ring, and the Adventurer’s Helper Pack.
+
+Your contributions last year went to some amazing organizations! This year, by purchasing the bundle and paying what you want, you can again help a mix of charities across a variety of causes! For more details, please clink on the link below.
+
+
+
+ ]]></description>  
+      <link>/en/games/neverwinter/news/detail/10743874-neverwinter-%26-jingle-jam-humble-bundle%21</link>
+      <guid isPermaLink="false">http://www.arcgames.com/en/games/PAB_nw/news/detail/10743874</guid>  
+      <pubDate>Thu, 07 Dec 17 10:00:29 -0800</pubDate>
+    </item>
+    <item> 
+      <title><![CDATA[2x Underdark Currency & 15% off Bags!]]></title>  
+      <description><![CDATA[
+
+Looking to make progress in the Underdark Campaign? This weekend you can earn 2x Underdark Campaign Currency! In addition, Bags will be 15% off! 
+
+2x Underdark Currency and 15% off Bags starts Thursday, December 7 at 7:30am PT (or after maintenance)
+
+2x Underdark Currency and 15% off Bags ends Monday, December 11 at 7:30am PT
+
+Underdark Currency can be obtained in Demonic Heroic Encounters, Throne of the Dwarven Gods, Prophecy of Madness, and Demogorgon!
+
+
+ 
+
+.share-link a {
+    margin: 0 10px 0 0;
+    background: url(http://images-cdn.perfectworld.com/arcportal_static/images/global/icon-social.png) no-repeat 0 0;
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.9);
+    -moz-box-shadow: 0 0 1px rgba(255,255,255,.9);
+    box-shadow: 0 0 1px rgba(255,255,255,.9);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    padding: 0;
+    border: 1px solid transparent;
+}
+.share-link .youtube {
+    background-position: -60px 0;
+}
+.share-link .twitter {
+    background-position: -30px 0;
+}
+
+
+    
+
+.share-footer a {
+ margin: 20px 10px 10px 0;
+ background: url(http://images-cdn.perfectworld.com/arc/78/37/7837b2f61b4e186e6e19241cd6fe43491466535696.png)
+no-repeat 0 0;
+ opacity: .5;
+ display: inline-block;
+ height: 60px;
+ width: 60px;
+ padding: 0;
+ border: 1px solid transparent;
+ -webkit-transition: opacity .3s;
+ transition: opacity .3s;
+}
+.share-footer .TI { background-position: 0 20%; }
+.share-footer .YT { background-position: 0 40%; }
+.share-footer .YT { background-position: 0 40%; }
+.share-footer .TW { background-position: 0 60%; }
+.share-footer .FO { background-position: 0 80%; }
+.FB:hover { background-position: 100% 0%; }
+.TI:hover { background-position: 100% 20%; }
+.YT:hover { background-position: 100% 40%; }
+.TW:hover { background-position: 100% 60%; }
+.FO:hover { background-position: 100% 80%; }
+.share-footer a:hover {
+ opacity: 1;
+ -webkit-transition: opacity .3s;
+ transition: opacity .3s;
+}
+]]></description>  
+      <link>/en/games/neverwinter/news/detail/10738994-2x-underdark-currency-%26-15%25-off-bags%21</link>
+      <guid isPermaLink="false">http://www.arcgames.com/en/games/PAB_nw/news/detail/10738994</guid>  
+      <pubDate>Thu, 07 Dec 17 07:00:00 -0800</pubDate>
+    </item>
+  </channel> 
+</rss>
