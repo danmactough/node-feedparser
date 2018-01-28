@@ -1,4 +1,10 @@
 
+2.2.9 / 2018-01-27
+==================
+
+  * Skip illegally-nested items
+  * Add failing test for illegally nested items
+
 2.2.8 / 2018-01-07
 ==================
 
