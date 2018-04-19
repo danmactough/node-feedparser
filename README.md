@@ -69,7 +69,7 @@ feedparser.on('readable', function () {
 
 ```
 
-You can also check out this nice [working demo](https://github.com/scripting/feedParserDemo).
+You can also check out this nice [working implementation](https://github.com/scripting/feedRead) that demonstrates one way to handle all the hard and annoying stuff. :smiley:
 
 ### options
 
