@@ -46,7 +46,7 @@
     "sax": "^1.2.4"
   },
   "devDependencies": {
-    "eslint": "^4.8.0",
+    "eslint": "^5.0.0",
     "iconv": "^2.3.0",
     "mocha": "^5.0.0",
     "request": "^2.83.0"
