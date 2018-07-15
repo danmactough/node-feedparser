@@ -101,6 +101,10 @@ You can also check out this nice [working implementation](https://github.com/scr
 
 See the [`examples`](examples/) directory.
 
+## Changes in v3
+
+- dropped support for Node 4
+
 ## API
 
 ### Transform Stream
