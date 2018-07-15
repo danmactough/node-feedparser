@@ -111,7 +111,8 @@ See the [`examples`](examples/) directory.
 
 ## Changes in v3
 
-- dropped support for Node 4
+- Dropped support for Node 4
+- Change default behavior to not strip html by default [#264](https://github.com/danmactough/node-feedparser/pull/264)
 
 ## API
 
