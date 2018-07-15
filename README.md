@@ -202,7 +202,7 @@ the original inspiration and a starting point.
 
 (The MIT License)
 
-Copyright (c) 2011-2016 Dan MacTough and contributors
+Copyright (c) 2011-2018 Dan MacTough and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
