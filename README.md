@@ -105,7 +105,7 @@ See the [`examples`](examples/) directory.
 
 ### Transform Stream
 
-Feedparser is a [transform stream](http://nodejs.org/api/stream.html#stream_class_stream_transform) operating in "object mode": XML in -> Javascript objects out.
+Feedparser is a [transform stream](http://nodejs.org/api/stream.html#stream_class_stream_transform) operating in "object mode": XML in -> JavaScript objects out.
 Each readable chunk is an object representing an article in the feed.
 
 ### Events Emitted
