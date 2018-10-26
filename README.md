@@ -12,7 +12,7 @@ Feedparser is for parsing RSS, Atom, and RDF feeds in node.js.
 
 It has a couple features you don't usually see in other feed parsers:
 
-1. It resolves relative URLs (such as those seen in Tim Bray's "ongoing" [feed](http://www.tbray.org/ongoing/ongoing.atom)).
+1. It resolves relative URLs (such as those seen in Tim Bray's "ongoing" [feed](https://www.tbray.org/ongoing/ongoing.atom)).
 2. It properly handles XML namespaces (including those in unusual feeds
 that define a non-default namespace for the main feed elements).
 
@@ -105,7 +105,7 @@ See the [`examples`](examples/) directory.
 
 ### Transform Stream
 
-Feedparser is a [transform stream](http://nodejs.org/api/stream.html#stream_class_stream_transform) operating in "object mode": XML in -> Javascript objects out.
+Feedparser is a [transform stream](https://nodejs.org/api/stream.html#stream_class_stream_transform) operating in "object mode": XML in -> Javascript objects out.
 Each readable chunk is an object representing an article in the feed.
 
 ### Events Emitted
@@ -182,7 +182,7 @@ e.g., `meta['atom:subtitle']['#']`.
 * comments (a link to the article's comments section)
 * image (an Object containing `url` and `title` properties)
 * categories (an Array of Strings)
-* source (an Object containing `url` and `title` properties pointing to the original source for an article; see the [RSS Spec](http://cyber.law.harvard.edu/rss/rss.html#ltsourcegtSubelementOfLtitemgt) for an explanation of this element)
+* source (an Object containing `url` and `title` properties pointing to the original source for an article; see the [RSS Spec](https://cyber.law.harvard.edu/rss/rss.html#ltsourcegtSubelementOfLtitemgt) for an explanation of this element)
 * enclosures (an Array of Objects, each representing a podcast or other enclosure and having a `url` property and possibly `type` and `length` properties)
 * meta (an Object containing all the feed meta properties; especially handy when using the EventEmitter interface to listen to `article` emissions)
 
