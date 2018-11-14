@@ -78,6 +78,14 @@ You can also check out this nice [working implementation](https://github.com/scr
   patterned after (although not identical to) the RSS 2.0 format, regardless
   of the feed's format.
 
+- `dateformat` - When ommitted, the default behaviuor is to return a Javascript date object. Setting this option to one of the follow string values will convert dates to strings using the specified Javascript date object function:
+  - `toISOString`
+  - `toLocaleString`
+  - `toDateString`
+  - `toString`
+  - `toJSON`
+  - `toUTCString`
+
 - `addmeta` - Set to `false` to override Feedparser's default behavior, which
   is to add the feed's `meta` information to each article.
 
