@@ -1,6 +1,6 @@
 var request = require('request')
   , FeedParser = require(__dirname+'/..')
-  , Iconv = require('iconv').Iconv
+  , iconv = require('iconv-lite')
   , zlib = require('zlib');
 
 function fetch(feed) {
@@ -46,16 +46,16 @@ function maybeDecompress (res, encoding) {
 }
 
 function maybeTranslate (res, charset) {
-  var iconv;
-  // Use iconv if its not utf8 already.
-  if (!iconv && charset && !/utf-*8/i.test(charset)) {
+  var iconvStream;
+  // Decode using iconv-lite if its not utf8 already.
+  if (!iconvStream && charset && !/utf-*8/i.test(charset)) {
     try {
-      iconv = new Iconv(charset, 'utf-8');
+      iconvStream = iconv.decodeStream(charset);
       console.log('Converting from charset %s to utf-8', charset);
-      iconv.on('error', done);
-      // If we're using iconv, stream will be the output of iconv
+      iconvStream.on('error', done);
+      // If we're using iconvStream, stream will be the output of iconvStream
       // otherwise it will remain the output of request
-      res = res.pipe(iconv);
+      res = res.pipe(iconvStream);
     } catch(err) {
       res.emit('error', err);
     }

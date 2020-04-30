@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "eslint": "^4.8.0",
-    "iconv": "^2.3.0",
+    "iconv-lite": "^0.5.1",
     "mocha": "^5.0.0",
     "request": "^2.83.0"
   },
