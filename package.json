@@ -32,7 +32,7 @@
     "lib"
   ],
   "engines": {
-    "node": ">= 4.2.0"
+    "node": ">= 10.18.1"
   },
   "dependencies": {
     "addressparser": "^1.0.1",
