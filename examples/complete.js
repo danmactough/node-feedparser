@@ -1,48 +1,37 @@
-var request = require('request')
+/**
+ * Tip
+ * ====
+ * - Set `user-agent` and `accept` headers when sending requests. Some services will not respond as expected without them.
+ */
+
+var fetch = require('node-fetch')
   , FeedParser = require(__dirname+'/..')
-  , iconv = require('iconv-lite')
-  , zlib = require('zlib');
+  , iconv = require('iconv-lite');
 
-function fetch(feed) {
-  // Define our streams
-  var req = request(feed, {timeout: 10000, pool: false});
-  req.setMaxListeners(50);
-  // Some feeds do not respond without user-agent and accept headers.
-  req.setHeader('user-agent', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36');
-  req.setHeader('accept', 'text/html,application/xhtml+xml');
+function get(feed) {
+  // Get a response stream
+  fetch(feed, { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36', 'accept': 'text/html,application/xhtml+xml' }).then(function (res) {
 
-  var feedparser = new FeedParser();
+    // Setup feedparser stream
+    var feedparser = new FeedParser();
+    feedparser.on('error', done);
+    feedparser.on('end', done);
+    feedparser.on('readable', function() {
+      var post;
+      while (post = this.read()) {
+        console.log(JSON.stringify(post, ' ', 4));
+      }
+    });
 
+    // Handle our response and pipe it to feedparser
+    if (res.status != 200) throw new Error('Bad status code');
+    var charset = getParams(res.headers.get('content-type') || '').charset;
+    var responseStream = res.body;
+    responseStream = maybeTranslate(responseStream, charset);
+    // And boom goes the dynamite
+    responseStream.pipe(feedparser);
 
-  // Define our handlers
-  req.on('error', done);
-  req.on('response', function(res) {
-    if (res.statusCode != 200) return this.emit('error', new Error('Bad status code'));
-    var encoding = res.headers['content-encoding'] || 'identity'
-      , charset = getParams(res.headers['content-type'] || '').charset;
-    res = maybeDecompress(res, encoding);
-    res = maybeTranslate(res, charset);
-    res.pipe(feedparser);
-  });
-
-  feedparser.on('error', done);
-  feedparser.on('end', done);
-  feedparser.on('readable', function() {
-    var post;
-    while (post = this.read()) {
-      console.log(post);
-    }
-  });
-}
-
-function maybeDecompress (res, encoding) {
-  var decompress;
-  if (encoding.match(/\bdeflate\b/)) {
-    decompress = zlib.createInflate();
-  } else if (encoding.match(/\bgzip\b/)) {
-    decompress = zlib.createGunzip();
-  }
-  return decompress ? res.pipe(decompress) : res;
+  }).catch(done);
 }
 
 function maybeTranslate (res, charset) {
@@ -92,5 +81,5 @@ var server = require('http').createServer(function (req, res) {
   stream.pipe(res);
 });
 server.listen(0, function () {
-  fetch('http://localhost:' + this.address().port + '/compressed.xml');
+  get('http://localhost:' + this.address().port + '/compressed.xml');
 });
