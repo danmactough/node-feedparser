@@ -1,4 +1,24 @@
 
+2.2.10 / 2020-05-01
+==================
+
+  * Changes a direct use of hasOwnProperty builtin to call it from Object.prototype instead
+  * Update mri
+  * Update readable-stream
+  * Update npm audit fixes
+  * Remove unused Makefile
+  * Update examples to use node-fetch in place of request
+  * Update mocha v7
+  * Update eslint v6
+  * Replace iconv with iconv-lite
+  * Update travis config; drop support for unmaintained node versions
+  * Merge pull request #271 from jakutis/readme-use-https
+  * README: make links use https: instead of http: protocol
+  * Update copyright
+  * Update README
+  * Merge pull request #255 from danmactough/greenkeeper/mocha-5.0.0
+  * chore(package): update mocha to version 5.0.0
+
 2.2.9 / 2018-01-27
 ==================
 
