@@ -8,7 +8,7 @@
   "bin": {
     "feedparser": "./bin/feedparser.js"
   },
-  "version": "3.0.0",
+  "version": "3.0.1",
   "keywords": [
     "rss",
     "feed",
