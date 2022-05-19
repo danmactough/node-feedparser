@@ -45,7 +45,7 @@
     "lodash.has": "^4.5.2",
     "lodash.uniq": "^4.5.0",
     "mri": "^1.1.0",
-    "readable-stream": "^2.2.2",
+    "readable-stream": "^2.3.7",
     "sax": "^1.2.4"
   },
   "devDependencies": {
