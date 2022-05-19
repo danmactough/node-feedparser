@@ -1,6 +1,9 @@
 {
-  "name": "feedparser",
+  "name": "newstex-feedparser",
   "author": "Dan MacTough <danmactough@gmail.com>",
+  "contributors": [
+    "Chris Moyer <cmoyer@newstex.com>"
+  ],
   "description": "Robust RSS Atom and RDF feed parsing using sax js",
   "bin": {
     "feedparser": "./bin/feedparser.js"
