@@ -1,12 +1,7 @@
 #  Feedparser - Robust RSS, Atom, and RDF feed parsing in Node.js
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/danmactough/node-feedparser.svg)](https://greenkeeper.io/)
-
-[![Join the chat at https://gitter.im/danmactough/node-feedparser](https://badges.gitter.im/danmactough/node-feedparser.svg)](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![Build Status](https://secure.travis-ci.org/danmactough/node-feedparser.png?branch=master)](https://travis-ci.org/danmactough/node-feedparser)
-
-[![NPM](https://nodei.co/npm/feedparser.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/feedparser/)
+**NOTE**: This is a fork of the node-feedparser library which supports invalid RSS feeds (missing opening tags, closing tags, etc).
+It takes an approch of "try to make sense of whatever input you get", rather than requiring strict RSS standards.
 
 Feedparser is for parsing RSS, Atom, and RDF feeds in node.js.
 
@@ -15,6 +10,7 @@ It has a couple features you don't usually see in other feed parsers:
 1. It resolves relative URLs (such as those seen in Tim Bray's "ongoing" [feed](https://www.tbray.org/ongoing/ongoing.atom)).
 2. It properly handles XML namespaces (including those in unusual feeds
 that define a non-default namespace for the main feed elements).
+3. It resolves issues with missing `<rss>` and `<channel>` envelops
 
 ## Installation
 
@@ -185,12 +181,11 @@ e.g., `meta['atom:subtitle']['#']`.
 
 ## Help
 
-- Don't be afraid to report an [issue](https://github.com/danmactough/node-feedparser/issues).
-- You can drop by [Gitter](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), too.
+- Don't be afraid to report an [issue](https://github.com/Newstex/node-feedparser/issues).
 
 ## Contributors
 
-View all the [contributors](https://github.com/danmactough/node-feedparser/graphs/contributors).
+View all the [contributors](https://github.com/Newstex/node-feedparser/graphs/contributors).
 
 Although `node-feedparser` no longer shares any code with `node-easyrss`, it was
 the original inspiration and a starting point.
@@ -200,6 +195,7 @@ the original inspiration and a starting point.
 (The MIT License)
 
 Copyright (c) 2011-2020 Dan MacTough and contributors
+Copyright (c) 2022 Newstex LLC
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
