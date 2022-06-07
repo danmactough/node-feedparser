@@ -20,13 +20,13 @@
     "pubsubhubbub"
   ],
   "license": "MIT",
-  "homepage": "http://github.com/danmactough/node-feedparser",
+  "homepage": "http://github.com/Newstex/node-feedparser",
   "repository": {
     "type": "git",
-    "url": "git://github.com/danmactough/node-feedparser.git"
+    "url": "git://github.com/Newstex/node-feedparser.git"
   },
   "bugs": {
-    "url": "http://github.com/danmactough/node-feedparser/issues"
+    "url": "http://github.com/Newstex/node-feedparser/issues"
   },
   "main": "index.js",
   "files": [
