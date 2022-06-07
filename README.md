@@ -26,30 +26,27 @@ npm install feedparser
 
 This example is just to briefly demonstrate basic concepts.
 
-**Please** also review the [compressed example](examples/compressed.js) for a
+**Please** also review the [complete example](examples/complete.js) for a
 thorough working example that is a suitable starting point for your app.
 
 ```js
 
 var FeedParser = require('feedparser');
-var request = require('request'); // for fetching the feed
+var fetch = require('node-fetch'); // for fetching the feed
 
-var req = request('http://somefeedurl.xml')
+var req = fetch('http://somefeedurl.xml')
 var feedparser = new FeedParser([options]);
 
-req.on('error', function (error) {
-  // handle any request errors
-});
-
-req.on('response', function (res) {
-  var stream = this; // `this` is `req`, which is a stream
-
-  if (res.statusCode !== 200) {
-    this.emit('error', new Error('Bad status code'));
+req.then(function (res) {
+  if (res.status !== 200) {
+    throw new Error('Bad status code');
   }
   else {
-    stream.pipe(feedparser);
+    // The response `body` -- res.body -- is a stream
+    res.body.pipe(feedparser);
   }
+}, function (err) {
+  // handle any request errors
 });
 
 feedparser.on('error', function (error) {
@@ -202,7 +199,7 @@ the original inspiration and a starting point.
 
 (The MIT License)
 
-Copyright (c) 2011-2018 Dan MacTough and contributors
+Copyright (c) 2011-2020 Dan MacTough and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
