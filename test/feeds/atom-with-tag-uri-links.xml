@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Test Feed</title>
+  <link rel="self" href="http://example.com" />
+  <entry>
+    <title>Test Entry</title>
+    <link href="tag:mefi.social,2024-01-26:objectId=20368395" />
+    <id>tag:mefi.social,2024-01-26:objectId=20368395</id>
+  </entry>
+</feed>
