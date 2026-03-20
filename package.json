@@ -57,7 +57,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit --strict test/types.ts --lib es6 --module commonjs",
+    "typecheck": "tsc",
     "pretest": "npm run lint && npm run typecheck",
     "test": "mocha",
     "version": "git changelog ; git add History.md"
