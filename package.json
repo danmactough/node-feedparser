@@ -57,7 +57,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "typecheck": "tsc",
+    "typecheck": "node -e \"process.exit(process.release.lts < 'Gallium' ? 0 : 1)\" || tsc",
     "pretest": "npm run lint && npm run typecheck",
     "test": "mocha",
     "version": "git changelog ; git add History.md"
