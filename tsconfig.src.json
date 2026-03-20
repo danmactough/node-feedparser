@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "checkJs": true,
+    "allowJs": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictNullChecks": false,
+    "module": "commonjs",
+    "lib": ["es6"],
+    "target": "es6"
+  },
+  "include": ["index.js", "lib/**/*.js"],
+  "exclude": ["node_modules", "test", "bin"]
+}
