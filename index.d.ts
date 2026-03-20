@@ -13,14 +13,17 @@ declare class FeedParser extends stream.Transform {
     resumeSaxError(): void;
 
     on(event: 'meta', listener: (meta: FeedParser.Meta) => void): this;
+    on(event: 'readable', listener: (this: FeedParser) => void): this;
     on(event: 'error', listener: (error: Error) => void): this;
     on(event: string, listener: (...args: any[]) => void): this;
 
     addListener(event: 'meta', listener: (meta: FeedParser.Meta) => void): this;
+    addListener(event: 'readable', listener: (this: FeedParser) => void): this;
     addListener(event: 'error', listener: (error: Error) => void): this;
     addListener(event: string, listener: (...args: any[]) => void): this;
 
     once(event: 'meta', listener: (meta: FeedParser.Meta) => void): this;
+    once(event: 'readable', listener: (this: FeedParser) => void): this;
     once(event: 'error', listener: (error: Error) => void): this;
     once(event: string, listener: (...args: any[]) => void): this;
 }
