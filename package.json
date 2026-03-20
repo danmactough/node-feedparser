@@ -52,11 +52,13 @@
     "eslint": "^6.8.0",
     "iconv-lite": "^0.5.1",
     "mocha": "^7.1.2",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "lint": "eslint .",
-    "pretest": "npm run lint",
+    "typecheck": "tsc --noEmit --strict test/types.ts --lib es6 --module commonjs",
+    "pretest": "npm run lint && npm run typecheck",
     "test": "mocha",
     "version": "git changelog ; git add History.md"
   },
