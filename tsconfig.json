@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "strict": true,
+    "module": "commonjs",
+    "lib": ["es6"]
+  },
+  "files": [
+    "test/types.ts"
+  ]
+}

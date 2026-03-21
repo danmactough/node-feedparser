@@ -26,8 +26,10 @@
     "url": "http://github.com/danmactough/node-feedparser/issues"
   },
   "main": "index.js",
+  "types": "./index.d.ts",
   "files": [
     "index.js",
+    "index.d.ts",
     "bin/*.js",
     "lib"
   ],
@@ -46,14 +48,20 @@
     "sax": ">=1.2.4 <1.4.4"
   },
   "devDependencies": {
+    "@types/node": "^25.5.0",
+    "@types/readable-stream": "^2.3.15",
+    "@types/sax": "^1.2.7",
     "eslint": "^6.8.0",
     "iconv-lite": "^0.5.1",
     "mocha": "^7.1.2",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "lint": "eslint .",
-    "pretest": "npm run lint",
+    "typecheck": "node -e \"process.exit(process.release.lts < 'Gallium' ? 0 : 1)\" || tsc",
+    "typecheck:src": "node -e \"process.exit(process.release.lts < 'Gallium' ? 0 : 1)\" || tsc --project tsconfig.src.json",
+    "pretest": "npm run lint && npm run typecheck && npm run typecheck:src",
     "test": "mocha",
     "version": "git changelog ; git add History.md"
   },
