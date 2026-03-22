@@ -182,7 +182,6 @@ e.g., `meta['atom:subtitle']['#']`.
 ## Help
 
 - Don't be afraid to report an [issue](https://github.com/danmactough/node-feedparser/issues).
-- You can drop by [Gitter](https://gitter.im/danmactough/node-feedparser?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge), too.
 
 ## Contributors
 
@@ -195,7 +194,7 @@ the original inspiration and a starting point.
 
 (The MIT License)
 
-Copyright (c) 2011-2020 Dan MacTough and contributors
+Copyright (c) 2011-2026 Dan MacTough and contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
