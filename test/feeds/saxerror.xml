@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>SAXError Test Feed</title>
+    <link>http://example.com/</link>
+    <description>A feed with a SAX error in one item.</description>
+    <item>
+      <title>Good Item</title>
+      <link>http://example.com/good</link>
+      <description>This item is fine.</description>
+      <guid>http://example.com/good</guid>
+    </item>
+    <item>
+      <title>Bad Item</title>
+      <link>http://example.com/bad?foo=1&bar=2</link>
+      <description>This item has an unescaped ampersand in the link.</description>
+      <guid>http://example.com/bad</guid>
+    </item>
+    <item>
+      <title>Item After Error</title>
+      <link>http://example.com/after</link>
+      <description>This item comes after the SAX error.</description>
+      <guid>http://example.com/after</guid>
+    </item>
+  </channel>
+</rss>

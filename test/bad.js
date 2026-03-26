@@ -67,4 +67,58 @@ describe('bad feeds', function(){
     });
 
   });
+
+  describe('SAXError handling', function () {
+
+    // The fixture is a valid RSS feed with an unescaped & in one item's link.
+    // strict: true is required because feedparser defaults to non-strict SAX mode.
+    var feed = __dirname + '/feeds/saxerror.xml';
+
+    describe('resume_saxerror: true (default)', function () {
+
+      it('should silently collect the error and continue parsing all items', function (done) {
+        var items = [];
+        var feedparser = new FeedParser({ strict: true });
+        fs.createReadStream(feed).pipe(feedparser);
+        feedparser.on('readable', function () {
+          var item;
+          while ((item = this.read())) items.push(item.title);
+        })
+        .on('error', function (err) {
+          done(err);
+        })
+        .on('end', function () {
+          assert.equal(feedparser.errors.length, 1);
+          assert.ok(feedparser.errors[0] instanceof Error);
+          assert.equal(items.length, 3);
+          assert.deepEqual(items, ['Good Item', 'Bad Item', 'Item After Error']);
+          done();
+        });
+      });
+
+    });
+
+    describe('resume_saxerror: false', function () {
+
+      it('should emit the SAXError and abort parsing', function (done) {
+        var items = [];
+        var feedparser = new FeedParser({ strict: true, resume_saxerror: false });
+        fs.createReadStream(feed).pipe(feedparser);
+        feedparser.on('readable', function () {
+          var item;
+          while ((item = this.read())) items.push(item.title);
+        })
+        .on('error', function (err) {
+          assert.ok(err instanceof Error);
+          assert.equal(feedparser.errors.length, 1);
+          assert.strictEqual(feedparser.errors[0], err);
+          // Only the item before the error should have been parsed
+          assert.deepEqual(items, ['Good Item']);
+          done();
+        });
+      });
+
+    });
+
+  });
 });
