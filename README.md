@@ -85,10 +85,11 @@ You can also check out this nice [working implementation](https://github.com/scr
   you should set the `feedurl` option. Otherwise, feel free to ignore this option.
 
 - `resume_saxerror` - Set to `false` to override Feedparser's default behavior, which
-  is to emit any `SAXError` on `error` and then automatically resume parsing. In
+  is to silently handle them and then automatically resume parsing. In
   my experience, `SAXErrors` are not usually fatal, so this is usually helpful
-  behavior. If you want total control over handling these errors and optionally
-  aborting parsing the feed, use this option.
+  behavior. If you prefer to abort parsing the feed when there's a `SAXError`,
+  set `resume_saxerror` to `false`, which will cause the `SAXError` to be emitted
+  on `error` and abort parsing.
 
 ## Examples
 
@@ -104,7 +105,7 @@ Each readable chunk is an object representing an article in the feed.
 ### Events Emitted
 
 * `meta` - called with feed `meta` when it has been parsed
-* `error` - called with `error` whenever there is a Feedparser error of any kind (SAXError, Feedparser error, etc.)
+* `error` - called with `error` whenever there is a fatal Feedparser error. SAXErrors are only emitted here when `resume_saxerror` is `false`; otherwise they are silently collected in `feedparser.errors`.
 
 ## What is the parsed output produced by feedparser?
 
