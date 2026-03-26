@@ -1,4 +1,31 @@
 
+v2.3.0 / 2026-03-20
+===================
+
+  * Merge pull request #298 from danmactough/add-types
+  * Add TypeScript type support for development
+  * Add 'readable' event overload with typed this context
+  * Skip typecheck on old versions of node that aren't compatible
+  * Add tsconfig.json to fix VSCode TypeScript errors
+  * Add automated typecheck for type definitions
+  * Add bundled TypeScript type definitions
+
+v2.2.11 / 2026-03-20
+====================
+
+  * Fix bin path
+  * Merge pull request #300 from danmactough/claude/node-20-11-1-emits-deprecation-warning-dep0170-1E55R
+  * Add tests for utils
+  * Merge pull request #299 from danmactough/claude/node-20-11-1-emits-deprecation-warning-dep0170-1E55R
+  * Fix ESLint parse error: use property access instead of destructuring
+  * Update package-lock.json
+  * Replace deprecated url.resolve/url.parse with WHATWG URL constructor
+  * Merge pull request #297 from danmactough/maintenance
+  * Restrict sax versions until we can publish a major
+  * Remove retired services
+  * Bump node version for development
+  * Add github actions CI
+
 2.2.10 / 2020-05-01
 ==================
 
