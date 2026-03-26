@@ -74,11 +74,14 @@ async function main() {
   if (res.status !== 200) throw new Error('Bad status code');
 
   var feedparser = new FeedParser([options]);
-  feedparser.on('error', function (error) { throw error; });
   res.body.pipe(feedparser);
 
-  for await (var item of feedparser) {
-    console.log(item.title);
+  try {
+    for await (var item of feedparser) {
+      console.log(item.title);
+    }
+  } catch (err) {
+    console.error(err);
   }
 }
 
