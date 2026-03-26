@@ -62,6 +62,30 @@ feedparser.on('readable', function () {
 
 ```
 
+You can also consume feeds using async iteration:
+
+```js
+
+var FeedParser = require('feedparser');
+var fetch = require('node-fetch');
+
+async function main() {
+  var res = await fetch('http://somefeedurl.xml');
+  if (res.status !== 200) throw new Error('Bad status code');
+
+  var feedparser = new FeedParser([options]);
+  feedparser.on('error', function (error) { throw error; });
+  res.body.pipe(feedparser);
+
+  for await (var item of feedparser) {
+    console.log(item.title);
+  }
+}
+
+main();
+
+```
+
 You can also check out this nice [working implementation](https://github.com/scripting/feedRead) that demonstrates one way to handle all the hard and annoying stuff. :smiley:
 
 ### options
