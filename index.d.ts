@@ -10,6 +10,7 @@ declare class FeedParser extends stream.Transform {
     options: FeedParser.Options;
 
     read(): FeedParser.Item | null;
+    [Symbol.asyncIterator](): AsyncGenerator<FeedParser.Item>;
     resumeSaxError(): void;
 
     on(event: 'meta', listener: (meta: FeedParser.Meta) => void): this;
