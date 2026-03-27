@@ -1,4 +1,13 @@
 
+v2.3.1 / 2026-03-26
+==================
+
+  * Update changelog
+  * Update more copyright dates
+  * Merge pull request #302 from danmactough/fix-saxerror-handling
+  * Fix SAXError handling: stop emitting error when resume_saxerror is true
+  * Update copyright and remove stray reference to gitter
+
 v2.3.0 / 2026-03-20
 ===================
 
