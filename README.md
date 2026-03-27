@@ -62,24 +62,36 @@ feedparser.on('readable', function () {
 
 ```
 
-You can also consume feeds using async iteration:
+You can also consume feeds using async iteration.
+
+When using async iteration, prefer `stream.pipeline(...)` (or a promisified
+`stream.pipeline`) so stream errors are handled before data starts flowing. Async iterator usage with `pipeline` requires Node v12+.
+If you use `pipe()` or otherwise start writing to `FeedParser` before iteration
+begins, attach an `error` handler on `feedparser` yourself.
 
 ```js
-
 var FeedParser = require('feedparser');
 var fetch = require('node-fetch');
+// stream/promises requires Node v15+ but the same behavior can be
+// attained by promisifying require('stream').pipeline
+var pipeline = require('stream/promises').pipeline;
 
 async function main() {
-  var res = await fetch('http://somefeedurl.xml');
+  var res = await fetch('http://someurl.site/rss.xml');
   if (res.status !== 200) throw new Error('Bad status code');
 
-  var feedparser = new FeedParser([options]);
-  res.body.pipe(feedparser);
+  var feedparser = new FeedParser(options);
 
   try {
-    for await (var item of feedparser) {
-      console.log(item.title);
-    }
+    await pipeline(
+      res.body,
+      feedparser,
+      async function (feedparserIterable) {
+        for await (var item of feedparserIterable) {
+          console.log(item.title);
+        }
+      }
+    )
   } catch (err) {
     console.error(err);
   }
