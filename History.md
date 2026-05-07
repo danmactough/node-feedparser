@@ -1,4 +1,18 @@
 
+v2.4.0 / 2026-05-07
+==================
+
+  * Update issue template
+  * Merge pull request #301 from danmactough/modern-stream
+  * Remove redundant nulling
+  * Change examples to pipeline-based async iteration
+  * Fix async iterator: destroy stream on early loop exit
+  * Add more tests of async iterator usage
+  * Add test for error handling via try/catch with async iterator
+  * Use try/catch in async iterator README example
+  * Add async iterator usage example to README
+  * Add async iterator support via Symbol.asyncIterator
+
 v2.3.1 / 2026-03-26
 ==================
 
