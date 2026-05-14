@@ -1,4 +1,11 @@
 
+v.2.4.1 / 2026-05-14
+==================
+
+  * Merge pull request #303 from danmactough/empty-xml-base
+  * Fix handling of xml:base with a same-doc reference
+  * Add failing tests for blank or fragment-only xml:base
+
 v2.4.0 / 2026-05-07
 ==================
 
