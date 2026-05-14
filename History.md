@@ -1,5 +1,12 @@
 
-v.2.4.1 / 2026-05-14
+v2.4.2 / 2026-05-14
+==================
+
+  * Merge pull request #304 from danmactough/angle-brackets
+  * Fix stripHtml function to properly strip HTML but leave non-HTML angle brackets
+  * Add failing test for angle brackets
+
+v2.4.1 / 2026-05-14
 ==================
 
   * Merge pull request #303 from danmactough/empty-xml-base
