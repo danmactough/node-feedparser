@@ -67,6 +67,52 @@ describe('xmlbase', function(){
     });
   });
 
+  it('should resolve relative URI item links with blank string xml:base', function (done) {
+    var feed = __dirname + '/feeds/tpm-with-empty-base.atom';
+    var links = [];
+
+    fs.createReadStream(feed).pipe(new FeedParser())
+    .on('readable', function () {
+      var item;
+      while ((item = this.read())) {
+        links.push(item.link);
+      }
+    })
+    .on('error', function (err) {
+      assert.ifError(err);
+      done(err);
+    })
+    .on('end', function () {
+      assert.equal(links[0], 'http://talkingpointsmemo.com/livewire/hannity-announces-fox-hired-sebastian-gorka-national-security-strategist');
+      assert.equal(links[1], 'http://talkingpointsmemo.com/edblog/were-hiring-senior-editor');
+      assert.equal(links.length, 20);
+      done();
+    });
+  });
+
+  it('should resolve relative URI item links with fragment-only xml:base', function (done) {
+    var feed = __dirname + '/feeds/tpm-with-fragment-base.atom';
+    var links = [];
+
+    fs.createReadStream(feed).pipe(new FeedParser())
+    .on('readable', function () {
+      var item;
+      while ((item = this.read())) {
+        links.push(item.link);
+      }
+    })
+    .on('error', function (err) {
+      assert.ifError(err);
+      done(err);
+    })
+    .on('end', function () {
+      assert.equal(links[0], 'http://talkingpointsmemo.com/livewire/hannity-announces-fox-hired-sebastian-gorka-national-security-strategist');
+      assert.equal(links[1], 'http://talkingpointsmemo.com/edblog/were-hiring-senior-editor');
+      assert.equal(links.length, 20);
+      done();
+    });
+  });
+
   it('should resolve relative URI item links in RSS with feedurl option', function (done) {
     var feed = __dirname + '/feeds/rss-with-relative-urls.xml';
     var links = [];
