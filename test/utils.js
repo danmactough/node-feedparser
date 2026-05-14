@@ -307,6 +307,14 @@ describe('utils', function () {
 
   describe('stripHtml', function () {
 
+    it('returns the string unchanged when there are no tags', function () {
+      assert.strictEqual(utils.stripHtml('plain text'), 'plain text');
+    });
+
+    it('returns an empty string for an empty string', function () {
+      assert.strictEqual(utils.stripHtml(''), '');
+    });
+
     it('removes simple HTML tags', function () {
       assert.strictEqual(utils.stripHtml('<b>bold</b>'), 'bold');
     });
@@ -323,12 +331,122 @@ describe('utils', function () {
       assert.strictEqual(utils.stripHtml('<a href="http://example.com">link</a>'), 'link');
     });
 
-    it('returns the string unchanged when there are no tags', function () {
-      assert.strictEqual(utils.stripHtml('plain text'), 'plain text');
+    it('strips nested tags leaving inner text', function () {
+      assert.strictEqual(utils.stripHtml('<div>You <strong>MUST</strong> remove tags</div>'), 'You MUST remove tags');
     });
 
-    it('returns an empty string for an empty string', function () {
-      assert.strictEqual(utils.stripHtml(''), '');
+    it('strips a self-closing tag without trailing slash', function () {
+      assert.strictEqual(utils.stripHtml('before<hr>after'), 'beforeafter');
+    });
+
+    it('strips a self-closing tag with trailing slash', function () {
+      assert.strictEqual(utils.stripHtml('before<br/>after'), 'beforeafter');
+    });
+
+    it('strips a self-closing tag with attributes', function () {
+      assert.strictEqual(utils.stripHtml('before<img src="x.png" alt="x">after'), 'beforeafter');
+    });
+
+    it('strips img with self-closing slash and attributes', function () {
+      assert.strictEqual(utils.stripHtml('before<img src="x.png" />after'), 'beforeafter');
+    });
+
+    it('strips closing tags', function () {
+      assert.strictEqual(utils.stripHtml('text</p>'), 'text');
+    });
+
+    it('strips tags with multiple attributes', function () {
+      assert.strictEqual(utils.stripHtml('<div class="foo" id="bar">content</div>'), 'content');
+    });
+
+    // --- edge cases: non-HTML angle brackets must be preserved ---
+
+    it('preserves literal angle brackets that are not HTML tags', function () {
+      assert.strictEqual(utils.stripHtml('1 < 2'), '1 < 2');
+    });
+
+    it('preserves less-than followed by a number', function () {
+      assert.strictEqual(utils.stripHtml('x<3'), 'x<3');
+    });
+
+    it('preserves triple left angle brackets', function () {
+      assert.strictEqual(utils.stripHtml('<<<'), '<<<');
+    });
+
+    it('preserves triple right angle brackets', function () {
+      assert.strictEqual(utils.stripHtml('>>>'), '>>>');
+    });
+
+    it('preserves encoded angle brackets decoded by XML parser', function () {
+      assert.strictEqual(utils.stripHtml('RSS <<<Tutorial>>>'), 'RSS <<<Tutorial>>>');
+    });
+
+    it('does not treat unknown tag names as HTML', function () {
+      assert.strictEqual(utils.stripHtml('a <foo> b'), 'a <foo> b');
+    });
+
+    it('does not treat a closing tag with unknown name as HTML', function () {
+      assert.strictEqual(utils.stripHtml('</foo>'), '</foo>');
+    });
+
+    it('preserves bare angle brackets adjacent to real HTML tags', function () {
+      assert.strictEqual(utils.stripHtml('<<b>bold</b>>'), '<bold>');
+    });
+
+    it('strips real HTML but preserves non-HTML angle brackets in the same string', function () {
+      assert.strictEqual(utils.stripHtml('if a < b then <em>yes</em> else x<y>z'), 'if a < b then yes else x<y>z');
+    });
+
+    it('strips non-void elements written as self-closing like <div />', function () {
+      assert.strictEqual(utils.stripHtml('<div />text</div>'), 'text');
+    });
+
+    it('strips multiline tags spanning several lines', function () {
+      assert.strictEqual(
+        utils.stripHtml('<img \n  src="logo.png" \n  alt="Company Logo" \n  width="200" \n  height="100"\n>'),
+        ''
+      );
+    });
+
+    it('strips HTML comments', function () {
+      assert.strictEqual(utils.stripHtml('before<!-- comment -->after'), 'beforeafter');
+    });
+
+    it('strips multi-line HTML comments', function () {
+      assert.strictEqual(utils.stripHtml('before<!-- a\ncomment -->after'), 'beforeafter');
+    });
+
+    it('strips doctype declarations', function () {
+      assert.strictEqual(utils.stripHtml('<!DOCTYPE html>Title'), 'Title');
+    });
+
+    it('strips XML processing instructions', function () {
+      assert.strictEqual(utils.stripHtml('<?xml version="1.0"?>text'), 'text');
+    });
+
+    it('strips xml-stylesheet processing instructions', function () {
+      assert.strictEqual(utils.stripHtml('<?xml-stylesheet href="style.xsl" type="text/xsl"?>text'), 'text');
+    });
+
+    it('strips mixed HTML tags, comments, and processing instructions in one string', function () {
+      assert.strictEqual(
+        utils.stripHtml('<?xml version="1.0"?><p><!-- intro -->Hello <em>world</em></p>'),
+        'Hello world'
+      );
+    });
+
+    it('strips tags with double-quoted attribute values containing >', function () {
+      assert.strictEqual(utils.stripHtml('<a title="1 > 0">link</a>'), 'link');
+    });
+
+    it('strips tags with single-quoted attribute values containing >', function () {
+      assert.strictEqual(utils.stripHtml('<a title=\'1 > 0\'>link</a>'), 'link');
+    });
+
+    utils.HTML_TAGS.forEach(function (tag) {
+      it(`strips ${tag} HTML tag opening and closing and self-closing`, function () {
+        assert.strictEqual(utils.stripHtml('<' + tag + '>content</' + tag + '> and <' + tag + ' />more'), 'content and more', 'expected <' + tag + '> to be stripped');
+      });
     });
 
   });
