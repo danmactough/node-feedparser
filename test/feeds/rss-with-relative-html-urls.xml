@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xml:base="https://example.com/">
+  <channel>
+    <title>Relative HTML URLs</title>
+    <link>https://example.com/</link>
+    <description>Fixture for relative links in embedded HTML.</description>
+    <item xml:base="posts/post-1">
+      <title>Post</title>
+      <link>posts/post-1</link>
+      <description><![CDATA[<p><a href="post-1">Read</a><a href="#comments">Comments</a><img src="/images/post-1.png" srcset="small.png 480w, /large.png 2x"><video poster="poster.png"></video></p>]]></description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Item Scoped HTML Base</title>
+    <link>https://example.com/</link>
+    <description>Fixture for scoped xml:base in item HTML.</description>
+    <item xml:base="https://example.com/first/">
+      <title>First</title>
+      <link>first</link>
+      <description><![CDATA[<p><a href="post">First</a></p>]]></description>
+    </item>
+    <item>
+      <title>Second</title>
+      <link>second</link>
+      <description><![CDATA[<p><a href="post">Second</a></p>]]></description>
+    </item>
+  </channel>
+</rss>
