@@ -36,7 +36,7 @@ var items = [];
 
 process.stdin.pipe(new FeedParser(argv))
   .on('error', console.error)
-  .on('readable', function() {
+  .on('readable', function () {
     var stream = this, item;
     while (item = stream.read()) {
       if (argv.group) {

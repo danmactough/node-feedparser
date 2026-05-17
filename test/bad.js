@@ -1,4 +1,4 @@
-describe('bad feeds', function(){
+describe('bad feeds', function () {
 
   describe('not a feed', function () {
 

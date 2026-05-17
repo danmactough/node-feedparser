@@ -4,7 +4,7 @@ var pipeline = require('util').promisify(require('stream').pipeline);
 
 describe('async iterator usage', function () {
   // These tests use .pipe() only to allow testing in older Node versions.
-  // In modern Node versions, you can use pipeline() with async iterators 
+  // In modern Node versions, you can use pipeline() with async iterators
   // instead of .pipe(). If you use .pipe, you must add your own error handling
   // to avoid uncaught exceptions on errors.
   it('should work as an async iterator', async function () {
@@ -46,7 +46,7 @@ describe('async iterator usage', function () {
     var items = [];
     var caught = null;
     var uncaught = null;
-    function onUncaught(err) {
+    function onUncaught (err) {
       uncaught = err;
     }
     process.prependOnceListener('uncaughtException', onUncaught);

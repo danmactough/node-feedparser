@@ -1,4 +1,4 @@
-describe('categories', function(){
+describe('categories', function () {
 
   var feed = __dirname + '/feeds/category-feed.xml';
 

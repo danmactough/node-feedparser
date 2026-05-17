@@ -1,4 +1,4 @@
-describe('links', function(){
+describe('links', function () {
 
   var feed = __dirname + '/feeds/non-text-alternate-links.xml';
 
@@ -20,7 +20,7 @@ describe('links', function(){
     var items = [];
     var sawDeprecation = false;
     var origEmit = process.emit;
-    process.emit = function(event, warning) {
+    process.emit = function (event, warning) {
       if (event === 'warning' && warning && warning.name === 'DeprecationWarning') {
         sawDeprecation = true;
       }

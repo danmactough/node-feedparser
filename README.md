@@ -106,22 +106,23 @@ You can also check out this nice [working implementation](https://github.com/scr
 ### options
 
 - `normalize` - Set to `false` to override Feedparser's default behavior,
-  which is to parse feeds into an object that contains the generic properties
+  which is to both parse feeds into an object that contains the generic properties
   patterned after (although not identical to) the RSS 2.0 format, regardless
-  of the feed's format.
+  of the feed's format, as well as to resolve all relative urls, including those
+  embedded in HTML content fields.
 
 - `addmeta` - Set to `false` to override Feedparser's default behavior, which
   is to add the feed's `meta` information to each article.
 
 - `feedurl` - The url (string) of the feed. FeedParser is very good at
-  resolving relative urls in feeds. But some feeds use relative urls without
-  declaring the `xml:base` attribute any place in the feed. This is perfectly
-  valid, but we don't know know the feed's url before we start parsing the feed
-  and trying to resolve those relative urls. If we discover the feed's url, we
-  will go back and resolve the relative urls we've already seen, but this takes
-  a little time (not much). If you want to be sure we never have to re-resolve
-  relative urls (or if FeedParser is failing to properly resolve relative urls),
-  you should set the `feedurl` option. Otherwise, feel free to ignore this option.
+  resolving relative urls in feeds, including those embedded in HTML content 
+  fields. But some feeds use relative urls without declaring the `xml:base`
+  attribute any place in the feed. This is perfectly valid, but we don't know
+  the feed's url before we start parsing the feed and trying to resolve those
+  relative urls. If we discover the feed's url, we will go back and resolve the
+  relative urls we've already seen, but this takes a little time (not much).
+  If you want to be sure we can resolve all relative urls, you should set the
+  `feedurl` option.
 
 - `resume_saxerror` - Set to `false` to override Feedparser's default behavior, which
   is to silently handle them and then automatically resume parsing. In

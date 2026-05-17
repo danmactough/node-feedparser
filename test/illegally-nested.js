@@ -1,8 +1,8 @@
-describe('illegally nested', function(){
+describe('illegally nested', function () {
 
   var feed = __dirname + '/feeds/illegally-nested.xml';
 
-  it('should ignore illegally-nested items', function (done){
+  it('should ignore illegally-nested items', function (done) {
     var itemCount = 0;
     fs.createReadStream(feed).pipe(new FeedParser())
       .on('readable', function () {

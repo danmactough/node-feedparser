@@ -1,4 +1,5 @@
 var utils = require('../lib/utils');
+var { HTML_TAGS } = require('../lib/constants');
 
 describe('utils', function () {
 
@@ -118,6 +119,10 @@ describe('utils', function () {
       assert.strictEqual(utils.resolve('http://example.com/', null), null);
       assert.strictEqual(utils.resolve('http://example.com/', ''), '');
       assert.strictEqual(utils.resolve('http://example.com/', undefined), undefined);
+    });
+
+    it('returns pathUrl when pathUrl is not a string', function () {
+      assert.strictEqual(utils.resolve('http://example.com/', 42), 42);
     });
 
     it('returns pathUrl for tag: URIs that the URL constructor rejects', function () {
@@ -275,6 +280,18 @@ describe('utils', function () {
       var node = { el: { '@': { uri: '/resource' } } };
       utils.reresolve(node, 'http://example.com/');
       assert.strictEqual(node.el['@'].uri, 'http://example.com/resource');
+    });
+
+    it('resolves HTML URI attributes', function () {
+      var node = { video: { '@': { poster: '/poster.png' } } };
+      utils.reresolve(node, 'http://example.com/');
+      assert.strictEqual(node.video['@'].poster, 'http://example.com/poster.png');
+    });
+
+    it('resolves srcset attributes', function () {
+      var node = { img: { '@': { srcset: 'small.png 480w, /large.png 2x' } } };
+      utils.reresolve(node, 'http://example.com/path/');
+      assert.strictEqual(node.img['@'].srcset, 'http://example.com/path/small.png 480w, http://example.com/large.png 2x');
     });
 
     it('handles array of element items', function () {
@@ -443,7 +460,7 @@ describe('utils', function () {
       assert.strictEqual(utils.stripHtml('<a title=\'1 > 0\'>link</a>'), 'link');
     });
 
-    utils.HTML_TAGS.forEach(function (tag) {
+    HTML_TAGS.forEach(function (tag) {
       it(`strips ${tag} HTML tag opening and closing and self-closing`, function () {
         assert.strictEqual(utils.stripHtml('<' + tag + '>content</' + tag + '> and <' + tag + ' />more'), 'content and more', 'expected <' + tag + '> to be stripped');
       });

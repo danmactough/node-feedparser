@@ -8,7 +8,7 @@ var fetch = require('node-fetch')
   , FeedParser = require(__dirname+'/..')
   , iconv = require('iconv-lite');
 
-function get(feed) {
+function get (feed) {
   // Get a response stream
   fetch(feed, { 'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36', 'accept': 'text/html,application/xhtml+xml' }).then(function (res) {
 
@@ -16,7 +16,7 @@ function get(feed) {
     var feedparser = new FeedParser();
     feedparser.on('error', done);
     feedparser.on('end', done);
-    feedparser.on('readable', function() {
+    feedparser.on('readable', function () {
       var post;
       while (post = this.read()) {
         console.log(JSON.stringify(post, ' ', 4));
@@ -45,14 +45,14 @@ function maybeTranslate (res, charset) {
       // If we're using iconvStream, stream will be the output of iconvStream
       // otherwise it will remain the output of request
       res = res.pipe(iconvStream);
-    } catch(err) {
+    } catch (err) {
       res.emit('error', err);
     }
   }
   return res;
 }
 
-function getParams(str) {
+function getParams (str) {
   var params = str.split(';').reduce(function (params, param) {
     var parts = param.split('=').map(function (part) { return part.trim(); });
     if (parts.length === 2) {
@@ -63,7 +63,7 @@ function getParams(str) {
   return params;
 }
 
-function done(err) {
+function done (err) {
   if (err) {
     console.log(err, err.stack);
     return process.exit(1);
