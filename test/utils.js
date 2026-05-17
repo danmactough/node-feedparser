@@ -1,4 +1,5 @@
 var utils = require('../lib/utils');
+var { HTML_TAGS } = require('../lib/constants');
 
 describe('utils', function () {
 
@@ -459,7 +460,7 @@ describe('utils', function () {
       assert.strictEqual(utils.stripHtml('<a title=\'1 > 0\'>link</a>'), 'link');
     });
 
-    utils.HTML_TAGS.forEach(function (tag) {
+    HTML_TAGS.forEach(function (tag) {
       it(`strips ${tag} HTML tag opening and closing and self-closing`, function () {
         assert.strictEqual(utils.stripHtml('<' + tag + '>content</' + tag + '> and <' + tag + ' />more'), 'content and more', 'expected <' + tag + '> to be stripped');
       });

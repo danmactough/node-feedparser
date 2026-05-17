@@ -1,8 +1,8 @@
-describe('duplicate enclosures', function(){
+describe('duplicate enclosures', function () {
 
   var feed = __dirname + '/feeds/mediacontent-dupes.xml';
 
-  it('should not have duplicate enclosures from different elements', function (done){
+  it('should not have duplicate enclosures from different elements', function (done) {
     fs.createReadStream(feed).pipe(new FeedParser())
       .once('readable', function () {
         var stream = this;

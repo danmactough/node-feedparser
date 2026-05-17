@@ -1,6 +1,6 @@
-describe('namespaced elements', function(){
+describe('namespaced elements', function () {
 
-  describe('standard namespaces', function(){
+  describe('standard namespaces', function () {
 
     var feed = __dirname + '/feeds/wapowellness.xml';
 
@@ -21,7 +21,7 @@ describe('namespaced elements', function(){
 
   });
 
-  describe('non-standard namespaces', function(){
+  describe('non-standard namespaces', function () {
 
     var feed = __dirname + '/feeds/complexNamespaceFeed.xml';
 
@@ -41,7 +41,7 @@ describe('namespaced elements', function(){
 
   });
 
-  describe('nondefaultnamespace-baseline', function(){
+  describe('nondefaultnamespace-baseline', function () {
 
     var feed = __dirname + '/feeds/nondefaultnamespace-baseline.atom';
 
@@ -62,7 +62,7 @@ describe('namespaced elements', function(){
 
   });
 
-  describe('nondefaultnamespace Test case 1', function(){
+  describe('nondefaultnamespace Test case 1', function () {
 
     var feed = __dirname + '/feeds/nondefaultnamespace.atom';
 
@@ -83,7 +83,7 @@ describe('namespaced elements', function(){
 
   });
 
-  describe('nondefaultnamespace Test case 2', function(){
+  describe('nondefaultnamespace Test case 2', function () {
 
     var feed = __dirname + '/feeds/nondefaultnamespace-xhtml.atom';
 
@@ -104,7 +104,7 @@ describe('namespaced elements', function(){
 
   });
 
-  describe('nondefaultnamespace Test case 3', function(){
+  describe('nondefaultnamespace Test case 3', function () {
 
     var feed = __dirname + '/feeds/unknown-namespace.atom';
 

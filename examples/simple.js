@@ -19,7 +19,7 @@ fs.createReadStream(feed)
   .on('meta', function (meta) {
     console.log('===== %s =====', meta.title);
   })
-  .on('readable', function() {
+  .on('readable', function () {
     var stream = this, item;
     while (item = stream.read()) {
       console.log('Got article: %s', item.title || item.description);

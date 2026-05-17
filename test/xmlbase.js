@@ -1,4 +1,4 @@
-describe('xmlbase', function(){
+describe('xmlbase', function () {
 
   it('should resolve relative URIs in meta elements with no root xml:base', function (done) {
     var feed = __dirname + '/feeds/intertwingly.atom';
