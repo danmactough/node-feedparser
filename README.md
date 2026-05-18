@@ -121,6 +121,10 @@ You can also check out this nice [working implementation](https://github.com/scr
   If you only need the metadata available when each article streams, you can
   use `item.meta` as usual.
 
+- `guidlink` - Set to `false` to override Feedparser's default behavior, which
+  is to use an RSS item's `guid` as the item `link` when the item has no `link`
+  and the `guid` starts with `http:` or `https:`.
+
 - `feedurl` - The url (string) of the feed. FeedParser is very good at
   resolving relative urls in feeds, including those embedded in HTML content
   fields. But some feeds use relative urls without declaring the `xml:base`

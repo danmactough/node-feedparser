@@ -36,6 +36,7 @@ declare namespace FeedParser {
         strict?: boolean;
         normalize?: boolean;
         addmeta?: boolean;
+        guidlink?: boolean;
         feedurl?: string;
         resume_saxerror?: boolean;
         MAX_BUFFER_LENGTH?: number;

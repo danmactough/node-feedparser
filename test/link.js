@@ -47,4 +47,64 @@ describe('links', function () {
       });
   });
 
+  it('should infer item link from http guid by default (issue #293)', function (done) {
+    var feedparser = new FeedParser();
+    var feed = '<?xml version="1.0" encoding="UTF-8"?>' +
+      '<rss version="2.0">' +
+      '<channel>' +
+      '<title>Linkless feed</title>' +
+      '<link>http://example.com/</link>' +
+      '<description>Feed with linkless items</description>' +
+      '<item>' +
+      '<title>One</title>' +
+      '<guid>http://example.com/posts/one</guid>' +
+      '</item>' +
+      '</channel>' +
+      '</rss>';
+
+    feedparser
+      .once('readable', function () {
+        var item = this.read();
+        assert.equal(item.guid, 'http://example.com/posts/one');
+        assert.equal(item.link, 'http://example.com/posts/one');
+        done();
+      })
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
+      });
+
+    feedparser.end(feed);
+  });
+
+  it('should not infer item link from guid when guidlink is false (issue #293)', function (done) {
+    var feedparser = new FeedParser({ guidlink: false });
+    var feed = '<?xml version="1.0" encoding="UTF-8"?>' +
+      '<rss version="2.0">' +
+      '<channel>' +
+      '<title>Linkless feed</title>' +
+      '<link>http://example.com/</link>' +
+      '<description>Feed with linkless items</description>' +
+      '<item>' +
+      '<title>One</title>' +
+      '<guid>http://example.com/posts/one</guid>' +
+      '</item>' +
+      '</channel>' +
+      '</rss>';
+
+    feedparser
+      .once('readable', function () {
+        var item = this.read();
+        assert.equal(item.guid, 'http://example.com/posts/one');
+        assert.equal(item.link, null);
+        done();
+      })
+      .on('error', function (err) {
+        assert.ifError(err);
+        done(err);
+      });
+
+    feedparser.end(feed);
+  });
+
 });
