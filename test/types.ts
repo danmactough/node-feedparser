@@ -8,6 +8,7 @@ const fp2 = new FeedParser({
   strict: false,
   normalize: true,
   addmeta: true,
+  guidlink: true,
   feedurl: 'https://example.com/feed',
   resume_saxerror: true,
   MAX_BUFFER_LENGTH: 1024 * 1024,
