@@ -1,4 +1,10 @@
 
+v2.6.0 / 2026-05-18
+==================
+
+  * Merge pull request #307 from danmactough/codex/issue-293-guid-link-option
+  * Add guid link inference option
+
 v2.5.0 / 2026-05-18
 ==================
 
