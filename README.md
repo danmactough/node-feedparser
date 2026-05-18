@@ -113,9 +113,16 @@ You can also check out this nice [working implementation](https://github.com/scr
 
 - `addmeta` - Set to `false` to override Feedparser's default behavior, which
   is to add the feed's `meta` information to each article.
+  Feed metadata is available as soon as Feedparser has enough information to
+  emit the first article. While bad practice and borderline pathological, feeds
+  can legally include additional channel metadata after articles, so the `meta`
+  object may be enriched until the stream ends. If you need complete metadata,
+  also handle the `meta` event and keep the emitted object until the stream ends.
+  If you only need the metadata available when each article streams, you can
+  use `item.meta` as usual.
 
 - `feedurl` - The url (string) of the feed. FeedParser is very good at
-  resolving relative urls in feeds, including those embedded in HTML content 
+  resolving relative urls in feeds, including those embedded in HTML content
   fields. But some feeds use relative urls without declaring the `xml:base`
   attribute any place in the feed. This is perfectly valid, but we don't know
   the feed's url before we start parsing the feed and trying to resolve those
