@@ -1,4 +1,15 @@
 
+v2.5.0 / 2026-05-18
+==================
+
+  * Merge pull request #306 from danmactough/codex/plan-262-resolution
+  * Allow trailing feed metadata after items
+  * Improve node types
+  * Merge pull request #305 from danmactough/resolve-body-uris
+  * Switch to arrow functions instead of passing thisArg
+  * Cleanup file layout and fix linting
+  * Resolve uris embedded in html
+
 v2.4.2 / 2026-05-14
 ==================
 
