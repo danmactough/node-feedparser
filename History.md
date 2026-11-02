@@ -1,4 +1,10 @@
 
+v2.6.1 / 2026-11-02
+==================
+
+  * Merge pull request #308 from KristjanESPERANTO/fix/invalid-dates
+  * fix(parser): ignore invalid normalized dates
+
 v2.6.0 / 2026-05-18
 ==================
 
